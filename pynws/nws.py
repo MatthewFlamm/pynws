@@ -23,8 +23,8 @@ async def get_obs_from_stn(station, websession, limit=None):
             _LOGGER.error('failed to update observation of station %s with status %s',
                           station, status)
             return None
-        else:
-            obs = await res.json()
+
+        obs = await res.json()
     return obs
 
 async def observations(station, websession, limit=None):
@@ -48,6 +48,8 @@ async def get_stn_from_pnt(lat, lon, websession):
 async def stations(lat, lon, websession):
     """Returns list of stations for a point."""
     res = await get_stn_from_pnt(lat, lon, websession)
+    if res is None:
+        return None
     return [s['properties']['stationIdentifier']
             for s in res['features']]
 

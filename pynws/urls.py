@@ -2,8 +2,7 @@
 url formattera
 """
 
-from pynws.const import API_URL, API_STATIONS, API_OBSERVATION, API_HEADER
-from pynws.const import API_FORECAST
+from pynws.const import API_URL, API_STATIONS, API_OBSERVATION, API_FORECAST
 
 def obs_url(station):
     """Formats observation url."""
