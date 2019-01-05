@@ -30,5 +30,5 @@ async def test_obs_response(aiohttp_client, loop, obs_url):
 async def test_obs_fail(aiohttp_client, loop, obs_url):
     app = aiohttp.web.Application()
     client = await aiohttp_client(app)
-    stations = await pynws.observations('STNA', client)
-    assert stations == None
+    observations = await pynws.observations('STNA', client)
+    assert observations == None

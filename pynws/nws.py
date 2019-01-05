@@ -71,4 +71,6 @@ async def get_forc_from_pnt(lat, lon, websession):
 async def forecast(lat, lon, websession):
     """Returns forecast as list """
     res = await get_forc_from_pnt(lat, lon, websession)
+    if res is None:
+        return None
     return res['properties']['periods']
