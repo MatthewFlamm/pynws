@@ -1,0 +1,8 @@
+tmp*
+__pycache__/
+*.py[cod]
+*egg*
+.tox/
+build/
+dist/
+.coverage
