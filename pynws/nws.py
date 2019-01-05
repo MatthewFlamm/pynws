@@ -30,6 +30,8 @@ async def get_obs_from_stn(station, websession, limit=None):
 async def observations(station, websession, limit=None):
     """Returns observations from station as list"""
     res = await get_obs_from_stn(station, websession, limit)
+    if res is None:
+        return None
     return [o['properties'] for o in res['features']]
 
 async def get_stn_from_pnt(lat, lon, websession):
