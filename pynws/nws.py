@@ -5,8 +5,37 @@ pynws module
 import pynws.urls
 from pynws.const import API_ACCEPT, API_USER, DEFAULT_USERID
 
+class Nws:
+    """Nws object for simple use"""
+    def __init__(self, session, latlon=None, station=None):
+        self.session = session
+        self.latlon = latlon
+        self.station = station
 
-def get_header(userid=DEFAULT_USERID):
+        self.limit = 5
+        self.userid = DEFAULT_USERID
+
+    async def stations(self):
+
+        if self.latlon is None:
+            raise NwsError("Need to set lattitude and longitude")
+        return await stations(*self.latlon, self.session, self.userid)
+
+    async def observations(self):
+
+        if self.station is None:
+            raise NwsError("Need to set station")
+        return await observations(self.station, self.session, self.limit, self.userid)
+
+    async def forecast(self):
+
+        if self.latlon is None:
+            raise NwsError("Need to set lattitude and longitude")
+        return await forecast(*self.latlon, self.session, self.userid)
+
+    
+
+def get_header(userid):
     """Get header.
 
     NWS recommends including an email in userid.
@@ -14,8 +43,7 @@ def get_header(userid=DEFAULT_USERID):
     return {'accept': API_ACCEPT,
             'User-Agent': API_USER.format(userid)}
 
-async def get_obs_from_stn(station, websession, limit=0,
-                           userid=DEFAULT_USERID):
+async def get_obs_from_stn(station, websession, limit, userid):
     """Get observation response from station"""
     if limit == 0:
         params = None
@@ -29,12 +57,12 @@ async def get_obs_from_stn(station, websession, limit=0,
         obs = await res.json()
     return obs
 
-async def observations(station, websession, limit=0, userid=DEFAULT_USERID):
+async def observations(station, websession, limit, userid):
     """Observations from station"""
     res = await get_obs_from_stn(station, websession, limit, userid)
     return [o['properties'] for o in res['features']]
 
-async def get_stn_from_pnt(lat, lon, websession, userid=DEFAULT_USERID):
+async def get_stn_from_pnt(lat, lon, websession, userid):
     """Get list of stations for lat/lon"""
 
     url = pynws.urls.stn_url(lat, lon)
@@ -44,13 +72,13 @@ async def get_stn_from_pnt(lat, lon, websession, userid=DEFAULT_USERID):
         jres = await res.json()
     return jres
 
-async def stations(lat, lon, websession, userid=DEFAULT_USERID):
+async def stations(lat, lon, websession, userid):
     """Returns list of stations for a point."""
     res = await get_stn_from_pnt(lat, lon, websession, userid)
     return [s['properties']['stationIdentifier']
             for s in res['features']]
 
-async def get_forc_from_pnt(lat, lon, websession, userid=DEFAULT_USERID):
+async def get_forc_from_pnt(lat, lon, websession, userid):
     """update forecast"""
 
     url = pynws.urls.forc_url(lat, lon)
@@ -60,7 +88,7 @@ async def get_forc_from_pnt(lat, lon, websession, userid=DEFAULT_USERID):
         jres = await res.json()
     return jres
 
-async def forecast(lat, lon, websession, userid=DEFAULT_USERID):
+async def forecast(lat, lon, websession, userid):
     """Returns forecast as list """
     res = await get_forc_from_pnt(lat, lon, websession, userid)
     return res['properties']['periods']
