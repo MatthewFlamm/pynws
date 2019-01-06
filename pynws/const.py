@@ -7,8 +7,11 @@ __version__ = '0.1'
 API_URL = 'https://api.weather.gov/'
 API_STATIONS = 'points/{},{}/stations'
 API_OBSERVATION = 'stations/{}/observations/'
-API_HEADER = {'Accept': 'application/geo+json'}
+API_ACCEPT = 'application/geo+json'
+API_USER = 'pynws {}'
 API_FORECAST = 'points/{},{}/forecast'
+
+DEFAULT_USERID = 'CODEemail@address'
 
 API_WEATHER_CODE = {
     "skc": "Fair/clear",
