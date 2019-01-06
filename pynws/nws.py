@@ -1,57 +1,41 @@
 """
-nws module
+pynws module
 """
 
-import logging
 import pynws.urls
 from pynws.const import API_HEADER
 
-_LOGGER = logging.getLogger(__name__)
-_LOGGER.setLevel(logging.DEBUG)
 
-async def get_obs_from_stn(station, websession, limit=None):
-    """Get observation from NWS"""
-    if limit is None:
+async def get_obs_from_stn(station, websession, limit=0):
+    """Get observation response from station"""
+    if limit == 0:
         params = None
     else:
         params = {'limit': limit}
 
     url = pynws.urls.obs_url(station)
     async with websession.get(url, headers=API_HEADER, params=params) as res:
-        status = res.status
-        if status != 200:
-            _LOGGER.error('failed to update observation of station %s with status %s',
-                          station, status)
-            return None
-
+        res.raise_for_status()
         obs = await res.json()
     return obs
 
-async def observations(station, websession, limit=None):
-    """Returns observations from station as list"""
+async def observations(station, websession, limit=0):
+    """Observations from station"""
     res = await get_obs_from_stn(station, websession, limit)
-    if res is None:
-        return None
     return [o['properties'] for o in res['features']]
 
 async def get_stn_from_pnt(lat, lon, websession):
-    """get list of stations for lat/lon"""
+    """Get list of stations for lat/lon"""
 
     url = pynws.urls.stn_url(lat, lon)
     async with websession.get(url, headers=API_HEADER) as res:
-        status = res.status
-        if status != 200:
-            _LOGGER.error('failed to get station list from %s with status %s',
-                          url, status)
-            return None
+        res.raise_for_status()
         jres = await res.json()
     return jres
 
 async def stations(lat, lon, websession):
     """Returns list of stations for a point."""
     res = await get_stn_from_pnt(lat, lon, websession)
-    if res is None:
-        return None
     return [s['properties']['stationIdentifier']
             for s in res['features']]
 
@@ -60,17 +44,11 @@ async def get_forc_from_pnt(lat, lon, websession):
 
     url = pynws.urls.forc_url(lat, lon)
     async with websession.get(url, headers=API_HEADER) as res:
-        status = res.status
-        if status != 200:
-            _LOGGER.error('failed to update forecast with status %s',
-                          status)
-            return None
+        res.raise_for_status()
         jres = await res.json()
     return jres
 
 async def forecast(lat, lon, websession):
     """Returns forecast as list """
     res = await get_forc_from_pnt(lat, lon, websession)
-    if res is None:
-        return None
     return res['properties']['periods']

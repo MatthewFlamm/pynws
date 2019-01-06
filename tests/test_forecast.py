@@ -30,5 +30,5 @@ async def test_fore_response(aiohttp_client, loop, fore_url):
 async def test_fore_fail(aiohttp_client, loop, fore_url):
     app = aiohttp.web.Application()
     client = await aiohttp_client(app)
-    forecast = await pynws.forecast(*LATLON, client)
-    assert forecast == None
+    with pytest.raises(aiohttp.ClientResponseError):
+        forecast = await pynws.forecast(*LATLON, client)
