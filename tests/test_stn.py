@@ -30,5 +30,5 @@ async def test_stn_response(aiohttp_client, loop, station_url):
 async def test_stn_fail(aiohttp_client, loop, station_url):
     app = aiohttp.web.Application()
     client = await aiohttp_client(app)
-    stations = await pynws.stations(*LATLON, client)
-    assert stations == None
+    with pytest.raises(aiohttp.ClientResponseError):
+        stations = await pynws.stations(*LATLON, client)
