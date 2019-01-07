@@ -48,3 +48,33 @@ async def test_nws_response(aiohttp_client, loop, obs_url, station_url, fore_url
     nws.station = stations[0]
     observations = await nws.observations()
     forecast = await nws.forecast()
+
+async def test_nws_fail_stn(aiohttp_client, loop, obs_url, station_url, fore_url):
+    app = aiohttp.web.Application()
+    app.router.add_get('/obs', obs)
+    app.router.add_get('/stations', stn)
+    app.router.add_get('/fore', fore)
+    client = await aiohttp_client(app)
+    nws = pynws.Nws(client)
+    with pytest.raises(pynws.NwsError):
+        stations = await nws.stations()
+
+async def test_nws_fail_obs(aiohttp_client, loop, obs_url, station_url, fore_url):
+    app = aiohttp.web.Application()
+    app.router.add_get('/obs', obs)
+    app.router.add_get('/stations', stn)
+    app.router.add_get('/fore', fore)
+    client = await aiohttp_client(app)
+    nws = pynws.Nws(client)
+    with pytest.raises(pynws.NwsError):
+        stations = await nws.observations()
+
+async def test_nws_fail_fore(aiohttp_client, loop, obs_url, station_url, fore_url):
+    app = aiohttp.web.Application()
+    app.router.add_get('/obs', obs)
+    app.router.add_get('/stations', stn)
+    app.router.add_get('/fore', fore)
+    client = await aiohttp_client(app)
+    nws = pynws.Nws(client)
+    with pytest.raises(pynws.NwsError):
+        stations = await nws.forecast()
