@@ -6,6 +6,7 @@ import pytest
 from tests.observation_response import OBSERVATION_RESPONSE
 
 LATLON = (0, 0)
+USERID = 'testing@test'
 
 @pytest.fixture()
 def obs_url(monkeypatch):
@@ -25,11 +26,11 @@ async def test_obs_response(aiohttp_client, loop, obs_url):
     app = aiohttp.web.Application()
     app.router.add_get('/obs', obs)
     client = await aiohttp_client(app)
-    await pynws.observations('STNA', client)
+    await pynws.observations('STNA', client, USERID)
 
 async def test_obs_fail(aiohttp_client, loop, obs_url):
     app = aiohttp.web.Application()
     client = await aiohttp_client(app)
     with pytest.raises(aiohttp.ClientResponseError):
-        observations = await pynws.observations('STNA', client)
+        observations = await pynws.observations('STNA', client, USERID)
     
