@@ -6,6 +6,7 @@ import pytest
 from tests.forecast_response import FORECAST_RESPONSE
 
 LATLON = (0, 0)
+USERID = 'testing@test'
 
 @pytest.fixture()
 def fore_url(monkeypatch):
@@ -25,10 +26,10 @@ async def test_fore_response(aiohttp_client, loop, fore_url):
     app = aiohttp.web.Application()
     app.router.add_get('/fore', fore)
     client = await aiohttp_client(app)
-    await pynws.forecast(*LATLON, client)
+    await pynws.forecast(*LATLON, client, USERID)
 
 async def test_fore_fail(aiohttp_client, loop, fore_url):
     app = aiohttp.web.Application()
     client = await aiohttp_client(app)
     with pytest.raises(aiohttp.ClientResponseError):
-        forecast = await pynws.forecast(*LATLON, client)
+        forecast = await pynws.forecast(*LATLON, client, USERID)

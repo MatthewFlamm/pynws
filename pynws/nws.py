@@ -5,6 +5,12 @@ pynws module
 import pynws.urls
 from pynws.const import API_ACCEPT, API_USER, DEFAULT_USERID
 
+class NwsError(Exception):
+    """Error in Nws Class"""
+    def __init__(self, message):
+        super().__init__(message)
+        self.message = message
+
 class Nws:
     """Nws object for simple use"""
     def __init__(self, session, latlon=None, station=None):
@@ -16,24 +22,23 @@ class Nws:
         self.userid = DEFAULT_USERID
 
     async def stations(self):
-
+        """Returns station list"""
         if self.latlon is None:
             raise NwsError("Need to set lattitude and longitude")
         return await stations(*self.latlon, self.session, self.userid)
 
     async def observations(self):
-
+        """Returns observation list"""
         if self.station is None:
             raise NwsError("Need to set station")
-        return await observations(self.station, self.session, self.limit, self.userid)
+        return await observations(self.station, self.session, self.userid, self.limit)
 
     async def forecast(self):
-
+        """Returns forecast list"""
         if self.latlon is None:
             raise NwsError("Need to set lattitude and longitude")
         return await forecast(*self.latlon, self.session, self.userid)
 
-    
 
 def get_header(userid):
     """Get header.
@@ -43,7 +48,7 @@ def get_header(userid):
     return {'accept': API_ACCEPT,
             'User-Agent': API_USER.format(userid)}
 
-async def get_obs_from_stn(station, websession, limit, userid):
+async def get_obs_from_stn(station, websession, userid, limit=0):
     """Get observation response from station"""
     if limit == 0:
         params = None
@@ -57,9 +62,9 @@ async def get_obs_from_stn(station, websession, limit, userid):
         obs = await res.json()
     return obs
 
-async def observations(station, websession, limit, userid):
+async def observations(station, websession, userid, limit=0):
     """Observations from station"""
-    res = await get_obs_from_stn(station, websession, limit, userid)
+    res = await get_obs_from_stn(station, websession, userid, limit)
     return [o['properties'] for o in res['features']]
 
 async def get_stn_from_pnt(lat, lon, websession, userid):

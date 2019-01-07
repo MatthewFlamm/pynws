@@ -6,6 +6,7 @@ import pytest
 from tests.station_response import STATION_RESPONSE
 
 LATLON = (0, 0)
+USERID = 'testing@test'
 
 @pytest.fixture()
 def station_url(monkeypatch):
@@ -25,10 +26,10 @@ async def test_stn_response(aiohttp_client, loop, station_url):
     app = aiohttp.web.Application()
     app.router.add_get('/stations', stn)
     client = await aiohttp_client(app)
-    await pynws.stations(*LATLON, client)
+    await pynws.stations(*LATLON, client, USERID)
 
 async def test_stn_fail(aiohttp_client, loop, station_url):
     app = aiohttp.web.Application()
     client = await aiohttp_client(app)
     with pytest.raises(aiohttp.ClientResponseError):
-        stations = await pynws.stations(*LATLON, client)
+        stations = await pynws.stations(*LATLON, client, USERID)
