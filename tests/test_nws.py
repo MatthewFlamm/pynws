@@ -48,7 +48,10 @@ async def test_nws_response(aiohttp_client, loop, obs_url, station_url, fore_url
     nws.station = stations[0]
     observations = await nws.observations()
     forecast = await nws.forecast()
-
+    
+    nws2 = pynws.Nws(client, station='STNA')
+    observations2 = await nws2.observations()
+    
 async def test_nws_fail_stn(aiohttp_client, loop, obs_url, station_url, fore_url):
     app = aiohttp.web.Application()
     app.router.add_get('/obs', obs)
