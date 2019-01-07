@@ -8,7 +8,7 @@ matrix:
       dist: xenial
       sudo: true
 install:
-  - pip install -r requirements-test.txt
+  - pip install --user -r requirements-test.txt
 script:
   - pytest --cov=pynws/
   - pylint pynws
