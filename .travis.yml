@@ -7,13 +7,14 @@ matrix:
     - python: 3.7
       dist: xenial
       sudo: true
+env:
+  - POST_COMMAND=codecov -e TOX_ENV
 install:
-  - pip install -r requirements-test.txt
+  - pip install tox-travis
 script:
-  - pytest --cov=pynws/
-  - pylint pynws
+  - tox
 branches:
   only:
     - master
-after_success:
-  - bash <(curl -s https://codecov.io/bash) || echo 'Codecov failed to upload'
+#after_success:
+#  - bash <(curl -s https://codecov.io/bash) || echo 'Codecov failed to upload'
