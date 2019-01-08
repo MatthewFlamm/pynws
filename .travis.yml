@@ -8,10 +8,9 @@ matrix:
       dist: xenial
       sudo: true
 install:
-  - pip install --user -r requirements-test.txt
+  - pip install tox-travis
 script:
-  - pytest --cov=pynws/
-  - pylint pynws
+  - tox
 branches:
   only:
     - master
