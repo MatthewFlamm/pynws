@@ -3,9 +3,9 @@ import aiohttp
 import pynws
 import pytest
 
-from tests.observation_response import OBSERVATION_RESPONSE
-from tests.station_response import STATION_RESPONSE
-from tests.forecast_response import FORECAST_RESPONSE
+from pynws.tests.observation_response import OBSERVATION_RESPONSE
+from pynws.tests.station_response import STATION_RESPONSE
+from pynws.tests.forecast_response import FORECAST_RESPONSE
 
 LATLON = (0, 0)
 USERID = 'testing@test'

@@ -3,7 +3,7 @@ import aiohttp
 import pynws
 import pytest
 
-from tests.forecast_response import FORECAST_RESPONSE
+from pynws.tests.forecast_response import FORECAST_RESPONSE
 
 LATLON = (0, 0)
 USERID = 'testing@test'
