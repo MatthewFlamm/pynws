@@ -15,3 +15,7 @@ def stn_url(lat, lon):
 def forc_url(lat, lon):
     """Formats forecast url"""
     return API_URL + API_FORECAST.format(lat, lon)
+
+def hour_forc_url(lat, lon):
+    """Formats forecast url"""
+    return API_URL + API_FORECAST_HOURLY.format(lat, lon)

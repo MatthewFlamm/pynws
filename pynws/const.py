@@ -10,6 +10,7 @@ API_OBSERVATION = 'stations/{}/observations/'
 API_ACCEPT = 'application/geo+json'
 API_USER = 'pynws {}'
 API_FORECAST = 'points/{},{}/forecast'
+API_FORECAST_HOURLY = '/points/{point}/forecast/hourly'
 
 DEFAULT_USERID = 'CODEemail@address'
 
