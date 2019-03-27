@@ -12,7 +12,7 @@ async def defaults():
         nws.station = stations[0]
         observations = await nws.observations()
         forecast = await nws.forecast()
-        
+
 loop = asyncio.get_event_loop()
-nws = loop.run_until_complete(defaults())
+loop.run_until_complete(defaults())
 
