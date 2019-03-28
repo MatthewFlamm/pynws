@@ -60,7 +60,7 @@ async def get_obs_from_stn(station, websession, userid, limit):
         obs = await res.json()
     return obs
 
-async def observations(station, websession, userid, limit):
+async def observations(station, websession, userid, limit=5):
     """Observations from station"""
     res = await get_obs_from_stn(station, websession, userid, limit)
     return [o['properties'] for o in res['features']]
