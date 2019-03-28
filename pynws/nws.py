@@ -13,13 +13,11 @@ class NwsError(Exception):
 
 class Nws:
     """Nws object for simple use"""
-    def __init__(self, session, latlon=None, station=None):
+    def __init__(self, session, latlon=None, station=None, userid=DEAFAULT_USERID):
         self.session = session
         self.latlon = latlon
         self.station = station
-
-        self.limit = 5
-        self.userid = DEFAULT_USERID
+        self.userid = userid
 
     async def stations(self):
         """Returns station list"""
@@ -27,11 +25,11 @@ class Nws:
             raise NwsError("Need to set lattitude and longitude")
         return await stations(*self.latlon, self.session, self.userid)
 
-    async def observations(self):
+    async def observations(self, limit=5):
         """Returns observation list"""
         if self.station is None:
             raise NwsError("Need to set station")
-        return await observations(self.station, self.session, self.userid, self.limit)
+        return await observations(self.station, self.session, self.userid, limit)
 
     async def forecast(self):
         """Returns forecast list"""
@@ -48,7 +46,7 @@ def get_header(userid):
     return {'accept': API_ACCEPT,
             'User-Agent': API_USER.format(userid)}
 
-async def get_obs_from_stn(station, websession, userid, limit=0):
+async def get_obs_from_stn(station, websession, userid, limit):
     """Get observation response from station"""
     if limit == 0:
         params = None
@@ -62,7 +60,7 @@ async def get_obs_from_stn(station, websession, userid, limit=0):
         obs = await res.json()
     return obs
 
-async def observations(station, websession, userid, limit=0):
+async def observations(station, websession, userid, limit):
     """Observations from station"""
     res = await get_obs_from_stn(station, websession, userid, limit)
     return [o['properties'] for o in res['features']]
