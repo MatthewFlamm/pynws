@@ -46,7 +46,7 @@ def get_header(userid):
     return {'accept': API_ACCEPT,
             'User-Agent': API_USER.format(userid)}
 
-async def get_obs_from_stn(station, websession, userid, limit):
+async def get_obs_from_stn(station, websession, userid, limit=5):
     """Get observation response from station"""
     if limit == 0:
         params = None
