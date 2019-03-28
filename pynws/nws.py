@@ -13,7 +13,7 @@ class NwsError(Exception):
 
 class Nws:
     """Nws object for simple use"""
-    def __init__(self, session, latlon=None, station=None, userid=DEAFAULT_USERID):
+    def __init__(self, session, latlon=None, station=None, userid=DEFAULT_USERID):
         self.session = session
         self.latlon = latlon
         self.station = station
