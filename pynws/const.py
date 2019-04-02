@@ -2,7 +2,7 @@
 Constants for pynws
 """
 
-__version__ = '0.5'
+__version__ = '0.6'
 
 API_URL = 'https://api.weather.gov/'
 API_STATIONS = 'points/{},{}/stations'
@@ -50,10 +50,3 @@ API_WEATHER_CODE = {
     "blizzard": "Blizzard",
     "fog": "Fog/mist"
     }
-
-_DIRECTIONS = ['N', 'NNE', 'NE', 'ENE',
-               'E', 'ESE', 'SE', 'SSE',
-               'S', 'SSW', 'SW', 'WSW',
-               'W', 'WNW', 'NW', 'NNW']
-
-WIND = {name: idx * 360 / 16 for idx, name in enumerate(_DIRECTIONS)}
