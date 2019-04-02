@@ -37,6 +37,11 @@ class Nws:
             raise NwsError("Need to set lattitude and longitude")
         return await forecast(*self.latlon, self.session, self.userid)
 
+    async def forecast_hourly(self):
+        """returns hourly forecast list"""
+        if self.latlon is None:
+            raise NwsError("Need to set lattitude and longitude")
+        return await forecast_hourly(*self.latlon, self.session, self.userid)
 
 def get_header(userid):
     """Get header.
@@ -94,4 +99,19 @@ async def get_forc_from_pnt(lat, lon, websession, userid):
 async def forecast(lat, lon, websession, userid):
     """Returns forecast as list """
     res = await get_forc_from_pnt(lat, lon, websession, userid)
+    return res['properties']['periods']
+
+async def get_hour_forc_from_pnt(lat, lon, websession, userid):
+    """update forecast"""
+
+    url = pynws.urls.hour_forc_url(lat, lon)
+    header = get_header(userid)
+    async with websession.get(url, headers=header) as res:
+        res.raise_for_status()
+        jres = await res.json()
+    return jres
+
+async def forecast_hourly(lat, lon, websession, userid):
+    """Returns hourly forecast as list """
+    res = await get_hour_forc_from_pnt(lat, lon, websession, userid)
     return res['properties']['periods']

@@ -2,7 +2,7 @@
 url formattera
 """
 
-from pynws.const import API_URL, API_STATIONS, API_OBSERVATION, API_FORECAST
+from pynws.const import API_URL, API_STATIONS, API_OBSERVATION, API_FORECAST, API_FORECAST_HOURLY
 
 def obs_url(station):
     """Formats observation url."""
@@ -15,3 +15,7 @@ def stn_url(lat, lon):
 def forc_url(lat, lon):
     """Formats forecast url"""
     return API_URL + API_FORECAST.format(lat, lon)
+
+def hour_forc_url(lat, lon):
+    """Formats forecast url"""
+    return API_URL + API_FORECAST_HOURLY.format(lat, lon)
