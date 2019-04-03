@@ -7,7 +7,7 @@ USERID = 'testing@address.xyz'
 
 async def defaults():
     async with aiohttp.ClientSession() as session:
-        nws = pynws.Nws(session, latlon=PHILLY)
+        nws = pynws.Nws(session, latlon=PHILLY, userid=USERID)
         stations = await nws.stations()
         nws.station = stations[0]
         observations = await nws.observations()
