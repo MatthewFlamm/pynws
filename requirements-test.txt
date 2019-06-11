@@ -1,4 +1,5 @@
 aiohttp
+metar
 pytest
 pytest-asyncio
 pytest-cov
