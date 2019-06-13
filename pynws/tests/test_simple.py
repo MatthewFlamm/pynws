@@ -81,12 +81,12 @@ async def test_obs(aiohttp_client, loop, urls):
     await snws.set_station('STN')
     await snws.update_observation()
 
-    assert snws.temperature == 50
+    assert snws.temperature == 10
     assert snws.humidity == 10
     assert snws.wind_bearing == 10
-    assert snws.visibility == 10 / 1609.34
-    assert snws.pressure == 10 / 3386.39
-    assert snws.wind_speed == 10 / 1609.34 * 3600
+    assert snws.visibility == 10
+    assert snws.pressure == 10
+    assert snws.wind_speed == 10
     assert snws.icon_condition[0] == "night"
     assert snws.icon_condition[1][0][0] == "Overcast"
     assert snws.icon_condition[1][0][1] == 0
@@ -118,7 +118,7 @@ async def metar_obs(request):
     return aiohttp.web.json_response(data=METAR_OBSERVATION_RESPONSE)
 
 
-async def test_obs(aiohttp_client, loop, urls):
+async def test_metar_obs(aiohttp_client, loop, urls):
     """Getting response succeeds"""
     app = aiohttp.web.Application()
     app.router.add_get('/obs', metar_obs)
@@ -129,12 +129,12 @@ async def test_obs(aiohttp_client, loop, urls):
     await snws.set_station('STN')
     await snws.update_observation()
 
-    assert snws.temperature == 78.08
+    assert snws.temperature == 25.6
     assert snws.humidity is None
     assert snws.wind_bearing == 80
-    assert snws.visibility == 16090 / 1609.34
-    assert snws.pressure == 101625.80398 / 3386.39
-    assert snws.wind_speed == 3.601108 / 1609.34 * 3600
+    assert snws.visibility == 16090
+    assert snws.pressure == 101625.80398
+    assert snws.wind_speed == 3.601108
     assert snws.icon_condition[0] == "night"
     assert snws.icon_condition[1][0][0] == "A few clouds"
     assert snws.icon_condition[1][0][1] == 0
