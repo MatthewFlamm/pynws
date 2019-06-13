@@ -2,7 +2,7 @@
 from collections import OrderedDict
 from statistics import mean
 
-from metar import Metar
+from metar.Metar import Metar
 
 from .nws import Nws
 from .const import API_WEATHER_CODE
@@ -57,13 +57,13 @@ class SimpleNWS:
         if station:
             self.nws.station = station
             self.station = station
-            self.stations = None
+            self.stations = [self.station]
         else:
             self.stations = await self.nws.stations()
-            self.nws.station = stations[0]
-            self.station = station
+            self.nws.station = self.stations[0]
+            self.station = self.stations[0]
 
-    async def update_observation():
+    async def update_observation(self):
         """Update observation."""
     
         obs = await self.nws.observations(limit=1)
@@ -76,13 +76,13 @@ class SimpleNWS:
         else:
             self.metar_obs = None
 
-    async def update_forecast():
+    async def update_forecast(self):
         """Update forecast."""
         if self.mode == 'daynight':
-            self.forecast = await self.nws.forecast()
-        elif self._mode == 'hourly':
-            self.forecast = await self.nws.forecast_hourly()
-        return
+            forecast = await self.nws.forecast()
+        elif self.mode == 'hourly':
+            forecast = await self.nws.forecast_hourly()
+        self._forecast = forecast
 
     @property
     def temperature(self):
@@ -108,7 +108,7 @@ class SimpleNWS:
             if pressure_hpa:
                 pressure_pa = pressure_hpa * 100
         if pressure_pa:
-            return pressure_pa * 3386.39
+            return pressure_pa / 3386.39
 
     @property
     def humidity(self):
@@ -128,13 +128,13 @@ class SimpleNWS:
         if wind_m_s is None and self.metar_obs and self.metar_obs.wind_speed:
             wind_m_s = self.metar_obs.wind_speed.value(units='MPS')
         if wind_m_s:
-            return wind_m_s * 2.23694
+            return wind_m_s / 1609.34 * 3600
 
     @property
     def wind_bearing(self):
         """Return the current wind bearing (degrees)."""
         wind_bearing = None
-        if self._observation:
+        if self.observation:
             wind_bearing = self.observation.get('windDirection',
                                                 {}).get('value')
         if wind_bearing is None and (self.metar_obs
@@ -143,14 +143,13 @@ class SimpleNWS:
         return wind_bearing
 
     @property
-    def condition(self):
+    def icon_condition(self):
         """Return current condition."""
         icon = None
         if self.observation:
             icon = self.observation.get('icon')
         if icon:
-            time, weather = parse_icon(self._observation['icon'])
-            
+            time, weather = parse_icon(self.observation['icon'])
             weather = convert_weather(weather)
             return time, weather
         return
@@ -170,11 +169,11 @@ class SimpleNWS:
     def forecast(self):
         """Return forecast."""
         forecast = []
-        for forecast_entry in self.forecast:
+        for forecast_entry in self._forecast:
             # get weather
             time, weather = parse_icon(forecast_entry['icon'])
             weather = convert_weather(weather)
-            forecast_entry['condition'] = weather
+            forecast_entry['iconCondition'] = weather
             
             forecast_entry['windBearing'] = \
                 WIND[forecast_entry['windDirection']]
