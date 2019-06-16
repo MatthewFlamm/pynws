@@ -1,9 +1,9 @@
+# pylint: disable=redefined-outer-name
 """Test observations"""
-import asyncio
 import aiohttp
-import pynws
 import pytest
 
+import pynws
 from pynws.tests.forecast_hourly_response import FORECAST_HOURLY_RESPONSE
 from pynws.tests.forecast_response import FORECAST_RESPONSE
 from pynws.tests.observation_response import OBSERVATION_RESPONSE
@@ -93,12 +93,12 @@ async def test_obs(aiohttp_client, loop, urls):
 
     await snws.update_forecast()
     forecast = snws.forecast[0]
-    forecast['iconCondition'][0][0] == "Thunderstorm (high cloud cover)" 
-    forecast['iconCondition'][0][1] == 40
-    forecast['iconCondition'][0][0] == "Overcast"
-    forecast['iconCondition'][0][1] == 0
-    forecast['windSpeed'] == 10
-    forecast['windBearing'] == 180
+    assert forecast['iconCondition'][1][0][0] == "Thunderstorm (high cloud cover)" 
+    assert forecast['iconCondition'][1][0][1] == 40
+    assert forecast['iconCondition'][1][1][0] == "Overcast"
+    assert forecast['iconCondition'][1][1][1] == 0
+    assert forecast['windSpeedAvg'] == 10
+    assert forecast['windBearing'] == 180
 
 
 async def test_hourly_forecast(aiohttp_client, loop, urls):

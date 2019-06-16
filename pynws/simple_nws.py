@@ -1,5 +1,4 @@
 """Support for NWS weather service."""
-from collections import OrderedDict
 from statistics import mean
 
 from metar.Metar import Metar
@@ -16,6 +15,7 @@ WIND = {name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)}
 
 
 def convert_weather(weather):
+    """Convert short code to readable name."""
     return [(API_WEATHER_CODE.get(w[0], w[0]), w[1]) for w in weather]
 
 
@@ -39,8 +39,13 @@ def parse_icon(icon):
 
 
 class SimpleNWS:
+    """
+    NWS simplified data.
+
+    Uses normal api first.  If value is None, use metar info.
+    """
     def __init__(self, lat, lon, api_key, mode, session):
-        """Set up simplified NWS class."""    
+        """Set up simplified NWS class."""
         self.lat = lat
         self.lon = lon
         self.api_key = api_key
@@ -48,6 +53,12 @@ class SimpleNWS:
         self.nws = Nws(session, latlon=(float(lat), float(lon)),
                        userid=api_key)
         self.mode = mode
+
+        self.observation = None
+        self.metar_obs = None
+        self.station = None
+        self.stations = None
+        self._forecast = None
 
     async def set_station(self, station=None):
         """
@@ -65,7 +76,7 @@ class SimpleNWS:
 
     async def update_observation(self):
         """Update observation."""
-    
+
         obs = await self.nws.observations(limit=1)
         if obs is None:
             return None
@@ -92,8 +103,7 @@ class SimpleNWS:
             temp_c = self.observation.get('temperature', {}).get('value')
         if temp_c is None and self.metar_obs and self.metar_obs.temp:
             temp_c = self.metar_obs.temp.value(units='C')
-        if temp_c:
-            return temp_c * 9/5 + 32
+        return temp_c
 
     @property
     def pressure(self):
@@ -107,8 +117,7 @@ class SimpleNWS:
             pressure_hpa = self.metar_obs.press.value(units='HPA')
             if pressure_hpa:
                 pressure_pa = pressure_hpa * 100
-        if pressure_pa:
-            return pressure_pa / 3386.39
+        return pressure_pa
 
     @property
     def humidity(self):
@@ -127,8 +136,7 @@ class SimpleNWS:
             wind_m_s = self.observation.get('windSpeed', {}).get('value')
         if wind_m_s is None and self.metar_obs and self.metar_obs.wind_speed:
             wind_m_s = self.metar_obs.wind_speed.value(units='MPS')
-        if wind_m_s:
-            return wind_m_s / 1609.34 * 3600
+        return wind_m_s
 
     @property
     def wind_bearing(self):
@@ -152,7 +160,7 @@ class SimpleNWS:
             time, weather = parse_icon(self.observation['icon'])
             weather = convert_weather(weather)
             return time, weather
-        return
+        return None
 
     @property
     def visibility(self):
@@ -162,8 +170,7 @@ class SimpleNWS:
             vis_m = self.observation.get('visibility', {}).get('value')
         if vis_m is None and self.metar_obs and self.metar_obs.vis:
             vis_m = self.metar_obs.vis.value(units='M')
-        if vis_m:
-            return vis_m / 1609.34
+        return vis_m
 
     @property
     def forecast(self):
@@ -173,8 +180,7 @@ class SimpleNWS:
             # get weather
             time, weather = parse_icon(forecast_entry['icon'])
             weather = convert_weather(weather)
-            forecast_entry['iconCondition'] = weather
-            
+            forecast_entry['iconCondition'] = (time, weather)
             forecast_entry['windBearing'] = \
                 WIND[forecast_entry['windDirection']]
 
@@ -182,7 +188,7 @@ class SimpleNWS:
             # if range, take average
             wind_speed = forecast_entry['windSpeed'].split(' ')[0::2]
             wind_speed_avg = mean(int(w) for w in wind_speed)
-            forecast_entry['windSpeed'] = wind_speed_avg
+            forecast_entry['windSpeedAvg'] = wind_speed_avg
 
             forecast.append(forecast_entry)
         return forecast
