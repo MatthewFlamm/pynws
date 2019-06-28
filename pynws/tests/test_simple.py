@@ -1,5 +1,8 @@
 # pylint: disable=redefined-outer-name
 """Test observations"""
+import json
+import os
+
 import aiohttp
 import pytest
 
@@ -15,6 +18,7 @@ USERID = 'testing@test'
 MODE = 'daynight'
 USERID = 'testing@test'
 
+DIR = os.path.dirname(os.path.realpath(__file__))
 
 async def stn(request):
     """Return station response"""
@@ -40,7 +44,9 @@ def urls(monkeypatch):
 
 async def obs(request):
     """Return observation response"""
-    return aiohttp.web.json_response(data=OBSERVATION_RESPONSE)
+    with open(os.path.join(DIR, 'obs.json'), 'r') as f:
+        return aiohttp.web.json_response(data=json.load(f))
+    #return aiohttp.web.json_response(data=OBSERVATION_RESPONSE)
 
 
 async def forc(request):
@@ -81,15 +87,16 @@ async def test_obs(aiohttp_client, loop, urls):
     await snws.set_station('STN')
     await snws.update_observation()
 
-    assert snws.temperature == 10
-    assert snws.humidity == 10
-    assert snws.wind_bearing == 10
-    assert snws.visibility == 10
-    assert snws.pressure == 10
-    assert snws.wind_speed == 10
-    assert snws.icon_condition[0] == "night"
-    assert snws.icon_condition[1][0][0] == "Overcast"
-    assert snws.icon_condition[1][0][1] == 0
+    observation = snws.observation
+    assert observation['temperature'] == 10
+    assert observation['relativeHumidity'] == 10
+    assert observation['windDirection'] == 10
+    assert observation['visibility'] == 10000
+    assert observation['seaLevelPressure'] == 100000
+    assert observation['windSpeed'] == 10
+    assert observation['iconTime'] == "day"
+    assert observation['iconWeather'][0][0] == "A few clouds"
+    assert observation['iconWeather'][0][1] == 0
 
     await snws.update_forecast()
     forecast = snws.forecast[0]

@@ -1,0 +1,168 @@
+{
+    "@context": [
+        "https://raw.githubusercontent.com/geojson/geojson-ld/master/contexts/geojson-base.jsonld",
+        {
+            "wx": "https://api.weather.gov/ontology#",
+            "s": "https://schema.org/",
+            "geo": "http://www.opengis.net/ont/geosparql#",
+            "unit": "http://codes.wmo.int/common/unit/",
+            "@vocab": "https://api.weather.gov/ontology#",
+            "geometry": {
+                "@id": "s:GeoCoordinates",
+                "@type": "geo:wktLiteral"
+            },
+            "city": "s:addressLocality",
+            "state": "s:addressRegion",
+            "distance": {
+                "@id": "s:Distance",
+                "@type": "s:QuantitativeValue"
+            },
+            "bearing": {
+                "@type": "s:QuantitativeValue"
+            },
+            "value": {
+                "@id": "s:value"
+            },
+            "unitCode": {
+                "@id": "s:unitCode",
+                "@type": "@id"
+            },
+            "forecastOffice": {
+                "@type": "@id"
+            },
+            "forecastGridData": {
+                "@type": "@id"
+            },
+            "publicZone": {
+                "@type": "@id"
+            },
+            "county": {
+                "@type": "@id"
+            }
+        }
+    ],
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "id": "https://api.weather.gov/stations/KFLL/observations/2019-06-27T10:53:00+00:00",
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -80.150000000000006,
+                    26.07
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/stations/KFLL/observations/2019-06-27T10:53:00+00:00",
+                "@type": "wx:ObservationStation",
+                "elevation": {
+                    "value": 10,
+                    "unitCode": "unit:m"
+                },
+                "station": "https://api.weather.gov/stations/KFLL",
+                "timestamp": "2019-06-27T10:53:00+00:00",
+                "rawMessage": "KFLL 271053Z 35005KT 10SM FEW025 FEW250 26/23 A3005 RMK AO2 SLP176 T02560228",
+                "textDescription": "Mostly Clear",
+                "icon": "https://api.weather.gov/icons/land/day/few?size=medium",
+                "presentWeather": [],
+                "temperature": {
+                    "value": 10,
+                    "unitCode": "unit:degC",
+                    "qualityControl": "qc:V"
+                },
+                "dewpoint": {
+                    "value": 10,
+                    "unitCode": "unit:degC",
+                    "qualityControl": "qc:V"
+                },
+                "windDirection": {
+                    "value": 10,
+                    "unitCode": "unit:degree_(angle)",
+                    "qualityControl": "qc:V"
+                },
+                "windSpeed": {
+                    "value": 10,
+                    "unitCode": "unit:m_s-1",
+                    "qualityControl": "qc:V"
+                },
+                "windGust": {
+                    "value": 10,
+                    "unitCode": "unit:m_s-1",
+                    "qualityControl": "qc:Z"
+                },
+                "barometricPressure": {
+                    "value": 100000,
+                    "unitCode": "unit:Pa",
+                    "qualityControl": "qc:V"
+                },
+                "seaLevelPressure": {
+                    "value": 100000,
+                    "unitCode": "unit:Pa",
+                    "qualityControl": "qc:V"
+                },
+                "visibility": {
+                    "value": 10000,
+                    "unitCode": "unit:m",
+                    "qualityControl": "qc:C"
+                },
+                "maxTemperatureLast24Hours": {
+                    "value": null,
+                    "unitCode": "unit:degC",
+                    "qualityControl": null
+                },
+                "minTemperatureLast24Hours": {
+                    "value": null,
+                    "unitCode": "unit:degC",
+                    "qualityControl": null
+                },
+                "precipitationLastHour": {
+                    "value": null,
+                    "unitCode": "unit:m",
+                    "qualityControl": "qc:Z"
+                },
+                "precipitationLast3Hours": {
+                    "value": null,
+                    "unitCode": "unit:m",
+                    "qualityControl": "qc:Z"
+                },
+                "precipitationLast6Hours": {
+                    "value": null,
+                    "unitCode": "unit:m",
+                    "qualityControl": "qc:Z"
+                },
+                "relativeHumidity": {
+                    "value": 10,
+                    "unitCode": "unit:percent",
+                    "qualityControl": "qc:C"
+                },
+                "windChill": {
+                    "value": null,
+                    "unitCode": "unit:degC",
+                    "qualityControl": "qc:V"
+                },
+                "heatIndex": {
+                    "value": 10,
+                    "unitCode": "unit:degC",
+                    "qualityControl": "qc:V"
+                },
+                "cloudLayers": [
+                    {
+                        "base": {
+                            "value": 760,
+                            "unitCode": "unit:m"
+                        },
+                        "amount": "FEW"
+                    },
+                    {
+                        "base": {
+                            "value": 7620,
+                            "unitCode": "unit:m"
+                        },
+                        "amount": "FEW"
+                    }
+                ]
+            }
+        }
+    ]
+}

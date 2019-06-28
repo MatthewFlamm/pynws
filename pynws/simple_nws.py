@@ -13,6 +13,31 @@ WIND_DIRECTIONS = ['N', 'NNE', 'NE', 'ENE',
 
 WIND = {name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)}
 
+OBSERVATIONS = {
+    'temperature': ['temp', 'C', None],
+    'barometricPressure': None,
+    'seaLevelPressure': ['press', 'HPA', 100],
+    'relativeHumidity': None,
+    'windSpeed': ['wind_speed', 'MPS', None],
+    'windDirection': ['wind_dir', None, None],
+    'icon': None, 
+    'visibility': ['vis', 'M', None],
+    'elevation': None,
+    'textDescription': None,
+    'dewpoint': None,
+    'windGust': None,
+    'elevation': None,
+    'station': None,
+    'timestamp': None,
+    'icon': None,
+    'maxTemperatureLast24Hours': None,
+    'minTemperatureLast24Hours': None,
+    'precipitationLastHour': None,
+    'precipitationLast3Hours': None,
+    'precipitationLast6Hours': None,
+    'windChill': None,
+    'heatIndex': None,
+}
 
 def convert_weather(weather):
     """Convert short code to readable name."""
@@ -54,7 +79,7 @@ class SimpleNWS:
                        userid=api_key)
         self.mode = mode
 
-        self.observation = None
+        self._observation = None
         self.metar_obs = None
         self.station = None
         self.stations = None
@@ -80,12 +105,12 @@ class SimpleNWS:
         obs = await self.nws.observations(limit=1)
         if obs is None:
             return None
-        self.observation = obs[0]
-        metar_msg = self.observation.get('rawMessage')
+        self._observation = obs[0]
+        metar_msg = self._observation.get('rawMessage')
         if metar_msg:
-            self.metar_obs = Metar(metar_msg)
+            self._metar_obs = Metar(metar_msg)
         else:
-            self.metar_obs = None
+            self._metar_obs = None
 
     async def update_forecast(self):
         """Update forecast."""
@@ -96,81 +121,28 @@ class SimpleNWS:
         self._forecast = forecast
 
     @property
-    def temperature(self):
-        """Return the current temperature in F."""
-        temp_c = None
-        if self.observation:
-            temp_c = self.observation.get('temperature', {}).get('value')
-        if temp_c is None and self.metar_obs and self.metar_obs.temp:
-            temp_c = self.metar_obs.temp.value(units='C')
-        return temp_c
+    def observation(self):
+        """Observation dict"""
 
-    @property
-    def pressure(self):
-        """Return the current pressure in inHg."""
-        pressure_pa = None
-        if self.observation:
-            pressure_pa = self.observation.get('seaLevelPressure',
-                                               {}).get('value')
+        if self._observation is None:
+            return None
 
-        if pressure_pa is None and self.metar_obs and self.metar_obs.press:
-            pressure_hpa = self.metar_obs.press.value(units='HPA')
-            if pressure_hpa:
-                pressure_pa = pressure_hpa * 100
-        return pressure_pa
+        data = {}
+        for obs, met in OBSERVATIONS.items():
+            data[obs] = self._observation[obs]
+            if isinstance(data[obs], dict):
+                data[obs] = data[obs].get('value')
+            if data[obs] is None and (met is not None
+                                      and self._metar_obs is not None):
+                met_prop =  getattr(self._metar_obs, met[0])
+                data[obs] = getattr(met_prop, met[1])
+                if met[2] is not None:
+                    data[obs] = data[obs] * met[2]
 
-    @property
-    def humidity(self):
-        """Return the humidity in %."""
-        humidity = None
-        if self.observation:
-            humidity = self.observation.get('relativeHumidity',
-                                            {}).get('value')
-        return humidity
-
-    @property
-    def wind_speed(self):
-        """Return the current windspeed in mph."""
-        wind_m_s = None
-        if self.observation:
-            wind_m_s = self.observation.get('windSpeed', {}).get('value')
-        if wind_m_s is None and self.metar_obs and self.metar_obs.wind_speed:
-            wind_m_s = self.metar_obs.wind_speed.value(units='MPS')
-        return wind_m_s
-
-    @property
-    def wind_bearing(self):
-        """Return the current wind bearing (degrees)."""
-        wind_bearing = None
-        if self.observation:
-            wind_bearing = self.observation.get('windDirection',
-                                                {}).get('value')
-        if wind_bearing is None and (self.metar_obs
-                                     and self.metar_obs.wind_dir):
-            wind_bearing = self.metar_obs.wind_dir.value()
-        return wind_bearing
-
-    @property
-    def icon_condition(self):
-        """Return current condition."""
-        icon = None
-        if self.observation:
-            icon = self.observation.get('icon')
-        if icon:
-            time, weather = parse_icon(self.observation['icon'])
-            weather = convert_weather(weather)
-            return time, weather
-        return None
-
-    @property
-    def visibility(self):
-        """Return visibility in mi."""
-        vis_m = None
-        if self.observation:
-            vis_m = self.observation.get('visibility', {}).get('value')
-        if vis_m is None and self.metar_obs and self.metar_obs.vis:
-            vis_m = self.metar_obs.vis.value(units='M')
-        return vis_m
+        time, weather = parse_icon(data['icon'])
+        data['iconTime'] = time
+        data['iconWeather'] = convert_weather(weather)
+        return data
 
     @property
     def forecast(self):
@@ -192,3 +164,9 @@ class SimpleNWS:
 
             forecast.append(forecast_entry)
         return forecast
+
+    @property
+    def obs_dict(self):
+        data = {}
+        for o in OBSERVATIONS:
+            data[o] = getattr(self, o)
