@@ -20,13 +20,11 @@ OBSERVATIONS = {
     'relativeHumidity': None,
     'windSpeed': ['wind_speed', 'MPS', None],
     'windDirection': ['wind_dir', None, None],
-    'icon': None, 
     'visibility': ['vis', 'M', None],
     'elevation': None,
     'textDescription': None,
     'dewpoint': None,
     'windGust': None,
-    'elevation': None,
     'station': None,
     'timestamp': None,
     'icon': None,
@@ -80,7 +78,7 @@ class SimpleNWS:
         self.mode = mode
 
         self._observation = None
-        self.metar_obs = None
+        self._metar_obs = None
         self.station = None
         self.stations = None
         self._forecast = None
@@ -134,8 +132,11 @@ class SimpleNWS:
                 data[obs] = data[obs].get('value')
             if data[obs] is None and (met is not None
                                       and self._metar_obs is not None):
-                met_prop =  getattr(self._metar_obs, met[0])
-                data[obs] = getattr(met_prop, met[1])
+                met_prop = getattr(self._metar_obs, met[0])
+                if met[1]:
+                    data[obs] = met_prop.value(units=met[1])
+                else:
+                    data[obs] = met_prop.value()
                 if met[2] is not None:
                     data[obs] = data[obs] * met[2]
 
@@ -164,9 +165,3 @@ class SimpleNWS:
 
             forecast.append(forecast_entry)
         return forecast
-
-    @property
-    def obs_dict(self):
-        data = {}
-        for o in OBSERVATIONS:
-            data[o] = getattr(self, o)

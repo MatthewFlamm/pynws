@@ -46,7 +46,6 @@ async def obs(request):
     """Return observation response"""
     with open(os.path.join(DIR, 'obs.json'), 'r') as f:
         return aiohttp.web.json_response(data=json.load(f))
-    #return aiohttp.web.json_response(data=OBSERVATION_RESPONSE)
 
 
 async def forc(request):
@@ -89,12 +88,14 @@ async def test_obs(aiohttp_client, loop, urls):
 
     observation = snws.observation
     assert observation['temperature'] == 10
+    assert observation['dewpoint'] == 10
     assert observation['relativeHumidity'] == 10
     assert observation['windDirection'] == 10
     assert observation['visibility'] == 10000
     assert observation['seaLevelPressure'] == 100000
     assert observation['windSpeed'] == 10
     assert observation['iconTime'] == "day"
+    assert observation['windGust'] == 10
     assert observation['iconWeather'][0][0] == "A few clouds"
     assert observation['iconWeather'][0][1] == 0
 
@@ -122,7 +123,8 @@ async def test_hourly_forecast(aiohttp_client, loop, urls):
 
 async def metar_obs(request):
     """Return observation response"""
-    return aiohttp.web.json_response(data=METAR_OBSERVATION_RESPONSE)
+    with open(os.path.join(DIR, 'obs_metar.json'), 'r') as f:
+        return aiohttp.web.json_response(data=json.load(f))
 
 
 async def test_metar_obs(aiohttp_client, loop, urls):
@@ -136,12 +138,12 @@ async def test_metar_obs(aiohttp_client, loop, urls):
     await snws.set_station('STN')
     await snws.update_observation()
 
-    assert snws.temperature == 25.6
-    assert snws.humidity is None
-    assert snws.wind_bearing == 80
-    assert snws.visibility == 16090
-    assert snws.pressure == 101625.80398
-    assert snws.wind_speed == 3.601108
-    assert snws.icon_condition[0] == "night"
-    assert snws.icon_condition[1][0][0] == "A few clouds"
-    assert snws.icon_condition[1][0][1] == 0
+    observation = snws.observation
+    assert observation['temperature'] == 25.6
+    assert observation['dewpoint'] is None
+    assert observation['relativeHumidity'] is None
+    assert observation['windDirection'] == 350.
+    assert observation['visibility'] == 16093.44
+    assert round(observation['seaLevelPressure']) == 101761
+    assert round(observation['windSpeed'], 2) == 2.57
+    assert observation['windGust'] is None
