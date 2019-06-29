@@ -18,7 +18,10 @@ setup(
     author_email='matthewflamm0@gmail.com',
     description='Python library to retrieve observations and forecasts from NWS/NOAA',
     packages=['pynws'],
-    install_requires=['aiohttp'],
+    install_requires=[
+        'aiohttp',
+        'metar',
+    ],
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3.5",
