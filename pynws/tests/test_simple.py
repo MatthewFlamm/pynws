@@ -97,14 +97,14 @@ async def test_obs(aiohttp_client, loop, urls):
     assert observation['iconTime'] == "day"
     assert observation['windGust'] == 10
     assert observation['iconWeather'][0][0] == "A few clouds"
-    assert observation['iconWeather'][0][1] == 0
+    assert observation['iconWeather'][0][1] is None
 
     await snws.update_forecast()
     forecast = snws.forecast[0]
-    assert forecast['iconCondition'][1][0][0] == "Thunderstorm (high cloud cover)" 
-    assert forecast['iconCondition'][1][0][1] == 40
-    assert forecast['iconCondition'][1][1][0] == "Overcast"
-    assert forecast['iconCondition'][1][1][1] == 0
+    assert forecast['iconWeather'][0][0] == "Thunderstorm (high cloud cover)" 
+    assert forecast['iconWeather'][0][1] == 40
+    assert forecast['iconWeather'][1][0] == "Overcast"
+    assert forecast['iconWeather'][1][1] is None
     assert forecast['windSpeedAvg'] == 10
     assert forecast['windBearing'] == 180
 

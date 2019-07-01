@@ -50,13 +50,13 @@ def parse_icon(icon):
     https://api.weather.gov/icons/land/day/skc/tsra,40?size=medium
 
     Example return:
-    ('day', (('skc', 0), ('tsra', 40),))
+    ('day', (('skc', None), ('tsra', 40),))
     """
     icon_list = icon.split('/')
     time = icon_list[5]
     weather = [i.split('?')[0] for i in icon_list[6:]]
     code = [w.split(',')[0] for w in weather]
-    chance = [int(w.split(',')[1]) if len(w.split(',')) == 2 else 0
+    chance = [int(w.split(',')[1]) if len(w.split(',')) == 2 else None
               for w in weather]
     return time, tuple(zip(code, chance))
 
@@ -153,7 +153,8 @@ class SimpleNWS:
             # get weather
             time, weather = parse_icon(forecast_entry['icon'])
             weather = convert_weather(weather)
-            forecast_entry['iconCondition'] = (time, weather)
+            forecast_entry['iconTime'] = time
+            forecast_entry['iconWeather'] = weather
             forecast_entry['windBearing'] = \
                 WIND[forecast_entry['windDirection']]
 
