@@ -10,3 +10,5 @@ bin/
 lib/
 pyvenv.cfg
 lib64
+.in
+.out
