@@ -133,12 +133,13 @@ class SimpleNWS:
             if data[obs] is None and (met is not None
                                       and self._metar_obs is not None):
                 met_prop = getattr(self._metar_obs, met[0])
-                if met[1]:
-                    data[obs] = met_prop.value(units=met[1])
-                else:
-                    data[obs] = met_prop.value()
-                if met[2] is not None:
-                    data[obs] = data[obs] * met[2]
+                if met_prop:
+                    if met[1]:
+                        data[obs] = met_prop.value(units=met[1])
+                    else:
+                        data[obs] = met_prop.value()
+                    if met[2] is not None:
+                        data[obs] = data[obs] * met[2]
 
         time, weather = parse_icon(data['icon'])
         data['iconTime'] = time
