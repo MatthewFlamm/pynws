@@ -43,6 +43,7 @@ class Nws:
             raise NwsError("Need to set lattitude and longitude")
         return await forecast_hourly(*self.latlon, self.session, self.userid)
 
+
 def get_header(userid):
     """Get header.
 
@@ -50,6 +51,7 @@ def get_header(userid):
     """
     return {'accept': API_ACCEPT,
             'User-Agent': API_USER.format(userid)}
+
 
 async def get_obs_from_stn(station, websession, userid, limit=5):
     """Get observation response from station"""
@@ -65,10 +67,12 @@ async def get_obs_from_stn(station, websession, userid, limit=5):
         obs = await res.json()
     return obs
 
+
 async def observations(station, websession, userid, limit=5):
     """Observations from station"""
     res = await get_obs_from_stn(station, websession, userid, limit)
     return [o['properties'] for o in res['features']]
+
 
 async def get_stn_from_pnt(lat, lon, websession, userid):
     """Get list of stations for lat/lon"""
@@ -80,11 +84,13 @@ async def get_stn_from_pnt(lat, lon, websession, userid):
         jres = await res.json()
     return jres
 
+
 async def stations(lat, lon, websession, userid):
     """Returns list of stations for a point."""
     res = await get_stn_from_pnt(lat, lon, websession, userid)
     return [s['properties']['stationIdentifier']
             for s in res['features']]
+
 
 async def get_forc_from_pnt(lat, lon, websession, userid):
     """update forecast"""
@@ -96,10 +102,12 @@ async def get_forc_from_pnt(lat, lon, websession, userid):
         jres = await res.json()
     return jres
 
+
 async def forecast(lat, lon, websession, userid):
     """Returns forecast as list """
     res = await get_forc_from_pnt(lat, lon, websession, userid)
     return res['properties']['periods']
+
 
 async def get_hour_forc_from_pnt(lat, lon, websession, userid):
     """update forecast"""
@@ -110,6 +118,7 @@ async def get_hour_forc_from_pnt(lat, lon, websession, userid):
         res.raise_for_status()
         jres = await res.json()
     return jres
+
 
 async def forecast_hourly(lat, lon, websession, userid):
     """Returns hourly forecast as list """

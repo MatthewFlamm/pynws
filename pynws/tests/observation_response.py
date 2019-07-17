@@ -1,4 +1,3 @@
-
 OBSERVATION_RESPONSE = {'features': [{'properties':
                 {'temperature': {'value': 10, 'qualityControl': 'qc:V'},
                  'relativeHumidity': {'value': 10, 'qualityControl': 'qc:V'},
