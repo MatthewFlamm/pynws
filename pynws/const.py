@@ -3,10 +3,11 @@ Constants for pynws
 """
 import os
 
+from .version import __version__
+
 file_dir = os.path.join(os.path.dirname(__file__), '..')
 
-with open(os.path.join(file_dir, 'VERSION')) as version_file:
-    version = version_file.read().strip()
+version = __version__
 
 API_URL = 'https://api.weather.gov/'
 API_STATIONS = 'points/{},{}/stations'
