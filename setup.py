@@ -1,15 +1,14 @@
 import os
 from setuptools import setup
 
-with open('VERSION') as version_file:
-    version = version_file.read().strip()
+exec(open('pynws/version.py').read())
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
     name='pynws',
-    version=version,
+    version=__version__,
     license='MIT License',
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -18,6 +17,7 @@ setup(
     author_email='matthewflamm0@gmail.com',
     description='Python library to retrieve observations and forecasts from NWS/NOAA',
     packages=['pynws'],
+    include_package_data=True,
     install_requires=[
         'aiohttp',
         'metar',
