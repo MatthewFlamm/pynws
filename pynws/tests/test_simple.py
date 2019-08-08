@@ -148,6 +148,28 @@ async def test_metar_obs(aiohttp_client, loop, urls):
     assert round(observation['windSpeed'], 2) == 2.57
     assert observation['windGust'] is None
 
+
+async def noparse_metar_obs(request):
+    """Return observation response"""
+    with open(os.path.join(DIR, 'obs_noparse_metar.json'), 'r') as f:
+        return aiohttp.web.json_response(data=json.load(f))
+
+
+async def test_noparse_metar_obs(aiohttp_client, loop, urls):
+    """Getting response succeeds"""
+    app = aiohttp.web.Application()
+    app.router.add_get('/obs', noparse_metar_obs)
+    app.router.add_get('/stations', stn)
+    app.router.add_get('/forecast', forc)
+    client = await aiohttp_client(app)
+    snws = pynws.SimpleNWS(*LATLON, USERID, MODE, client) 
+    await snws.set_station('STN')
+    await snws.update_observation()
+
+    observation = snws.observation
+    assert observation['temperature'] is None
+
+
 async def empty_obs(request):
     """Return observation response"""
     with open(os.path.join(DIR, 'obs_empty.json'), 'r') as f:

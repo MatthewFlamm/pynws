@@ -1,7 +1,7 @@
 """Support for NWS weather service."""
 from statistics import mean
 
-from metar.Metar import Metar
+from metar import Metar
 
 from .nws import Nws
 from .const import API_WEATHER_CODE
@@ -106,7 +106,10 @@ class SimpleNWS:
         self._observation = obs[0]
         metar_msg = self._observation.get('rawMessage')
         if metar_msg:
-            self._metar_obs = Metar(metar_msg)
+            try:
+                self._metar_obs = Metar.Metar(metar_msg)
+            except Metar.ParserError:
+                self._metar_obs = None
         else:
             self._metar_obs = None
 
