@@ -61,11 +61,11 @@
                     "unitCode": "unit:m"
                 },
                 "station": "https://api.weather.gov/stations/KFLL",
-                "timestamp": "2019-06-27T10:53:00+00:00",
+                "timestamp": null,
                 "rawMessage": null,
-                "textDescription": "Mostly Clear",
-                "icon": "https://api.weather.gov/icons/land/day/few?size=medium",
-                "presentWeather": [],
+                "textDescription": null,
+                "icon": null,
+                "presentWeather": null,
                 "temperature": {
                     "value": null,
                     "unitCode": "unit:degC",
