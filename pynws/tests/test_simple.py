@@ -188,6 +188,7 @@ async def test_empty_obs(aiohttp_client, loop, urls):
     await snws.update_observation()
 
     observation = snws.observation
+    
     assert observation['temperature'] is None
     assert observation['dewpoint'] is None
     assert observation['relativeHumidity'] is None
@@ -196,3 +197,6 @@ async def test_empty_obs(aiohttp_client, loop, urls):
     assert observation['seaLevelPressure'] is None
     assert observation['windSpeed'] is None
     assert observation['windGust'] is None
+    assert observation['iconTime'] is None
+    assert observation['iconWeather'] is None
+    

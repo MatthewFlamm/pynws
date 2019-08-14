@@ -143,10 +143,13 @@ class SimpleNWS:
                         data[obs] = met_prop.value()
                     if met[2] is not None:
                         data[obs] = data[obs] * met[2]
-
-        time, weather = parse_icon(data['icon'])
-        data['iconTime'] = time
-        data['iconWeather'] = convert_weather(weather)
+        if data['icon']:
+            time, weather = parse_icon(data['icon'])
+            data['iconTime'] = time
+            data['iconWeather'] = convert_weather(weather)
+        else:
+            data['iconTime'] = None
+            data['iconWeather'] = None
         return data
 
     @property
