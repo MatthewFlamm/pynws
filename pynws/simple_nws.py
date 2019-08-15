@@ -143,7 +143,7 @@ class SimpleNWS:
                         data[obs] = met_prop.value()
                     if met[2] is not None:
                         data[obs] = data[obs] * met[2]
-        if data['icon']:
+        if data.get('icon'):
             time, weather = parse_icon(data['icon'])
             data['iconTime'] = time
             data['iconWeather'] = convert_weather(weather)
@@ -158,18 +158,27 @@ class SimpleNWS:
         forecast = []
         for forecast_entry in self._forecast:
             # get weather
-            time, weather = parse_icon(forecast_entry['icon'])
-            weather = convert_weather(weather)
+            if forecast_entry.get('icon'):
+                time, weather = parse_icon(forecast_entry['icon'])
+                weather = convert_weather(weather)
+            else:
+                time, weather = (None, None)
             forecast_entry['iconTime'] = time
             forecast_entry['iconWeather'] = weather
-            forecast_entry['windBearing'] = \
-                WIND[forecast_entry['windDirection']]
+            if forecast_entry.get('windDirection'):
+                forecast_entry['windBearing'] = \
+                    WIND[forecast_entry['windDirection']]
+            else:
+                forecast_entry['windBearing'] = None
 
             # wind speed reported as '7 mph' or '7 to 10 mph'
             # if range, take average
-            wind_speed = forecast_entry['windSpeed'].split(' ')[0::2]
-            wind_speed_avg = mean(int(w) for w in wind_speed)
-            forecast_entry['windSpeedAvg'] = wind_speed_avg
+            if forecast_entry.get('windSpeed'):
+                wind_speed = forecast_entry['windSpeed'].split(' ')[0::2]
+                wind_speed_avg = mean(int(w) for w in wind_speed)
+                forecast_entry['windSpeedAvg'] = wind_speed_avg
+            else:
+                forecast_entry['windSpeedAvg'] = None
 
             forecast.append(forecast_entry)
         return forecast
