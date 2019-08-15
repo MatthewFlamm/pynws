@@ -200,3 +200,21 @@ async def test_empty_obs(aiohttp_client, loop, urls):
     assert observation['iconTime'] is None
     assert observation['iconWeather'] is None
     
+
+async def empty_fore(request):
+    """Return observation response"""
+    with open(os.path.join(DIR, 'fore_empty.json'), 'r') as f:
+        return aiohttp.web.json_response(data=json.load(f))
+
+
+async def test_empty_fore(aiohttp_client, loop, urls):
+    """Getting response succeeds"""
+    app = aiohttp.web.Application()
+    app.router.add_get('/obs', obs)
+    app.router.add_get('/stations', stn)
+    app.router.add_get('/forecast', empty_fore)
+    client = await aiohttp_client(app)
+    snws = pynws.SimpleNWS(*LATLON, USERID, MODE, client) 
+    await snws.set_station('STN')
+    await snws.update_forecast()
+    assert snws.forecast
