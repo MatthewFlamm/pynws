@@ -97,21 +97,27 @@ class SimpleNWS:
             self.nws.station = self.stations[0]
             self.station = self.stations[0]
 
-    async def update_observation(self):
-        """Update observation."""
-
-        obs = await self.nws.observations(limit=1)
-        if obs is None:
-            return None
-        self._observation = obs[0]
-        metar_msg = self._observation.get('rawMessage')
+    @staticmethod
+    def extract_metar(obs):
+        """Return parsed metar if available."""
+        metar_msg = obs.get('rawMessage')
         if metar_msg:
             try:
-                self._metar_obs = Metar.Metar(metar_msg)
+                metar_obs = Metar.Metar(metar_msg)
             except Metar.ParserError:
-                self._metar_obs = None
+                metar_obs = None
         else:
-            self._metar_obs = None
+            metar_obs = None
+        return metar_obs
+
+    async def update_observation(self, start_time=None):
+        """Update observation."""
+        obs = await self.nws.observations(limit=0, start_time=start_time)
+        if obs is None:
+            return None
+        self._observation = obs
+        self._metar_obs = [self.extract_metar(iobs) for iobs in self._observation]
+
 
     async def update_forecast(self):
         """Update forecast."""
@@ -120,6 +126,13 @@ class SimpleNWS:
         elif self.mode == 'hourly':
             forecast = await self.nws.forecast_hourly()
         self._forecast = forecast
+
+    @staticmethod
+    def extract_observation_value(observation, value):
+        """Returns observation or observation value."""
+        if isinstance(observation[value], dict):
+            return observation[value].get('value')
+        return observation[value]
 
     @property
     def observation(self):
@@ -130,12 +143,11 @@ class SimpleNWS:
 
         data = {}
         for obs, met in OBSERVATIONS.items():
-            data[obs] = self._observation[obs]
-            if isinstance(data[obs], dict):
-                data[obs] = data[obs].get('value')
+            obs_list = [self.extract_observation_value(o, obs) for o in self._observation]
+            data[obs] = next(iter([o for o in obs_list if o]), None)
             if data[obs] is None and (met is not None
-                                      and self._metar_obs is not None):
-                met_prop = getattr(self._metar_obs, met[0])
+                                      and self._metar_obs[0] is not None):
+                met_prop = getattr(self._metar_obs[0], met[0])
                 if met_prop:
                     if met[1]:
                         data[obs] = met_prop.value(units=met[1])
