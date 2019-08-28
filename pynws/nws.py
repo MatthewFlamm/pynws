@@ -1,4 +1,5 @@
 """pynws module."""
+from datetime import timedelta, datetime, timezone
 
 import pynws.urls
 from pynws.const import API_ACCEPT, API_USER, DEFAULT_USERID
@@ -58,7 +59,11 @@ async def get_obs_from_stn(station, websession, userid, limit=5, start_time=None
         params['limit'] = limit
 
     if start_time:
-        params['start'] = start_time
+        if not isinstance(start_time, timedelta):
+            raise ValueError
+        now = datetime.now(timezone.utc)
+        request_time = now - start_time
+        params['start'] = request_time.isoformat(timespec='seconds')
 
     url = pynws.urls.obs_url(station)
     header = get_header(userid)

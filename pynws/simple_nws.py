@@ -110,9 +110,9 @@ class SimpleNWS:
             metar_obs = None
         return metar_obs
 
-    async def update_observation(self, start_time=None):
+    async def update_observation(self, limit=0, start_time=None):
         """Update observation."""
-        obs = await self.nws.observations(limit=0, start_time=start_time)
+        obs = await self.nws.observations(limit, start_time=start_time)
         if obs is None:
             return None
         self._observation = obs

@@ -1,5 +1,7 @@
 """Test observations"""
 import asyncio
+from datetime import timedelta
+
 import aiohttp
 import pynws
 import pytest
@@ -33,6 +35,9 @@ async def test_obs_response(aiohttp_client, loop, obs_url):
     app.router.add_get('/obs', obs)
     client = await aiohttp_client(app)
     await pynws.observations('STNA', client, USERID)
+    await pynws.observations('STNA', client, USERID, limit=1)
+    await pynws.observations('STNA', client, USERID, start_time=timedelta(hours=1))
+
 
 async def test_obs_fail(aiohttp_client, loop, obs_url):
     """Response fails when url not correct"""
@@ -41,3 +46,11 @@ async def test_obs_fail(aiohttp_client, loop, obs_url):
     with pytest.raises(aiohttp.ClientResponseError):
         observations = await pynws.observations('STNA', client, USERID)
     
+
+async def test_obs_fail_start(aiohttp_client, loop, obs_url):
+    """Non timedelta fails"""
+    app = aiohttp.web.Application()
+    app.router.add_get('/obs', obs)
+    client = await aiohttp_client(app)
+    with pytest.raises(ValueError):
+        await pynws.observations('STNA', client, USERID, start_time=1)
