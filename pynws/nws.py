@@ -1,6 +1,5 @@
-"""
-pynws module
-"""
+"""pynws module."""
+from datetime import timedelta, datetime, timezone
 
 import pynws.urls
 from pynws.const import API_ACCEPT, API_USER, DEFAULT_USERID
@@ -25,11 +24,11 @@ class Nws:
             raise NwsError("Need to set lattitude and longitude")
         return await stations(*self.latlon, self.session, self.userid)
 
-    async def observations(self, limit=5):
+    async def observations(self, limit=0, start_time=None):
         """Returns observation list"""
         if self.station is None:
             raise NwsError("Need to set station")
-        return await observations(self.station, self.session, self.userid, limit)
+        return await observations(self.station, self.session, self.userid, limit, start_time)
 
     async def forecast(self):
         """Returns forecast list"""
@@ -53,12 +52,18 @@ def get_header(userid):
             'User-Agent': API_USER.format(userid)}
 
 
-async def get_obs_from_stn(station, websession, userid, limit=5):
+async def get_obs_from_stn(station, websession, userid, limit=5, start_time=None):
     """Get observation response from station"""
-    if limit == 0:
-        params = None
-    else:
-        params = {'limit': limit}
+    params = {}
+    if limit > 0:
+        params['limit'] = limit
+
+    if start_time:
+        if not isinstance(start_time, timedelta):
+            raise ValueError
+        now = datetime.now(timezone.utc)
+        request_time = now - start_time
+        params['start'] = request_time.isoformat(timespec='seconds')
 
     url = pynws.urls.obs_url(station)
     header = get_header(userid)
@@ -68,9 +73,9 @@ async def get_obs_from_stn(station, websession, userid, limit=5):
     return obs
 
 
-async def observations(station, websession, userid, limit=5):
+async def observations(station, websession, userid, limit=5, start_time=None):
     """Observations from station"""
-    res = await get_obs_from_stn(station, websession, userid, limit)
+    res = await get_obs_from_stn(station, websession, userid, limit, start_time)
     return [o['properties'] for o in res['features']]
 
 

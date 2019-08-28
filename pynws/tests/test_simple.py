@@ -47,6 +47,11 @@ async def obs(request):
     with open(os.path.join(DIR, 'obs.json'), 'r') as f:
         return aiohttp.web.json_response(data=json.load(f))
 
+async def obs_multiple(request):
+    """Return observation response"""
+    with open(os.path.join(DIR, 'obs_multiple.json'), 'r') as f:
+        return aiohttp.web.json_response(data=json.load(f))
+
 
 async def forc(request):
     """Return observation response"""
@@ -75,10 +80,11 @@ async def test_set_station(aiohttp_client, loop, urls):
     assert snws.stations == ['STNA', 'STNB', 'STNC', 'STND']
     assert snws.nws.station == 'STNA'
 
-async def test_obs(aiohttp_client, loop, urls):
+@pytest.mark.parametrize("obs_json", [obs, obs_multiple])
+async def test_obs(aiohttp_client, loop, urls, obs_json):
     """Getting response succeeds"""
     app = aiohttp.web.Application()
-    app.router.add_get('/obs', obs)
+    app.router.add_get('/obs', obs_json)
     app.router.add_get('/stations', stn)
     app.router.add_get('/forecast', forc)
     client = await aiohttp_client(app)
