@@ -1,4 +1,7 @@
 import asyncio
+import json
+import os
+
 import aiohttp
 import pynws
 import pytest
@@ -10,6 +13,9 @@ from pynws.tests.forecast_response import FORECAST_RESPONSE
 LATLON = (0, 0)
 USERID = 'testing@test'
 
+
+DIR = os.path.dirname(os.path.realpath(__file__))
+
 @pytest.fixture()
 def obs_url(monkeypatch):
     def mock_url(a):
@@ -18,6 +24,10 @@ def obs_url(monkeypatch):
 
 async def obs(request):
     return aiohttp.web.json_response(data=OBSERVATION_RESPONSE)
+
+async def no_obs(request):
+    with open(os.path.join(DIR, 'obs_no_prop.json'), 'r') as f:
+        return aiohttp.web.json_response(data=json.load(f))
 
 @pytest.fixture()
 def station_url(monkeypatch):
@@ -52,6 +62,19 @@ async def test_nws_response(aiohttp_client, loop, obs_url, station_url, fore_url
     nws2 = pynws.Nws(client, station='STNA')
     observations2 = await nws2.observations()
     
+
+async def test_nws_response_no_obs(aiohttp_client, loop, obs_url, station_url, fore_url):
+    app = aiohttp.web.Application()
+    app.router.add_get('/obs', no_obs)
+    app.router.add_get('/stations', stn)
+    app.router.add_get('/fore', fore)
+    client = await aiohttp_client(app)
+    nws = pynws.Nws(client, latlon=LATLON)
+    stations = await nws.stations()
+    nws.station = stations[0]
+    observations = await nws.observations()
+    assert not observations
+
 async def test_nws_fail_stn(aiohttp_client, loop, obs_url, station_url, fore_url):
     app = aiohttp.web.Application()
     app.router.add_get('/obs', obs)
