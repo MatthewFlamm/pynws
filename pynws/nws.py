@@ -18,6 +18,10 @@ class Nws:
         self.station = station
         self.userid = userid
 
+        self.wfo = None
+        self.x = None
+        self.y = None
+
     async def stations(self):
         """Returns station list"""
         if self.latlon is None:
@@ -29,6 +33,32 @@ class Nws:
         if self.station is None:
             raise NwsError("Need to set station")
         return await observations(self.station, self.session, self.userid, limit, start_time)
+
+
+    async def get_griddata(self):
+        """Saves griddata from latlon."""
+        data = await get_griddata(*self.latlon, self.session, self.userid)
+
+        properties = data.get('properties')
+        if properties:
+            self.wfo = properties.get('cwa')
+            self.x = properties.get('gridX')
+            self.y = properties.get('gridY')
+
+    async def grid_forecast(self):
+        """Return forecast from grid."""
+        if self.wfo is None:
+            await self.get_griddata()
+        raw_forecast = await grid_forecast_raw(self.wfo, self.x, self.y, self.session, self.userid)
+        return raw_forecast['properties']['periods']
+
+    async def grid_forecast_hourly(self):
+        """Return hourly forecast from grid."""
+        if self.wfo is None:
+            await self.get_griddata()
+        raw_forecast = await grid_forecast_hourly_raw(self.wfo, self.x, self.y,
+                                                      self.session, self.userid)
+        return raw_forecast['properties']['periods']
 
     async def forecast(self):
         """Returns forecast list"""
@@ -129,3 +159,35 @@ async def forecast_hourly(lat, lon, websession, userid):
     """Returns hourly forecast as list """
     res = await get_hour_forc_from_pnt(lat, lon, websession, userid)
     return res['properties']['periods']
+
+
+async def get_griddata(lat, lon, websession, userid):
+    """Return griddata response."""
+
+    url = pynws.urls.point_url(lat, lon)
+    header = get_header(userid)
+    async with websession.get(url, headers=header) as res:
+        res.raise_for_status()
+        jres = await res.json()
+    return jres
+
+async def grid_forecast_raw(wfo, x, y, websession, userid):
+    """Return griddata response."""
+
+    url = pynws.urls.grid_forecast_url(wfo, x, y)
+    header = get_header(userid)
+    async with websession.get(url, headers=header) as res:
+        res.raise_for_status()
+        jres = await res.json()
+    return jres
+
+
+async def grid_forecast_hourly_raw(wfo, x, y, websession, userid):
+    """Return griddata response."""
+
+    url = pynws.urls.grid_forecast_hourly_url(wfo, x, y)
+    header = get_header(userid)
+    async with websession.get(url, headers=header) as res:
+        res.raise_for_status()
+        jres = await res.json()
+    return jres
