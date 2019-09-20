@@ -130,6 +130,9 @@ class SimpleNWS:
     @staticmethod
     def extract_observation_value(observation, value):
         """Returns observation or observation value."""
+        obs_value = observation.get(value)
+        if obs_value is None:
+            return None
         if isinstance(observation[value], dict):
             return observation[value].get('value')
         return observation[value]
