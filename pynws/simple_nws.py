@@ -122,9 +122,9 @@ class SimpleNWS:
     async def update_forecast(self):
         """Update forecast."""
         if self.mode == 'daynight':
-            forecast = await self.nws.forecast()
+            forecast = await self.nws.grid_forecast()
         elif self.mode == 'hourly':
-            forecast = await self.nws.forecast_hourly()
+            forecast = await self.nws.grid_forecast_hourly()
         self._forecast = forecast
 
     @staticmethod

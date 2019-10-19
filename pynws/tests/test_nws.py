@@ -104,3 +104,75 @@ async def test_nws_fail_fore(aiohttp_client, loop, obs_url, station_url, fore_ur
     nws = pynws.Nws(client)
     with pytest.raises(pynws.NwsError):
         stations = await nws.forecast()
+
+@pytest.fixture()
+def point_url(monkeypatch):
+    def mock_url(a,b):
+        return '/point'
+    monkeypatch.setattr('pynws.urls.point_url', mock_url)
+
+async def point(request):
+    with open(os.path.join(DIR, 'points.json'), 'r') as f:
+        return aiohttp.web.json_response(data=json.load(f))
+
+
+@pytest.fixture()
+def grid_forecast_url(monkeypatch):
+    def mock_url(a,b,c):
+        return '/grid_forecast'
+    monkeypatch.setattr('pynws.urls.grid_forecast_url', mock_url)
+
+async def grid_forecast(request):
+    with open(os.path.join(DIR, 'grid_forecast.json'), 'r') as f:
+        return aiohttp.web.json_response(data=json.load(f))
+
+@pytest.fixture()
+def grid_forecast_hourly_url(monkeypatch):
+    def mock_url(a,b,c):
+        return '/grid_forecast_hourly'
+    monkeypatch.setattr('pynws.urls.grid_forecast_hourly_url', mock_url)
+
+async def grid_forecast_hourly(request):
+    with open(os.path.join(DIR, 'grid_forecast_hourly.json'), 'r') as f:
+        return aiohttp.web.json_response(data=json.load(f))
+
+    
+
+async def test_nws_point_response(aiohttp_client, loop, point_url):
+    app = aiohttp.web.Application()
+    app.router.add_get('/point', point)
+    client = await aiohttp_client(app)
+    nws = pynws.Nws(client, latlon=(30, -85))
+
+    await nws.get_griddata()
+
+    assert nws.wfo == 'TAE'
+    assert nws.x == 59
+    assert nws.y == 64
+
+async def test_nws_grid_forecast(aiohttp_client, loop, point_url, grid_forecast_url):
+    app = aiohttp.web.Application()
+    app.router.add_get('/grid_forecast', grid_forecast)
+    app.router.add_get('/point', point)
+    client = await aiohttp_client(app)
+    nws = pynws.Nws(client, latlon=(30, -85))
+
+    assert await nws.grid_forecast()
+
+    assert nws.wfo == 'TAE'
+    assert nws.x == 59
+    assert nws.y == 64
+
+
+async def test_nws_grid_forecast_hourly(aiohttp_client, loop, point_url, grid_forecast_hourly_url):
+    app = aiohttp.web.Application()
+    app.router.add_get('/grid_forecast_hourly', grid_forecast_hourly)
+    app.router.add_get('/point', point)
+    client = await aiohttp_client(app)
+    nws = pynws.Nws(client, latlon=(30, -85))
+
+    assert await nws.grid_forecast_hourly()
+
+    assert nws.wfo == 'TAE'
+    assert nws.x == 59
+    assert nws.y == 64

@@ -13,3 +13,5 @@ lib64
 .in
 .out
 venv
+.direnv
+.envrc
