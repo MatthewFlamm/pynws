@@ -66,14 +66,14 @@
                 "startTime": "2019-10-13T14:00:00-04:00",
                 "endTime": "2019-10-13T18:00:00-04:00",
                 "isDaytime": true,
-                "temperature": 88,
+                "temperature": 41,
                 "temperatureUnit": "F",
                 "temperatureTrend": null,
-                "windSpeed": "5 mph",
+                "windSpeed": "10 mph",
                 "windDirection": "S",
-                "icon": "https://api.weather.gov/icons/land/day/bkn?size=medium",
-                "shortForecast": "Partly Sunny",
-                "detailedForecast": "Partly sunny, with a high near 88. South wind around 5 mph."
+                "icon": "https://api.weather.gov/icons/land/day/tsra,40/ovc?size=medium",
+                "shortForecast": "Chance Showers And Thunderstorms",
+                "detailedForecast": ""
             },
             {
                 "number": 2,

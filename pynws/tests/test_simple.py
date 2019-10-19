@@ -7,8 +7,6 @@ import aiohttp
 import pytest
 
 import pynws
-from pynws.tests.forecast_hourly_response import FORECAST_HOURLY_RESPONSE
-from pynws.tests.forecast_response import FORECAST_RESPONSE
 from pynws.tests.observation_response import OBSERVATION_RESPONSE
 from pynws.tests.station_response import STATION_RESPONSE
 from pynws.tests.metar_observation_response import METAR_OBSERVATION_RESPONSE
@@ -25,6 +23,21 @@ async def stn(request):
     return aiohttp.web.json_response(data=STATION_RESPONSE)
 
 
+async def point(request):
+    with open(os.path.join(DIR, 'points.json'), 'r') as f:
+        return aiohttp.web.json_response(data=json.load(f))
+
+
+async def grid_forecast(request):
+    with open(os.path.join(DIR, 'grid_forecast.json'), 'r') as f:
+        return aiohttp.web.json_response(data=json.load(f))
+
+
+async def grid_forecast_hourly(request):
+    with open(os.path.join(DIR, 'grid_forecast_hourly.json'), 'r') as f:
+        return aiohttp.web.json_response(data=json.load(f))
+
+
 @pytest.fixture()
 def urls(monkeypatch):
     """Monkeypatch observation url to /obs"""
@@ -34,12 +47,15 @@ def urls(monkeypatch):
     def stn_url(a, b):
         return '/stations'
     monkeypatch.setattr('pynws.urls.stn_url', stn_url)
-    def forc_url(a, b):
+    def grid_forecast_url(a, b, c):
         return '/forecast'
-    monkeypatch.setattr('pynws.urls.forc_url', forc_url)
-    def forc_hourly_url(a, b):
+    monkeypatch.setattr('pynws.urls.grid_forecast_url', grid_forecast_url)
+    def point_url(a, b):
+        return '/point'
+    monkeypatch.setattr('pynws.urls.point_url', point_url)
+    def grid_forecast_hourly_url(a, b, c):
         return '/forecast_hourly'
-    monkeypatch.setattr('pynws.urls.hour_forc_url', forc_hourly_url)
+    monkeypatch.setattr('pynws.urls.grid_forecast_hourly_url', grid_forecast_hourly_url)
 
 
 async def obs(request):
@@ -51,17 +67,7 @@ async def obs_multiple(request):
     """Return observation response"""
     with open(os.path.join(DIR, 'obs_multiple.json'), 'r') as f:
         return aiohttp.web.json_response(data=json.load(f))
-
-
-async def forc(request):
-    """Return observation response"""
-    return aiohttp.web.json_response(data=FORECAST_RESPONSE)
-
-
-async def forc_hourly(request):
-    """Return observation response"""
-    return aiohttp.web.json_response(data=FORECAST_HOURLY_RESPONSE)
-
+    
 
 async def test_set_station(aiohttp_client, loop, urls):
     """Getting response succeeds"""
@@ -86,7 +92,8 @@ async def test_obs(aiohttp_client, loop, urls, obs_json):
     app = aiohttp.web.Application()
     app.router.add_get('/obs', obs_json)
     app.router.add_get('/stations', stn)
-    app.router.add_get('/forecast', forc)
+    app.router.add_get('/point', point)
+    app.router.add_get('/forecast', grid_forecast)
     client = await aiohttp_client(app)
     snws = pynws.SimpleNWS(*LATLON, USERID, MODE, client) 
     await snws.set_station('STN')
@@ -120,7 +127,8 @@ async def test_hourly_forecast(aiohttp_client, loop, urls):
     app = aiohttp.web.Application()
     app.router.add_get('/obs', obs)
     app.router.add_get('/stations', stn)
-    app.router.add_get('/forecast_hourly', forc_hourly)
+    app.router.add_get('/point', point)
+    app.router.add_get('/forecast_hourly', grid_forecast_hourly)
     client = await aiohttp_client(app)
     snws = pynws.SimpleNWS(*LATLON, USERID, 'hourly', client) 
     await snws.set_station('STN')
@@ -138,7 +146,8 @@ async def test_metar_obs(aiohttp_client, loop, urls):
     app = aiohttp.web.Application()
     app.router.add_get('/obs', metar_obs)
     app.router.add_get('/stations', stn)
-    app.router.add_get('/forecast', forc)
+    app.router.add_get('/point', point)
+    app.router.add_get('/forecast', grid_forecast)
     client = await aiohttp_client(app)
     snws = pynws.SimpleNWS(*LATLON, USERID, MODE, client) 
     await snws.set_station('STN')
@@ -166,7 +175,8 @@ async def test_noparse_metar_obs(aiohttp_client, loop, urls):
     app = aiohttp.web.Application()
     app.router.add_get('/obs', noparse_metar_obs)
     app.router.add_get('/stations', stn)
-    app.router.add_get('/forecast', forc)
+    app.router.add_get('/point', point)
+    app.router.add_get('/forecast', grid_forecast)
     client = await aiohttp_client(app)
     snws = pynws.SimpleNWS(*LATLON, USERID, MODE, client) 
     await snws.set_station('STN')
@@ -187,7 +197,8 @@ async def test_empty_obs(aiohttp_client, loop, urls):
     app = aiohttp.web.Application()
     app.router.add_get('/obs', empty_obs)
     app.router.add_get('/stations', stn)
-    app.router.add_get('/forecast', forc)
+    app.router.add_get('/point', point)
+    app.router.add_get('/forecast', grid_forecast)
     client = await aiohttp_client(app)
     snws = pynws.SimpleNWS(*LATLON, USERID, MODE, client) 
     await snws.set_station('STN')
@@ -218,7 +229,8 @@ async def test_obs_no_prop(aiohttp_client, loop, urls):
     app = aiohttp.web.Application()
     app.router.add_get('/obs', obs_no_prop)
     app.router.add_get('/stations', stn)
-    app.router.add_get('/forecast', forc)
+    app.router.add_get('/point', point)
+    app.router.add_get('/forecast', grid_forecast)
     client = await aiohttp_client(app)
     snws = pynws.SimpleNWS(*LATLON, USERID, MODE, client) 
     await snws.set_station('STN')
@@ -249,7 +261,8 @@ async def test_obs_missing_value(aiohttp_client, loop, urls):
     app = aiohttp.web.Application()
     app.router.add_get('/obs', obs_miss_value)
     app.router.add_get('/stations', stn)
-    app.router.add_get('/forecast', forc)
+    app.router.add_get('/point', point)
+    app.router.add_get('/forecast', grid_forecast)
     client = await aiohttp_client(app)
     snws = pynws.SimpleNWS(*LATLON, USERID, MODE, client) 
     await snws.set_station('STN')
@@ -280,6 +293,7 @@ async def test_empty_fore(aiohttp_client, loop, urls):
     app = aiohttp.web.Application()
     app.router.add_get('/obs', obs)
     app.router.add_get('/stations', stn)
+    app.router.add_get('/point', point)
     app.router.add_get('/forecast', empty_fore)
     client = await aiohttp_client(app)
     snws = pynws.SimpleNWS(*LATLON, USERID, MODE, client) 
