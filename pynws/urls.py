@@ -2,7 +2,7 @@
 url formattera
 """
 
-from pynws.const import (API_URL, API_STATIONS, API_OBSERVATION, API_FORECAST,
+from pynws.const import (API_URL, API_ALERTS_ZONE, API_STATIONS, API_OBSERVATION, API_FORECAST,
                          API_FORECAST_HOURLY, API_GRID_FORECAST, API_GRID_FORECAST_HOURLY,
                          API_POINT)
 
@@ -33,3 +33,7 @@ def grid_forecast_hourly_url(wfo, x, y):
 def point_url(lat, lon):
     """ Formats point metadata url."""
     return API_URL + API_POINT.format(lat, lon)
+
+def alerts_zone_url(zone):
+    """Formats alerts url with zone."""
+    return API_URL + API_ALERTS_ZONE.format(zone)

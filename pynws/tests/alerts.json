@@ -1,0 +1,137 @@
+{
+    "@context": [
+        "https://raw.githubusercontent.com/geojson/geojson-ld/master/contexts/geojson-base.jsonld",
+        {
+            "wx": "https://api.weather.gov/ontology#",
+            "@vocab": "https://api.weather.gov/ontology#"
+        }
+    ],
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3965873-3369046",
+            "type": "Feature",
+            "geometry": null,
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3965873-3369046",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3965873-3369046",
+                "areaDesc": "North Oregon Coast; Greater Portland Metro Area; Greater Vancouver Area; Lower Columbia and I - 5 Corridor in Cowlitz County; Lower Columbia; Central Coast Range of Western Oregon; Willapa Hills; South Washington Coast; Central Oregon Coast; Coast Range of Northwest Oregon; South Washington Cascade Foothills",
+                "geocode": {
+                    "UGC": [
+                        "ORZ001",
+                        "ORZ006",
+                        "WAZ039",
+                        "WAZ022",
+                        "ORZ005",
+                        "ORZ004",
+                        "WAZ020",
+                        "WAZ021",
+                        "ORZ002",
+                        "ORZ003",
+                        "WAZ040"
+                    ],
+                    "SAME": [
+                        "041007",
+                        "041057",
+                        "041005",
+                        "041009",
+                        "041051",
+                        "041067",
+                        "053011",
+                        "053015",
+                        "053069",
+                        "041003",
+                        "041039",
+                        "041041",
+                        "041053",
+                        "053049",
+                        "041071",
+                        "053059"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/forecast/ORZ001",
+                    "https://api.weather.gov/zones/forecast/ORZ006",
+                    "https://api.weather.gov/zones/forecast/WAZ039",
+                    "https://api.weather.gov/zones/forecast/WAZ022",
+                    "https://api.weather.gov/zones/forecast/ORZ005",
+                    "https://api.weather.gov/zones/forecast/ORZ004",
+                    "https://api.weather.gov/zones/forecast/WAZ020",
+                    "https://api.weather.gov/zones/forecast/WAZ021",
+                    "https://api.weather.gov/zones/forecast/ORZ002",
+                    "https://api.weather.gov/zones/forecast/ORZ003",
+                    "https://api.weather.gov/zones/forecast/WAZ040"
+                ],
+                "references": [
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3964821-3368352",
+                        "identifier": "NWS-IDP-PROD-3964821-3368352",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-12-19T12:52:00-08:00"
+                    },
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3965324-3368680",
+                        "identifier": "NWS-IDP-PROD-3965324-3368680",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-12-20T01:47:00-08:00"
+                    },
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3965155-3368578",
+                        "identifier": "NWS-IDP-PROD-3965155-3368578",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-12-19T21:23:00-08:00"
+                    },
+                    {
+                        "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3963421-3367361",
+                        "identifier": "NWS-IDP-PROD-3963421-3367361",
+                        "sender": "w-nws.webmaster@noaa.gov",
+                        "sent": "2019-12-18T12:29:00-08:00"
+                    }
+                ],
+                "sent": "2019-12-20T13:34:00-08:00",
+                "effective": "2019-12-20T13:34:00-08:00",
+                "onset": "2019-12-20T13:34:00-08:00",
+                "expires": "2019-12-21T05:30:00-08:00",
+                "ends": "2019-12-22T10:00:00-08:00",
+                "status": "Actual",
+                "messageType": "Update",
+                "category": "Met",
+                "severity": "Severe",
+                "certainty": "Possible",
+                "urgency": "Future",
+                "event": "Flood Watch",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS Portland OR",
+                "headline": "Flood Watch issued December 20 at 1:34PM PST until December 22 at 10:00AM PST by NWS Portland OR",
+                "description": "The Flood Watch continues for\n\n* Portions of Northwest Oregon and Southwest Washington,\nincluding the following areas, in Northwest Oregon, Central\nCoast Range of Western Oregon, Central Oregon Coast, Coast\nRange of Northwest Oregon, Greater Portland Metro Area, Lower\nColumbia, and North Oregon Coast. In Southwest Washington,\nGreater Vancouver Area, I-5 Corridor in Cowlitz County, South\nWashington Cascade Foothills, South Washington Coast, and\nWillapa Hills.\n\n* Through Sunday morning\n\n* Rainfall totals were already exceeding 4 to 8 inches in the\nWillapa Hills, with 3 to 6 inches in the North Oregon Coast\nRange and South Washington Cascades since Thursday evening.\nHeavy rain is expected to continue through the rest of Friday\nafternoon in these locations before spreading south into the\nCentral Oregon Coast Range Friday night.\n\n* Additional rainfall Friday night and Saturday is expected to\nreach 2 to 4 inches in the North and Central Oregon Coast Range,\nwith 1 to 3 inches in the South Washington Cascades and 1 to 2\ninches in the Willapa Hills. Around 1 inch is possible in the\nWillamette Valley.",
+                "instruction": "A Flood Watch means there is a potential for flooding based on\ncurrent forecasts.\n\nYou should monitor later forecasts and be alert for possible\nFlood Warnings. Those living in areas prone to flooding should be\nprepared to take action should flooding develop.\n\nLandslides and debris flows are possible during this flood event.\nPeople, structures and roads located below steep slopes, in\ncanyons, and near the mouths of canyons may be at serious risk\nfrom rapidly moving landslides.",
+                "response": "Prepare",
+                "parameters": {
+                    "NWSheadline": [
+                        "FLOOD WATCH REMAINS IN EFFECT THROUGH SUNDAY MORNING"
+                    ],
+                    "VTEC": [
+                        "/O.CON.KPQR.FA.A.0004.000000T0000Z-191222T1800Z/"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "PQRFFAPQR"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ],
+                    "eventEndingTime": [
+                        "2019-12-22T10:00:00-08:00"
+                    ]
+                }
+            }
+        }
+    ],
+    "title": "current watches, warnings, and advisories for Central Coast Range of Western Oregon (ORZ004) OR",
+    "updated": "2019-12-20T21:35:17+00:00"
+}

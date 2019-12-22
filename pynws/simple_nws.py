@@ -82,6 +82,7 @@ class SimpleNWS:
         self.station = None
         self.stations = None
         self._forecast = None
+        self._alerts_zone = None
 
     async def set_station(self, station=None):
         """
@@ -118,7 +119,6 @@ class SimpleNWS:
         self._observation = obs
         self._metar_obs = [self.extract_metar(iobs) for iobs in self._observation]
 
-
     async def update_forecast(self):
         """Update forecast."""
         if self.mode == 'daynight':
@@ -126,6 +126,10 @@ class SimpleNWS:
         elif self.mode == 'hourly':
             forecast = await self.nws.grid_forecast_hourly()
         self._forecast = forecast
+
+    async def update_alerts_zone(self):
+        """Update alerts zone."""
+        self._alerts_zone = await self.nws.alerts_zone()
 
     @staticmethod
     def extract_observation_value(observation, value):
@@ -197,3 +201,8 @@ class SimpleNWS:
 
             forecast.append(forecast_entry)
         return forecast
+
+    @property
+    def alerts_zone(self):
+        """Return alerts as a list of dict."""
+        return self._alerts_zone
