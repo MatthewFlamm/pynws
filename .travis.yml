@@ -1,11 +1,8 @@
 language: python
 python:
   - "3.6"
-matrix:
-  include:
-    - python: 3.7
-      dist: xenial
-      sudo: true
+  - "3.7"
+  - "3.8"
 env:
   - POST_COMMAND=codecov -e TOX_ENV
 install:
