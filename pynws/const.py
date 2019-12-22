@@ -19,6 +19,7 @@ API_FORECAST_HOURLY = '/points/{},{}/forecast/hourly'
 API_GRID_FORECAST = 'gridpoints/{}/{},{}/forecast'
 API_GRID_FORECAST_HOURLY = 'gridpoints/{}/{},{}/forecast/hourly'
 API_POINT = 'points/{},{}'
+API_ALERTS_ZONE = 'alerts/active/zone/{}'
 
 DEFAULT_USERID = 'CODEemail@address'
 

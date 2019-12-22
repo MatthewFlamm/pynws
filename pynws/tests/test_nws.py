@@ -144,11 +144,13 @@ async def test_nws_point_response(aiohttp_client, loop, point_url):
     client = await aiohttp_client(app)
     nws = pynws.Nws(client, latlon=(30, -85))
 
-    await nws.get_griddata()
+    await nws.get_pointdata()
 
     assert nws.wfo == 'TAE'
     assert nws.x == 59
     assert nws.y == 64
+    assert nws.zone == 'FLZ015'
+
 
 async def test_nws_grid_forecast(aiohttp_client, loop, point_url, grid_forecast_url):
     app = aiohttp.web.Application()
@@ -176,3 +178,27 @@ async def test_nws_grid_forecast_hourly(aiohttp_client, loop, point_url, grid_fo
     assert nws.wfo == 'TAE'
     assert nws.x == 59
     assert nws.y == 64
+
+
+@pytest.fixture()
+def alerts_url(monkeypatch):
+    def mock_url(a):
+        return '/alerts'
+    monkeypatch.setattr('pynws.urls.alerts_zone_url', mock_url)
+
+
+async def alerts(request):
+    with open(os.path.join(DIR, 'alerts.json'), 'r') as f:
+        return aiohttp.web.json_response(data=json.load(f))
+
+
+async def test_alerts(aiohttp_client, loop, point_url, alerts_url):
+    app = aiohttp.web.Application()
+    app.router.add_get('/alerts', alerts)
+    app.router.add_get('/point', point)
+    client = await aiohttp_client(app)
+    nws = pynws.Nws(client, latlon=(30, -85))
+
+    assert await nws.alerts_zone()
+
+    assert nws.zone == 'FLZ015'

@@ -38,6 +38,11 @@ async def grid_forecast_hourly(request):
         return aiohttp.web.json_response(data=json.load(f))
 
 
+async def alerts_zone(request):
+    with open(os.path.join(DIR, 'alerts.json'), 'r') as f:
+        return aiohttp.web.json_response(data=json.load(f))
+
+
 @pytest.fixture()
 def urls(monkeypatch):
     """Monkeypatch observation url to /obs"""
@@ -56,7 +61,10 @@ def urls(monkeypatch):
     def grid_forecast_hourly_url(a, b, c):
         return '/forecast_hourly'
     monkeypatch.setattr('pynws.urls.grid_forecast_hourly_url', grid_forecast_hourly_url)
-
+    def alerts_zone_url(a):
+        return '/alerts_zone'
+    monkeypatch.setattr('pynws.urls.alerts_zone_url', alerts_zone_url)
+    
 
 async def obs(request):
     """Return observation response"""
@@ -300,3 +308,14 @@ async def test_empty_fore(aiohttp_client, loop, urls):
     await snws.set_station('STN')
     await snws.update_forecast()
     assert snws.forecast
+
+
+async def test_alerts_zone(aiohttp_client, loop, urls):
+    """Getting response succeeds"""
+    app = aiohttp.web.Application()
+    app.router.add_get('/point', point)
+    app.router.add_get('/alerts_zone', alerts_zone)
+    client = await aiohttp_client(app)
+    snws = pynws.SimpleNWS(*LATLON, USERID, MODE, client) 
+    await snws.update_alerts_zone()
+    assert snws.alerts_zone

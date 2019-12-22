@@ -22,6 +22,8 @@ class Nws:
         self.x = None
         self.y = None
 
+        self.zone = None
+
     async def stations(self):
         """Returns station list"""
         if self.latlon is None:
@@ -35,27 +37,28 @@ class Nws:
         return await observations(self.station, self.session, self.userid, limit, start_time)
 
 
-    async def get_griddata(self):
+    async def get_pointdata(self):
         """Saves griddata from latlon."""
-        data = await get_griddata(*self.latlon, self.session, self.userid)
+        data = await get_pointdata(*self.latlon, self.session, self.userid)
 
         properties = data.get('properties')
         if properties:
             self.wfo = properties.get('cwa')
             self.x = properties.get('gridX')
             self.y = properties.get('gridY')
+            self.zone = properties.get('forecastZone').split("/")[-1]
 
     async def grid_forecast(self):
         """Return forecast from grid."""
         if self.wfo is None:
-            await self.get_griddata()
+            await self.get_pointdata()
         raw_forecast = await grid_forecast_raw(self.wfo, self.x, self.y, self.session, self.userid)
         return raw_forecast['properties']['periods']
 
     async def grid_forecast_hourly(self):
         """Return hourly forecast from grid."""
         if self.wfo is None:
-            await self.get_griddata()
+            await self.get_pointdata()
         raw_forecast = await grid_forecast_hourly_raw(self.wfo, self.x, self.y,
                                                       self.session, self.userid)
         return raw_forecast['properties']['periods']
@@ -72,6 +75,12 @@ class Nws:
             raise NwsError("Need to set lattitude and longitude")
         return await forecast_hourly(*self.latlon, self.session, self.userid)
 
+    async def alerts_zone(self):
+        """Returns alerts dict."""
+        if self.zone is None:
+            await self.get_pointdata()
+        alerts = await alerts_zone_raw(self.zone, self.session, self.userid)
+        return [alert['properties'] for alert in alerts['features']]
 
 def get_header(userid):
     """Get header.
@@ -161,7 +170,7 @@ async def forecast_hourly(lat, lon, websession, userid):
     return res['properties']['periods']
 
 
-async def get_griddata(lat, lon, websession, userid):
+async def get_pointdata(lat, lon, websession, userid):
     """Return griddata response."""
 
     url = pynws.urls.point_url(lat, lon)
@@ -186,6 +195,17 @@ async def grid_forecast_hourly_raw(wfo, x, y, websession, userid):
     """Return griddata response."""
 
     url = pynws.urls.grid_forecast_hourly_url(wfo, x, y)
+    header = get_header(userid)
+    async with websession.get(url, headers=header) as res:
+        res.raise_for_status()
+        jres = await res.json()
+    return jres
+
+
+async def alerts_zone_raw(zone, websession, userid):
+    """Return griddata response."""
+
+    url = pynws.urls.alerts_zone_url(zone)
     header = get_header(userid)
     async with websession.get(url, headers=header) as res:
         res.raise_for_status()
