@@ -67,7 +67,7 @@ class SimpleNWS:
 
     Uses normal api first.  If value is None, use metar info.
     """
-    def __init__(self, lat, lon, api_key, mode, session):
+    def __init__(self, lat, lon, api_key, session):
         """Set up simplified NWS class."""
         self.lat = lat
         self.lon = lon
@@ -75,13 +75,13 @@ class SimpleNWS:
         self.session = session
         self.nws = Nws(session, latlon=(float(lat), float(lon)),
                        userid=api_key)
-        self.mode = mode
 
         self._observation = None
         self._metar_obs = None
         self.station = None
         self.stations = None
         self._forecast = None
+        self._forecast_hourly = None
         self._alerts_zone = None
 
     async def set_station(self, station=None):
@@ -121,11 +121,11 @@ class SimpleNWS:
 
     async def update_forecast(self):
         """Update forecast."""
-        if self.mode == 'daynight':
-            forecast = await self.nws.grid_forecast()
-        elif self.mode == 'hourly':
-            forecast = await self.nws.grid_forecast_hourly()
-        self._forecast = forecast
+        self._forecast = await self.nws.grid_forecast()
+
+    async def update_forecast_hourly(self):
+        """Update forecast."""
+        self._forecast_hourly = await self.nws.grid_forecast_hourly()
 
     async def update_alerts_zone(self):
         """Update alerts zone."""
@@ -174,8 +174,18 @@ class SimpleNWS:
     @property
     def forecast(self):
         """Return forecast."""
+        return self._convert_forecast(self._forecast)
+
+    @property
+    def forecast_hourly(self):
+        """Return forecast hourly."""
+        return self._convert_forecast(self._forecast_hourly)
+
+    @staticmethod
+    def _convert_forecast(input_forecast):
+        """Converts forecast to common dict."""
         forecast = []
-        for forecast_entry in self._forecast:
+        for forecast_entry in input_forecast:
             # get weather
             if forecast_entry.get('icon'):
                 time, weather = parse_icon(forecast_entry['icon'])

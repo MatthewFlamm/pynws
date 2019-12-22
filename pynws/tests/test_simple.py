@@ -13,10 +13,9 @@ from pynws.tests.metar_observation_response import METAR_OBSERVATION_RESPONSE
 
 LATLON = (0, 0)
 USERID = 'testing@test'
-MODE = 'daynight'
-USERID = 'testing@test'
 
 DIR = os.path.dirname(os.path.realpath(__file__))
+
 
 async def stn(request):
     """Return station response"""
@@ -83,12 +82,12 @@ async def test_set_station(aiohttp_client, loop, urls):
     app.router.add_get('/obs', obs)
     app.router.add_get('/stations', stn)
     client = await aiohttp_client(app)
-    snws = pynws.SimpleNWS(*LATLON, USERID, MODE, client) 
+    snws = pynws.SimpleNWS(*LATLON, USERID, client) 
     await snws.set_station('STN')
     assert snws.station == 'STN'
     assert snws.stations == ['STN']
     assert snws.nws.station == 'STN'
-    snws = pynws.SimpleNWS(*LATLON, USERID, MODE, client) 
+    snws = pynws.SimpleNWS(*LATLON, USERID, client) 
     await snws.set_station()
     assert snws.station == 'STNA'
     assert snws.stations == ['STNA', 'STNB', 'STNC', 'STND']
@@ -103,7 +102,7 @@ async def test_obs(aiohttp_client, loop, urls, obs_json):
     app.router.add_get('/point', point)
     app.router.add_get('/forecast', grid_forecast)
     client = await aiohttp_client(app)
-    snws = pynws.SimpleNWS(*LATLON, USERID, MODE, client) 
+    snws = pynws.SimpleNWS(*LATLON, USERID, client) 
     await snws.set_station('STN')
     await snws.update_observation()
 
@@ -138,10 +137,10 @@ async def test_hourly_forecast(aiohttp_client, loop, urls):
     app.router.add_get('/point', point)
     app.router.add_get('/forecast_hourly', grid_forecast_hourly)
     client = await aiohttp_client(app)
-    snws = pynws.SimpleNWS(*LATLON, USERID, 'hourly', client) 
+    snws = pynws.SimpleNWS(*LATLON, USERID, client) 
     await snws.set_station('STN')
-    await snws.update_forecast()
-    assert snws.forecast
+    await snws.update_forecast_hourly()
+    assert snws.forecast_hourly
 
 async def metar_obs(request):
     """Return observation response"""
@@ -155,9 +154,9 @@ async def test_metar_obs(aiohttp_client, loop, urls):
     app.router.add_get('/obs', metar_obs)
     app.router.add_get('/stations', stn)
     app.router.add_get('/point', point)
-    app.router.add_get('/forecast', grid_forecast)
+
     client = await aiohttp_client(app)
-    snws = pynws.SimpleNWS(*LATLON, USERID, MODE, client) 
+    snws = pynws.SimpleNWS(*LATLON, USERID, client) 
     await snws.set_station('STN')
     await snws.update_observation()
 
@@ -184,9 +183,9 @@ async def test_noparse_metar_obs(aiohttp_client, loop, urls):
     app.router.add_get('/obs', noparse_metar_obs)
     app.router.add_get('/stations', stn)
     app.router.add_get('/point', point)
-    app.router.add_get('/forecast', grid_forecast)
+
     client = await aiohttp_client(app)
-    snws = pynws.SimpleNWS(*LATLON, USERID, MODE, client) 
+    snws = pynws.SimpleNWS(*LATLON, USERID, client) 
     await snws.set_station('STN')
     await snws.update_observation()
 
@@ -206,9 +205,9 @@ async def test_empty_obs(aiohttp_client, loop, urls):
     app.router.add_get('/obs', empty_obs)
     app.router.add_get('/stations', stn)
     app.router.add_get('/point', point)
-    app.router.add_get('/forecast', grid_forecast)
+
     client = await aiohttp_client(app)
-    snws = pynws.SimpleNWS(*LATLON, USERID, MODE, client) 
+    snws = pynws.SimpleNWS(*LATLON, USERID, client) 
     await snws.set_station('STN')
     await snws.update_observation()
 
@@ -238,9 +237,9 @@ async def test_obs_no_prop(aiohttp_client, loop, urls):
     app.router.add_get('/obs', obs_no_prop)
     app.router.add_get('/stations', stn)
     app.router.add_get('/point', point)
-    app.router.add_get('/forecast', grid_forecast)
+
     client = await aiohttp_client(app)
-    snws = pynws.SimpleNWS(*LATLON, USERID, MODE, client) 
+    snws = pynws.SimpleNWS(*LATLON, USERID, client) 
     await snws.set_station('STN')
     await snws.update_observation()
 
@@ -270,9 +269,9 @@ async def test_obs_missing_value(aiohttp_client, loop, urls):
     app.router.add_get('/obs', obs_miss_value)
     app.router.add_get('/stations', stn)
     app.router.add_get('/point', point)
-    app.router.add_get('/forecast', grid_forecast)
+
     client = await aiohttp_client(app)
-    snws = pynws.SimpleNWS(*LATLON, USERID, MODE, client) 
+    snws = pynws.SimpleNWS(*LATLON, USERID, client) 
     await snws.set_station('STN')
     await snws.update_observation()
 
@@ -304,7 +303,7 @@ async def test_empty_fore(aiohttp_client, loop, urls):
     app.router.add_get('/point', point)
     app.router.add_get('/forecast', empty_fore)
     client = await aiohttp_client(app)
-    snws = pynws.SimpleNWS(*LATLON, USERID, MODE, client) 
+    snws = pynws.SimpleNWS(*LATLON, USERID, client) 
     await snws.set_station('STN')
     await snws.update_forecast()
     assert snws.forecast
@@ -316,6 +315,6 @@ async def test_alerts_zone(aiohttp_client, loop, urls):
     app.router.add_get('/point', point)
     app.router.add_get('/alerts_zone', alerts_zone)
     client = await aiohttp_client(app)
-    snws = pynws.SimpleNWS(*LATLON, USERID, MODE, client) 
+    snws = pynws.SimpleNWS(*LATLON, USERID, client) 
     await snws.update_alerts_zone()
     assert snws.alerts_zone
