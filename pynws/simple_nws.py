@@ -184,6 +184,8 @@ class SimpleNWS:
     @staticmethod
     def _convert_forecast(input_forecast):
         """Converts forecast to common dict."""
+        if not input_forecast:
+            return []
         forecast = []
         for forecast_entry in input_forecast:
             # get weather
