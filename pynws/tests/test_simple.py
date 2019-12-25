@@ -309,6 +309,12 @@ async def test_empty_fore(aiohttp_client, loop, urls):
     assert snws.forecast
 
 
+async def test_no_fore(aiohttp_client, loop):
+    app = aiohttp.web.Application()
+    client = await aiohttp_client(app)
+    snws = pynws.SimpleNWS(*LATLON, USERID, client)
+    assert snws.forecast == []
+
 async def test_alerts_zone(aiohttp_client, loop, urls):
     """Getting response succeeds"""
     app = aiohttp.web.Application()
