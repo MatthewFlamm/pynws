@@ -324,3 +324,19 @@ async def test_alerts_zone(aiohttp_client, loop, urls):
     snws = pynws.SimpleNWS(*LATLON, USERID, client) 
     await snws.update_alerts_zone()
     assert snws.alerts_zone
+
+
+async def test_overwriting_station(aiohttp_client, loop, urls):
+    """Getting response succeeds"""
+    app = aiohttp.web.Application()
+    app.router.add_get('/obs', obs)
+    app.router.add_get('/stations', stn)
+    app.router.add_get('/point', point)
+    client = await aiohttp_client(app)
+    snws = pynws.SimpleNWS(*LATLON, USERID, client) 
+    await snws.set_station()
+    assert snws.station == 'STNA'
+    assert snws.stations == ['STNA', 'STNB', 'STNC', 'STND']
+    await snws.set_station('STNC')
+    assert snws.station == 'STNC'
+    assert snws.stations == ['STNA', 'STNB', 'STNC', 'STND']
