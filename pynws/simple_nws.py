@@ -92,7 +92,8 @@ class SimpleNWS:
         if station:
             self.nws.station = station
             self.station = station
-            self.stations = [self.station]
+            if not self.stations:
+                self.stations = [self.station]
         else:
             self.stations = await self.nws.stations()
             self.nws.station = self.stations[0]
