@@ -31,6 +31,10 @@ async def grid_forecast(request):
     with open(os.path.join(DIR, 'grid_forecast.json'), 'r') as f:
         return aiohttp.web.json_response(data=json.load(f))
 
+async def grid_forecast_strings(request):
+    with open(os.path.join(DIR, 'grid_forecast_strings.json'), 'r') as f:
+        return aiohttp.web.json_response(data=json.load(f))
+
 
 async def grid_forecast_hourly(request):
     with open(os.path.join(DIR, 'grid_forecast_hourly.json'), 'r') as f:
@@ -128,6 +132,26 @@ async def test_obs(aiohttp_client, loop, urls, obs_json):
     assert forecast['windSpeedAvg'] == 10
     assert forecast['windBearing'] == 180
 
+
+async def test_forecast_strings(aiohttp_client, loop, urls):
+    """Getting response succeeds"""
+    app = aiohttp.web.Application()
+    app.router.add_get('/point', point)
+    app.router.add_get('/forecast', grid_forecast_strings)
+    client = await aiohttp_client(app)
+    snws = pynws.SimpleNWS(*LATLON, USERID, client) 
+
+    await snws.update_forecast()
+    forecast = snws.forecast[0]
+    assert forecast['temperature'] == 41
+    assert forecast['iconWeather'][0][0] == "Thunderstorm (high cloud cover)" 
+    assert forecast['iconWeather'][0][1] == 40
+    assert forecast['iconWeather'][1][0] == "Overcast"
+    assert forecast['iconWeather'][1][1] is None
+    assert forecast['windSpeedAvg'] == 10
+    assert forecast['windBearing'] == 180
+
+    
 
 async def test_hourly_forecast(aiohttp_client, loop, urls):
     """Getting response succeeds"""

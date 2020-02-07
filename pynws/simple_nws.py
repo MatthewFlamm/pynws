@@ -193,6 +193,9 @@ class SimpleNWS:
         forecast = []
         for forecast_entry in input_forecast:
             # get weather
+            if forecast_entry.get('temperature'):
+                forecast_entry['temperature'] = int(forecast_entry['temperature'])
+
             if forecast_entry.get('icon'):
                 time, weather = parse_icon(forecast_entry['icon'])
                 weather = convert_weather(weather)
