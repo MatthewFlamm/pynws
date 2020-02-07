@@ -139,7 +139,10 @@ class SimpleNWS:
         if obs_value is None:
             return None
         if isinstance(observation[value], dict):
-            return observation[value].get('value')
+            obs_sub_value = observation[value].get('value')
+            if obs_sub_value is None:
+                return None
+            return float(obs_sub_value)
         return observation[value]
 
     @property
