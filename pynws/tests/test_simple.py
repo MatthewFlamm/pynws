@@ -289,6 +289,39 @@ async def test_obs_missing_value(aiohttp_client, loop, urls):
     assert observation['iconWeather'] is None
 
 
+async def obs_strings(request):
+    """Return no observation"""
+    with open(os.path.join(DIR, 'obs_strings.json'), 'r') as f:
+        return aiohttp.web.json_response(data=json.load(f))
+    
+    
+async def test_obs_strings(aiohttp_client, loop, urls):
+    """No error when missing value."""
+    app = aiohttp.web.Application()
+    app.router.add_get('/obs', obs_strings)
+    app.router.add_get('/stations', stn)
+    app.router.add_get('/point', point)
+
+    client = await aiohttp_client(app)
+    snws = pynws.SimpleNWS(*LATLON, USERID, client) 
+    await snws.set_station('STN')
+    await snws.update_observation()
+
+    observation = snws.observation
+
+    assert observation['temperature'] == float(10)
+    assert observation['dewpoint'] == float(10)
+    assert observation['relativeHumidity'] == float(10)
+    assert observation['windDirection'] == float(10)
+    assert observation['visibility'] == float(10000)
+    assert observation['seaLevelPressure'] == float(100000)
+    assert observation['windSpeed'] == float(10)
+    assert observation['iconTime'] == "day"
+    assert observation['windGust'] == float(10)
+    assert observation['iconWeather'][0][0] == "A few clouds"
+    assert observation['iconWeather'][0][1] is None
+
+
 async def empty_fore(request):
     """Return observation response"""
     with open(os.path.join(DIR, 'fore_empty.json'), 'r') as f:
