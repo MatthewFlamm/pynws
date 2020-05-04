@@ -1,4 +1,5 @@
 import asyncio
+
 import aiohttp
 import pynws
 
@@ -15,4 +16,3 @@ async def defaults():
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(defaults())
-

@@ -1,4 +1,5 @@
 import os
+
 from setuptools import setup
 
 exec(open('pynws/version.py').read())
