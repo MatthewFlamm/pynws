@@ -1,7 +1,10 @@
 aiohttp
 metar
+black
+isort
+pylint
 pytest
 pytest-asyncio
 pytest-cov
 pytest-aiohttp
-pylint
+
