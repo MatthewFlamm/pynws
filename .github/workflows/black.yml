@@ -29,4 +29,4 @@ jobs:
         pip install -r requirements-test.txt
     - name: Check black
       run: |
-        black --check -q
+        black --check .
