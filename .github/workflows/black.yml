@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies, run tests and lint with a variety of Python versions
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: Lint
+name: Black
 
 on:
   push:
@@ -27,6 +27,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements-test.txt
-    - name: Lint
+    - name: Check black
       run: |
-        pylint pynws
+        black --check -q
