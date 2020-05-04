@@ -1,1 +1,1 @@
-'''Tests and mock responses'''
+"""Tests and mock responses"""
