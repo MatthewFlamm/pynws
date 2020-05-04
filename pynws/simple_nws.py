@@ -96,7 +96,9 @@ class SimpleNWS:
         self.stations = None
         self._forecast = None
         self._forecast_hourly = None
-        self._alerts_zone = None
+        self._alerts_forecast_zone = None
+        self._alerts_county_zone = None
+        self._alerts_fire_weather_zone = None
 
     async def set_station(self, station=None):
         """
@@ -142,9 +144,17 @@ class SimpleNWS:
         """Update forecast."""
         self._forecast_hourly = await self.nws.grid_forecast_hourly()
 
-    async def update_alerts_zone(self):
+    async def update_alerts_forecast_zone(self):
         """Update alerts zone."""
-        self._alerts_zone = await self.nws.alerts_zone()
+        self._alerts_forecast_zone = await self.nws.alerts_forecast_zone()
+
+    async def update_alerts_county_zone(self):
+        """Update alerts zone."""
+        self._alerts_county_zone = await self.nws.alerts_county_zone()
+
+    async def update_alerts_fire_weather_zone(self):
+        """Update alerts zone."""
+        self._alerts_fire_weather_zone = await self.nws.alerts_fire_weather_zone()
 
     @staticmethod
     def extract_observation_value(observation, value):
@@ -238,6 +248,16 @@ class SimpleNWS:
         return forecast
 
     @property
-    def alerts_zone(self):
+    def alerts_forecast_zone(self):
         """Return alerts as a list of dict."""
-        return self._alerts_zone
+        return self._alerts_forecast_zone
+
+    @property
+    def alerts_county_zone(self):
+        """Return alerts as a list of dict."""
+        return self._alerts_county_zone
+
+    @property
+    def alerts_fire_weather_zone(self):
+        """Return alerts as a list of dict."""
+        return self._alerts_fire_weather_zone
