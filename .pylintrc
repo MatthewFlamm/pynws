@@ -1,0 +1,9 @@
+[MASTER]
+ignore=tests
+
+[MESSAGES CONTROL]
+disable=invalid-name,
+	too-many-instance-attributes,
+	too-many-arguments,
+	duplicate-code,
+	format
