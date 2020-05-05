@@ -5,7 +5,6 @@ from pynws.const import API_ACCEPT, API_USER, DEFAULT_USERID
 import pynws.urls
 
 
-
 class NwsError(Exception):
     """Error in Nws Class"""
 

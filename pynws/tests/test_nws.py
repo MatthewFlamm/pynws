@@ -171,7 +171,9 @@ async def test_nws_point_response(aiohttp_client, loop, point_url):
     assert nws.wfo == "TAE"
     assert nws.x == 59
     assert nws.y == 64
-    assert nws.zone == "FLZ015"
+    assert nws.forecast_zone == "FLZ015"
+    assert nws.county_zone == "FLC037"
+    assert nws.fire_weather_zone == "FLZ015"
 
 
 async def test_nws_grid_forecast(aiohttp_client, loop, point_url, grid_forecast_url):
@@ -224,6 +226,13 @@ async def test_alerts(aiohttp_client, loop, point_url, alerts_url):
     client = await aiohttp_client(app)
     nws = pynws.Nws(client, latlon=(30, -85))
 
-    assert await nws.alerts_zone()
+    assert await nws.alerts_forecast_zone()
+    assert nws.forecast_zone == "FLZ015"
 
-    assert nws.zone == "FLZ015"
+    nws = pynws.Nws(client, latlon=(30, -85))
+    assert await nws.alerts_county_zone()
+    assert nws.county_zone == "FLC037"
+
+    nws = pynws.Nws(client, latlon=(30, -85))
+    assert await nws.alerts_fire_weather_zone()
+    assert nws.fire_weather_zone == "FLZ015"

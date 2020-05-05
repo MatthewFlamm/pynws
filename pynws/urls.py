@@ -1,7 +1,15 @@
 """url formatter."""
-from pynws.const import (API_ALERTS_ZONE, API_FORECAST, API_FORECAST_HOURLY,
-                         API_GRID_FORECAST, API_GRID_FORECAST_HOURLY,
-                         API_OBSERVATION, API_POINT, API_STATIONS, API_URL)
+from pynws.const import (
+    API_ALERTS_ZONE,
+    API_FORECAST,
+    API_FORECAST_HOURLY,
+    API_GRID_FORECAST,
+    API_GRID_FORECAST_HOURLY,
+    API_OBSERVATION,
+    API_POINT,
+    API_STATIONS,
+    API_URL,
+)
 
 
 def obs_url(station):
