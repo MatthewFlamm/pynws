@@ -26,7 +26,9 @@ class Nws:
         self.x = None
         self.y = None
 
-        self.zone = None
+        self.forecast_zone = None
+        self.county_zone = None
+        self.fire_weather_zone = None
 
     async def stations(self):
         """Returns station list"""
@@ -51,7 +53,9 @@ class Nws:
             self.wfo = properties.get("cwa")
             self.x = properties.get("gridX")
             self.y = properties.get("gridY")
-            self.zone = properties.get("forecastZone").split("/")[-1]
+            self.forecast_zone = properties.get("forecastZone").split("/")[-1]
+            self.county_zone = properties.get("county").split("/")[-1]
+            self.fire_weather_zone = properties.get("fireWeatherZone").split("/")[-1]
 
     async def grid_forecast(self):
         """Return forecast from grid."""
@@ -83,11 +87,27 @@ class Nws:
             raise NwsError("Need to set lattitude and longitude")
         return await forecast_hourly(*self.latlon, self.session, self.userid)
 
-    async def alerts_zone(self):
-        """Returns alerts dict."""
-        if self.zone is None:
+    async def alerts_forecast_zone(self):
+        """Returns alerts dict for forecast_l zone."""
+        if self.forecast_zone is None:
             await self.get_pointdata()
-        alerts = await alerts_zone_raw(self.zone, self.session, self.userid)
+        alerts = await alerts_zone_raw(self.forecast_zone, self.session, self.userid)
+        return [alert["properties"] for alert in alerts["features"]]
+
+    async def alerts_county_zone(self):
+        """Returns alerts dict for county zone."""
+        if self.county_zone is None:
+            await self.get_pointdata()
+        alerts = await alerts_zone_raw(self.county_zone, self.session, self.userid)
+        return [alert["properties"] for alert in alerts["features"]]
+
+    async def alerts_fire_weather_zone(self):
+        """Returns alerts dict for fire weather zone."""
+        if self.fire_weather_zone is None:
+            await self.get_pointdata()
+        alerts = await alerts_zone_raw(
+            self.fire_weather_zone, self.session, self.userid
+        )
         return [alert["properties"] for alert in alerts["features"]]
 
 

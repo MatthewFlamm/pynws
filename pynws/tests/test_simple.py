@@ -394,8 +394,14 @@ async def test_alerts_zone(aiohttp_client, loop, urls):
     app.router.add_get("/alerts_zone", alerts_zone)
     client = await aiohttp_client(app)
     snws = pynws.SimpleNWS(*LATLON, USERID, client)
-    await snws.update_alerts_zone()
-    assert snws.alerts_zone
+    await snws.update_alerts_forecast_zone()
+    assert snws.alerts_forecast_zone
+
+    await snws.update_alerts_county_zone()
+    assert snws.alerts_county_zone
+
+    await snws.update_alerts_fire_weather_zone()
+    assert snws.alerts_fire_weather_zone
 
 
 async def test_overwriting_station(aiohttp_client, loop, urls):

@@ -1,7 +1,4 @@
-"""
-url formattera
-"""
-
+"""url formatter."""
 from pynws.const import (
     API_ALERTS_ZONE,
     API_FORECAST,
