@@ -115,6 +115,10 @@ class SimpleNWS:
             self.nws.station = self.stations[0]
             self.station = self.stations[0]
 
+    async def update_pointdata(self):
+        """Set point data from API."""
+        await self.nws.get_pointdata()
+
     @staticmethod
     def extract_metar(obs):
         """Return parsed metar if available."""
@@ -246,6 +250,21 @@ class SimpleNWS:
 
             forecast.append(forecast_entry)
         return forecast
+
+    @property
+    def forecast_zone(self):
+        """Forecast zone."""
+        return self.nws.forecast_zone
+
+    @property
+    def county_zone(self):
+        """County zone."""
+        return self.nws.county_zone
+
+    @property
+    def fire_weather_zone(self):
+        """Fire weather zone."""
+        return self.nws.fire_weather_zone
 
     @property
     def alerts_forecast_zone(self):
