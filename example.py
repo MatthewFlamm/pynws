@@ -1,7 +1,6 @@
 import asyncio
 
 import aiohttp
-
 import pynws
 
 PHILLY = (39.95, -75.16)

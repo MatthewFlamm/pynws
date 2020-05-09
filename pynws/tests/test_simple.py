@@ -394,6 +394,12 @@ async def test_alerts_zone(aiohttp_client, loop, urls):
     app.router.add_get("/alerts_zone", alerts_zone)
     client = await aiohttp_client(app)
     snws = pynws.SimpleNWS(*LATLON, USERID, client)
+
+    await snws.update_pointdata()
+    assert snws.forecast_zone == "FLZ015"
+    assert snws.county_zone == "FLC037"
+    assert snws.fire_weather_zone == "FLZ015"
+
     await snws.update_alerts_forecast_zone()
     assert snws.alerts_forecast_zone
 
