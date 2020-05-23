@@ -19,12 +19,17 @@ def stations_observations_data(request):
 
 
 def gridpoints_forecast_data(request):
-    with open(os.path.join("tests/fixtures/sgridpoints_forecast.json"), "r") as f:
+    with open(os.path.join("tests/fixtures/gridpoints_forecast.json"), "r") as f:
         return aiohttp.web.json_response(data=json.load(f))
 
 
 def gridpoints_forecast_hourly_data(request):
     with open(os.path.join("tests/fixtures/gridpoints_forecast_hourly.json"), "r") as f:
+        return aiohttp.web.json_response(data=json.load(f))
+
+
+def alerts_active_zone_data(request):
+    with open(os.path.join("tests/fixtures/alerts_active_zone.json"), "r") as f:
         return aiohttp.web.json_response(data=json.load(f))
 
 
@@ -35,4 +40,5 @@ def setup_app():
     app.router.add_get("/stations_observations", stations_observations_data)
     app.router.add_get("/gridpoints_forecast", gridpoints_forecast_data)
     app.router.add_get("/gridpoints_forecast_hourly", gridpoints_forecast_hourly_data)
+    app.router.add_get("/alerts_active_zone", gridpoints_forecast_hourly_data)
     return app

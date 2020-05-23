@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pynws.const import API_ACCEPT, API_USER
 import pynws.urls
 
@@ -9,18 +11,16 @@ def get_header(userid):
     return {"accept": API_ACCEPT, "User-Agent": API_USER.format(userid)}
 
 
-async def raw_stations_observations(station, websession, userid, limit=5, start_time=None):
+async def raw_stations_observations(station, websession, userid, limit=0, start=None):
     """Get observation response from station"""
     params = {}
     if limit > 0:
         params["limit"] = limit
 
-    if start_time:
-        if not isinstance(start_time, timedelta):
+    if start:
+        if not isinstance(start, datetime):
             raise ValueError
-        now = datetime.now(timezone.utc)
-        request_time = now - start_time
-        params["start"] = request_time.isoformat(timespec="seconds")
+        params["start"] = start.isoformat(timespec="seconds")
 
     url = pynws.urls.stations_observations_url(station)
     header = get_header(userid)
@@ -52,7 +52,7 @@ async def raw_points(lat, lon, websession, userid):
 
 async def raw_gridpoints_forecast(wfo, x, y, websession, userid):
     """Return griddata response."""
-    url = pynws.urls.grid_forecast_url(wfo, x, y)
+    url = pynws.urls.gridpoints_forecast_url(wfo, x, y)
     header = get_header(userid)
     async with websession.get(url, headers=header) as res:
         res.raise_for_status()
@@ -62,7 +62,7 @@ async def raw_gridpoints_forecast(wfo, x, y, websession, userid):
 
 async def raw_gridpoints_forecast_hourly(wfo, x, y, websession, userid):
     """Return griddata response."""
-    url = pynws.urls.grid_forecast_hourly_url(wfo, x, y)
+    url = pynws.urls.gridpoints_forecast_hourly_url(wfo, x, y)
     header = get_header(userid)
     async with websession.get(url, headers=header) as res:
         res.raise_for_status()
@@ -72,7 +72,7 @@ async def raw_gridpoints_forecast_hourly(wfo, x, y, websession, userid):
 
 async def raw_alerts_active_zone(zone, websession, userid):
     """Return griddata response."""
-    url = pynws.urls.alerts_zone_url(zone)
+    url = pynws.urls.alerts_active_zone_url(zone)
     header = get_header(userid)
     async with websession.get(url, headers=header) as res:
         res.raise_for_status()
