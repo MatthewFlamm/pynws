@@ -75,7 +75,7 @@ def parse_icon(icon):
     return time, tuple(zip(code, chance))
 
 
-class SimpleNWS:
+class SimpleNWS(Nws):
     """
     NWS simplified data.
 
@@ -84,11 +84,7 @@ class SimpleNWS:
 
     def __init__(self, lat, lon, api_key, session):
         """Set up simplified NWS class."""
-        self.lat = lat
-        self.lon = lon
-        self.api_key = api_key
-        self.session = session
-        self.nws = Nws(session, latlon=(float(lat), float(lon)), userid=api_key)
+        super().__init__(session, api_key, (lat, lon))
 
         self._observation = None
         self._metar_obs = None
@@ -106,18 +102,12 @@ class SimpleNWS:
         If no station is supplied, the first retrieved value is set.
         """
         if station:
-            self.nws.station = station
             self.station = station
             if not self.stations:
                 self.stations = [self.station]
         else:
-            self.stations = await self.nws.stations()
-            self.nws.station = self.stations[0]
+            self.stations = await self.get_points_stations()
             self.station = self.stations[0]
-
-    async def update_pointdata(self):
-        """Set point data from API."""
-        await self.nws.get_pointdata()
 
     @staticmethod
     def extract_metar(obs):
@@ -134,7 +124,7 @@ class SimpleNWS:
 
     async def update_observation(self, limit=0, start_time=None):
         """Update observation."""
-        obs = await self.nws.observations(limit, start_time=start_time)
+        obs = await self.get_stations_observations(limit, start_time=start_time)
         if obs is None:
             return None
         self._observation = obs
@@ -142,23 +132,23 @@ class SimpleNWS:
 
     async def update_forecast(self):
         """Update forecast."""
-        self._forecast = await self.nws.grid_forecast()
+        self._forecast = await self.get_gridpoints_forecast()
 
     async def update_forecast_hourly(self):
         """Update forecast."""
-        self._forecast_hourly = await self.nws.grid_forecast_hourly()
+        self._forecast_hourly = await self.get_gridpoints_forecast_hourly()
 
     async def update_alerts_forecast_zone(self):
         """Update alerts zone."""
-        self._alerts_forecast_zone = await self.nws.alerts_forecast_zone()
+        self._alerts_forecast_zone = await self.get_alerts_forecast_zone()
 
     async def update_alerts_county_zone(self):
         """Update alerts zone."""
-        self._alerts_county_zone = await self.nws.alerts_county_zone()
+        self._alerts_county_zone = await self.get_alerts_county_zone()
 
     async def update_alerts_fire_weather_zone(self):
         """Update alerts zone."""
-        self._alerts_fire_weather_zone = await self.nws.alerts_fire_weather_zone()
+        self._alerts_fire_weather_zone = await self.get_alerts_fire_weather_zone()
 
     @staticmethod
     def extract_observation_value(observation, value):
@@ -177,7 +167,7 @@ class SimpleNWS:
     def observation(self):
         """Observation dict"""
 
-        if self._observation is None:
+        if self._observation is None or self._observation == []:
             return None
 
         data = {}
@@ -250,21 +240,6 @@ class SimpleNWS:
 
             forecast.append(forecast_entry)
         return forecast
-
-    @property
-    def forecast_zone(self):
-        """Forecast zone."""
-        return self.nws.forecast_zone
-
-    @property
-    def county_zone(self):
-        """County zone."""
-        return self.nws.county_zone
-
-    @property
-    def fire_weather_zone(self):
-        """Fire weather zone."""
-        return self.nws.fire_weather_zone
 
     @property
     def alerts_forecast_zone(self):
