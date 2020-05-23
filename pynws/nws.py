@@ -10,9 +10,9 @@ class NwsError(Exception):
 
 
 class Nws:
-    """Nws object for simple use"""
+    """Class to more easily get data for one location."""
 
-    def __init__(self, session, latlon=None, station=None, userid=DEFAULT_USERID):
+    def __init__(self, session, userid, latlon=None, station=None):
         self.session = session
         self.latlon = latlon
         self.station = station
@@ -26,14 +26,14 @@ class Nws:
         self.county_zone = None
         self.fire_weather_zone = None
 
-    async def get_stations(self):
+    async def get_points_stations(self):
         """Returns station list"""
         if self.latlon is None:
             raise NwsError("Need to set lattitude and longitude")
         res = await raw_points_stations(*self.latlon, self.session, self.userid)
-        return [res["properties"]["stationIdentifier"] for s in res["features"]]
+        return [s["properties"]["stationIdentifier"] for s in res["features"]]
 
-    async def get_observations(self, limit=0, start_time=None):
+    async def get_stations_observations(self, limit=0, start_time=None):
         """Returns observation list"""
         if self.station is None:
             raise NwsError("Need to set station")
@@ -81,16 +81,16 @@ class Nws:
         """Returns alerts dict for forecast zone."""
         if self.forecast_zone is None:
             await self.get_points()
-        return await raw_alerts_active_zone(self.forecast_zone)
+        return await self.get_alerts_active_zone(self.forecast_zone)
 
     async def get_alerts_county_zone(self):
         """Returns alerts dict for county zone."""
         if self.county_zone is None:
             await self.get_points()
-        return await get_alerts_active_zone(self.county_zone)
+        return await self.get_alerts_active_zone(self.county_zone)
 
     async def get_alerts_fire_weather_zone(self):
         """Returns alerts dict for fire weather zone."""
         if self.fire_weather_zone is None:
             await self.get_points()
-            return await get_alerts_active_zone(self.fire_weather_zone)
+            return await self.get_alerts_active_zone(self.fire_weather_zone)

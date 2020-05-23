@@ -40,5 +40,5 @@ def setup_app():
     app.router.add_get("/stations_observations", stations_observations_data)
     app.router.add_get("/gridpoints_forecast", gridpoints_forecast_data)
     app.router.add_get("/gridpoints_forecast_hourly", gridpoints_forecast_hourly_data)
-    app.router.add_get("/alerts_active_zone", gridpoints_forecast_hourly_data)
+    app.router.add_get("/alerts_active_zone", alerts_active_zone_data)
     return app
