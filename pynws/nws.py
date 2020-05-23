@@ -1,5 +1,13 @@
 """pynws module."""
-from pynws.raw_data import raw_points, raw_points_stations, raw_stations_observations, raw_gridpoints_forecast, raw_gridpoints_forecast_hourly, raw_alerts_active_zone
+from pynws.raw_data import (
+    raw_alerts_active_zone,
+    raw_gridpoints_forecast,
+    raw_gridpoints_forecast_hourly,
+    raw_points,
+    raw_points_stations,
+    raw_stations_observations,
+)
+
 
 class NwsError(Exception):
     """Error in Nws Class"""
@@ -37,7 +45,9 @@ class Nws:
         """Returns observation list"""
         if self.station is None:
             raise NwsError("Need to set station")
-        res = await raw_stations_observations(self.station, self.session, self.userid, limit, start_time)
+        res = await raw_stations_observations(
+            self.station, self.session, self.userid, limit, start_time
+        )
         return [o["properties"] for o in res["features"]]
 
     async def get_points(self):

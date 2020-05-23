@@ -3,16 +3,16 @@ from pynws.const import (
     API_ALERTS_ACTIVE_ZONE,
     API_GRIDPOINTS_FORECAST,
     API_GRIDPOINTS_FORECAST_HOURLY,
-    API_STATIONS_OBSERVATIONS,
     API_POINTS,
     API_POINTS_STATIONS,
+    API_STATIONS_OBSERVATIONS,
     API_URL,
 )
 
 
 def stations_observations_url(station):
     """Formats observation url."""
-    return API_URL + API_STATIONS_OBSERVATION.format(station)
+    return API_URL + API_STATIONS_OBSERVATIONS.format(station)
 
 
 def points_stations_url(lat, lon):
@@ -32,7 +32,7 @@ def gridpoints_forecast_hourly_url(wfo, x, y):
 
 def points_url(lat, lon):
     """ Formats point metadata url."""
-    return API_URL + API_POINT.format(lat, lon)
+    return API_URL + API_POINTS.format(lat, lon)
 
 
 def alerts_active_zone_url(zone):

@@ -1,7 +1,9 @@
+"""Functions to retrieve raw data."""
 from datetime import datetime
 
 from pynws.const import API_ACCEPT, API_USER
 import pynws.urls
+
 
 def get_header(userid):
     """Get header.

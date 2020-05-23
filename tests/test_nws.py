@@ -1,12 +1,13 @@
+from pynws import Nws, NwsError
 import pytest
 
-from pynws import Nws, NwsError
 from tests.helpers import setup_app
 
 LATLON = (0, 0)
 STATION = "ABC"
 USERID = "test_user"
 ZONE = "test_zone"
+
 
 async def test_nws_points_stations(aiohttp_client, loop, mock_urls):
     app = setup_app()
@@ -44,7 +45,8 @@ async def test_nws_stations_observations(aiohttp_client, loop, mock_urls):
     observations = await nws.get_stations_observations()
     assert observations
     assert isinstance(observations, list)
-    
+
+
 async def test_nws_gridpoints_forecast(aiohttp_client, loop, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
@@ -55,6 +57,7 @@ async def test_nws_gridpoints_forecast(aiohttp_client, loop, mock_urls):
     assert forecast
     assert isinstance(forecast, list)
 
+
 async def test_nws_gridpoints_forecast_hourly(aiohttp_client, loop, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
@@ -64,7 +67,6 @@ async def test_nws_gridpoints_forecast_hourly(aiohttp_client, loop, mock_urls):
     assert nws.wfo
     assert forecast
     assert isinstance(forecast, list)
-
 
 
 async def test_nws_alerts_active_zone(aiohttp_client, loop, mock_urls):
@@ -86,6 +88,7 @@ async def test_nws_alerts_forecast_zone(aiohttp_client, loop, mock_urls):
     assert alerts
     assert isinstance(alerts, list)
 
+
 async def test_nws_alerts_county_zone(aiohttp_client, loop, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
@@ -94,6 +97,7 @@ async def test_nws_alerts_county_zone(aiohttp_client, loop, mock_urls):
     alerts = await nws.get_alerts_county_zone()
     assert alerts
     assert isinstance(alerts, list)
+
 
 async def test_nws_alerts_fire_weather_zone(aiohttp_client, loop, mock_urls):
     app = setup_app()

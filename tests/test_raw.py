@@ -1,7 +1,10 @@
 from datetime import datetime, timezone
-import pytest
+
 from pynws import raw_data
+import pytest
+
 from tests.helpers import setup_app
+
 LATLON = (0, 0)
 STATION = "ABC"
 USERID = "test"
@@ -9,6 +12,7 @@ WFO = "ABC"
 X = 0
 Y = 0
 ZONE = "test"
+
 
 async def test_points_stations(aiohttp_client, loop, mock_urls):
     app = setup_app()
@@ -27,14 +31,16 @@ async def test_stations_observations(aiohttp_client, loop, mock_urls):
     client = await aiohttp_client(app)
     await raw_data.raw_stations_observations(STATION, client, USERID)
     await raw_data.raw_stations_observations(STATION, client, USERID, limit=2)
-    await raw_data.raw_stations_observations(STATION, client, USERID, start=datetime.now(timezone.utc))
+    await raw_data.raw_stations_observations(
+        STATION, client, USERID, start=datetime.now(timezone.utc)
+    )
 
 
 async def test_stations_observations_start_datetime(aiohttp_client, loop, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     with pytest.raises(ValueError):
-        await raw_data.raw_stations_observations(STATION, client, USERID, start='1PM')
+        await raw_data.raw_stations_observations(STATION, client, USERID, start="1PM")
 
 
 async def test_gridpoints_forecaat(aiohttp_client, loop, mock_urls):
@@ -42,7 +48,7 @@ async def test_gridpoints_forecaat(aiohttp_client, loop, mock_urls):
     client = await aiohttp_client(app)
     await raw_data.raw_gridpoints_forecast(WFO, X, Y, client, USERID)
 
-    
+
 async def test_gridpoints_forecaat_hourly(aiohttp_client, loop, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)

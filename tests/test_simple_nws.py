@@ -1,12 +1,13 @@
+from pynws import NwsError, SimpleNWS
 import pytest
 
-from pynws import SimpleNWS, NwsError
 from tests.helpers import setup_app
 
 LATLON = (0, 0)
 STATION = "ABC"
 USERID = "test_user"
 ZONE = "test_zone"
+
 
 async def test_nws_set_station(aiohttp_client, loop, mock_urls):
     app = setup_app()
@@ -25,7 +26,15 @@ async def test_nws_set_station_none(aiohttp_client, loop, mock_urls):
     assert nws.station == "KCMH"
     assert isinstance(nws.stations, list)
 
-@pytest.mark.parametrize("observation_json", ["stations_observations.json", "stations_observations_multiple.json", "stations_observations_strings.json"])
+
+@pytest.mark.parametrize(
+    "observation_json",
+    [
+        "stations_observations.json",
+        "stations_observations_multiple.json",
+        "stations_observations_strings.json",
+    ],
+)
 async def test_nws_observation(aiohttp_client, loop, mock_urls, observation_json):
     app = setup_app(stations_observations=observation_json)
     client = await aiohttp_client(app)
@@ -75,7 +84,8 @@ async def test_nws_observation_metar_noparse(aiohttp_client, loop, mock_urls):
     await nws.update_observation()
     observation = nws.observation
     assert observation["temperature"] is None
-    
+
+
 async def test_nws_observation_empty(aiohttp_client, loop, mock_urls):
     app = setup_app(stations_observations="stations_observations_empty.json")
     client = await aiohttp_client(app)
@@ -95,6 +105,7 @@ async def test_nws_observation_empty(aiohttp_client, loop, mock_urls):
     assert observation["iconTime"] is None
     assert observation["iconWeather"] is None
 
+
 async def test_nws_observation_noprop(aiohttp_client, loop, mock_urls):
     app = setup_app(stations_observations="stations_observations_noprop.json")
     client = await aiohttp_client(app)
@@ -104,6 +115,7 @@ async def test_nws_observation_noprop(aiohttp_client, loop, mock_urls):
     observation = nws.observation
 
     assert observation is None
+
 
 async def test_nws_observation_missing_value(aiohttp_client, loop, mock_urls):
     app = setup_app(stations_observations="stations_observations_missing_value.json")
@@ -174,6 +186,7 @@ async def test_nws_forecast_empty(aiohttp_client, loop, mock_urls):
 
     assert forecast
 
+
 async def test_nws_alerts_forecast_zone(aiohttp_client, loop, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
@@ -181,6 +194,7 @@ async def test_nws_alerts_forecast_zone(aiohttp_client, loop, mock_urls):
     await nws.update_alerts_forecast_zone()
     alerts = nws.alerts_forecast_zone
     assert alerts
+
 
 async def test_nws_alerts_county_zone(aiohttp_client, loop, mock_urls):
     app = setup_app()
@@ -190,6 +204,7 @@ async def test_nws_alerts_county_zone(aiohttp_client, loop, mock_urls):
     alerts = nws.alerts_county_zone
     assert alerts
 
+
 async def test_nws_alerts_fire_weather_zone(aiohttp_client, loop, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
@@ -197,4 +212,3 @@ async def test_nws_alerts_fire_weather_zone(aiohttp_client, loop, mock_urls):
     await nws.update_alerts_fire_weather_zone()
     alerts = nws.alerts_fire_weather_zone
     assert alerts
-
