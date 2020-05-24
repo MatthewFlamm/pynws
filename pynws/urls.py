@@ -1,52 +1,40 @@
 """url formatter."""
 from pynws.const import (
-    API_ALERTS_ZONE,
-    API_FORECAST,
-    API_FORECAST_HOURLY,
-    API_GRID_FORECAST,
-    API_GRID_FORECAST_HOURLY,
-    API_OBSERVATION,
-    API_POINT,
-    API_STATIONS,
+    API_ALERTS_ACTIVE_ZONE,
+    API_GRIDPOINTS_FORECAST,
+    API_GRIDPOINTS_FORECAST_HOURLY,
+    API_POINTS,
+    API_POINTS_STATIONS,
+    API_STATIONS_OBSERVATIONS,
     API_URL,
 )
 
 
-def obs_url(station):
+def stations_observations_url(station):
     """Formats observation url."""
-    return API_URL + API_OBSERVATION.format(station)
+    return API_URL + API_STATIONS_OBSERVATIONS.format(station)
 
 
-def stn_url(lat, lon):
+def points_stations_url(lat, lon):
     """formats station url"""
-    return API_URL + API_STATIONS.format(str(lat), str(lon))
+    return API_URL + API_POINTS_STATIONS.format(str(lat), str(lon))
 
 
-def forc_url(lat, lon):
-    """Formats forecast url"""
-    return API_URL + API_FORECAST.format(lat, lon)
-
-
-def hour_forc_url(lat, lon):
-    """Formats forecast url"""
-    return API_URL + API_FORECAST_HOURLY.format(lat, lon)
-
-
-def grid_forecast_url(wfo, x, y):
+def gridpoints_forecast_url(wfo, x, y):
     """gridpoint forecast."""
-    return API_URL + API_GRID_FORECAST.format(wfo, x, y)
+    return API_URL + API_GRIDPOINTS_FORECAST.format(wfo, x, y)
 
 
-def grid_forecast_hourly_url(wfo, x, y):
+def gridpoints_forecast_hourly_url(wfo, x, y):
     """gridpoint forecast hpurly."""
-    return API_URL + API_GRID_FORECAST_HOURLY.format(wfo, x, y)
+    return API_URL + API_GRIDPOINTS_FORECAST_HOURLY.format(wfo, x, y)
 
 
-def point_url(lat, lon):
+def points_url(lat, lon):
     """ Formats point metadata url."""
-    return API_URL + API_POINT.format(lat, lon)
+    return API_URL + API_POINTS.format(lat, lon)
 
 
-def alerts_zone_url(zone):
+def alerts_active_zone_url(zone):
     """Formats alerts url with zone."""
-    return API_URL + API_ALERTS_ZONE.format(zone)
+    return API_URL + API_ALERTS_ACTIVE_ZONE.format(zone)

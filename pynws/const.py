@@ -10,16 +10,14 @@ file_dir = os.path.join(os.path.dirname(__file__), "..")
 version = __version__
 
 API_URL = "https://api.weather.gov/"
-API_STATIONS = "points/{},{}/stations"
-API_OBSERVATION = "stations/{}/observations/"
+API_POINTS_STATIONS = "points/{},{}/stations"
+API_STATIONS_OBSERVATIONS = "stations/{}/observations/"
 API_ACCEPT = "application/geo+json"
 API_USER = "pynws {}"
-API_FORECAST = "points/{},{}/forecast"
-API_FORECAST_HOURLY = "/points/{},{}/forecast/hourly"
-API_GRID_FORECAST = "gridpoints/{}/{},{}/forecast"
-API_GRID_FORECAST_HOURLY = "gridpoints/{}/{},{}/forecast/hourly"
-API_POINT = "points/{},{}"
-API_ALERTS_ZONE = "alerts/active/zone/{}"
+API_GRIDPOINTS_FORECAST = "gridpoints/{}/{},{}/forecast"
+API_GRIDPOINTS_FORECAST_HOURLY = "gridpoints/{}/{},{}/forecast/hourly"
+API_POINTS = "points/{},{}"
+API_ALERTS_ACTIVE_ZONE = "alerts/active/zone/{}"
 
 DEFAULT_USERID = "CODEemail@address"
 
