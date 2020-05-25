@@ -9,11 +9,14 @@ USERID = "testing@address.xyz"
 
 async def defaults():
     async with aiohttp.ClientSession() as session:
-        nws = pynws.Nws(session, latlon=PHILLY, userid=USERID)
-        stations = await nws.stations()
-        nws.station = stations[0]
-        observations = await nws.observations()
-        forecast = await nws.forecast()
+        nws = pynws.SimpleNWS(*PHILLY, USERID, session)
+        await nws.set_station()
+        await nws.update_observation()
+        await nws.update_forecast()
+        await nws.update_alerts_forecast_zone()
+        print(nws.observation)
+        print(nws.forecast[0])
+        print(nws.alerts_forecast_zone)
 
 
 loop = asyncio.get_event_loop()
