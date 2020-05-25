@@ -3,7 +3,7 @@
 A python library to asynchronously retrieve weather observation from NWS/NOAA.
 
 ## Example
-See [example.py](../blob/master/example.py) for a runnable example.
+See [example.py](example.py) for a runnable example.
 ```python
 PHILLY = (39.95, -75.16)
 USERID = "testing@address.xyz"
