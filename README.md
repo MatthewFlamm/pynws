@@ -8,7 +8,7 @@ See [example.py](example.py) for a runnable example.
 PHILLY = (39.95, -75.16)
 USERID = "testing@address.xyz"
 
-async def defaults():
+async def example():
     async with aiohttp.ClientSession() as session:
         nws = pynws.SimpleNWS(*PHILLY, USERID, session)
         await nws.set_station()
