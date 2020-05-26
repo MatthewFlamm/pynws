@@ -7,9 +7,13 @@ DIR = "tests/fixtures"
 
 
 def data_return_function(file_name):
-    def function(request):
-        with open(os.path.join(DIR, file_name), "r") as f:
-            return aiohttp.web.json_response(data=json.load(f))
+    async def function(request):
+        if isinstance(file_name, str):
+            with open(os.path.join(DIR, file_name), "r") as f:
+                return aiohttp.web.json_response(data=json.load(f))
+        elif isinstance(file_name, list):
+            with open(os.path.join(DIR, file_name.pop(0)), "r") as f:
+                return aiohttp.web.json_response(data=json.load(f))
 
     return function
 

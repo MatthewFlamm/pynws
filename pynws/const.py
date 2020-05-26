@@ -21,6 +21,8 @@ API_ALERTS_ACTIVE_ZONE = "alerts/active/zone/{}"
 
 DEFAULT_USERID = "CODEemail@address"
 
+ALERT_ID = "id"
+
 API_WEATHER_CODE = {
     "skc": "Fair/clear",
     "few": "A few clouds",
