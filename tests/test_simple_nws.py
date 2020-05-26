@@ -1,7 +1,7 @@
 from pynws import NwsError, SimpleNWS
 import pytest
 
-from tests.helpers import setup_app
+from tests.helpers import data_return_function, setup_app
 
 LATLON = (0, 0)
 STATION = "ABC"
@@ -188,12 +188,24 @@ async def test_nws_forecast_empty(aiohttp_client, loop, mock_urls):
 
 
 async def test_nws_alerts_forecast_zone(aiohttp_client, loop, mock_urls):
-    app = setup_app()
+    app = setup_app(
+        alerts_active_zone=["alerts_active_zone.json", "alerts_active_zone_second.json"]
+    )
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
-    await nws.update_alerts_forecast_zone()
+    new_alerts = await nws.update_alerts_forecast_zone()
+    assert new_alerts
     alerts = nws.alerts_forecast_zone
     assert alerts
+    assert new_alerts == alerts
+    assert len(alerts) == 1
+
+    new_alerts = await nws.update_alerts_forecast_zone()
+    assert new_alerts != alerts
+    alerts = nws.alerts_forecast_zone
+    assert new_alerts != alerts
+    assert len(new_alerts) == 1
+    assert len(alerts) == 2
 
 
 async def test_nws_alerts_county_zone(aiohttp_client, loop, mock_urls):

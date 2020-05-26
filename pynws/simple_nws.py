@@ -3,7 +3,7 @@ from statistics import mean
 
 from metar import Metar
 
-from .const import API_WEATHER_CODE
+from .const import ALERT_ID, API_WEATHER_CODE
 from .nws import Nws
 
 WIND_DIRECTIONS = [
@@ -92,9 +92,9 @@ class SimpleNWS(Nws):
         self.stations = None
         self._forecast = None
         self._forecast_hourly = None
-        self._alerts_forecast_zone = None
-        self._alerts_county_zone = None
-        self._alerts_fire_weather_zone = None
+        self._alerts_forecast_zone = []
+        self._alerts_county_zone = []
+        self._alerts_fire_weather_zone = []
 
     async def set_station(self, station=None):
         """
@@ -138,17 +138,36 @@ class SimpleNWS(Nws):
         """Update forecast."""
         self._forecast_hourly = await self.get_gridpoints_forecast_hourly()
 
+    @staticmethod
+    def _unique_alert_ids(alerts):
+        """Return set of unique alert_ids."""
+        return {alert[ALERT_ID] for alert in alerts}
+
+    def _new_alerts(self, alerts, current_alerts):
+        """Return new alerts."""
+        current_alert_ids = self._unique_alert_ids(current_alerts)
+        return [alert for alert in alerts if alert[ALERT_ID] not in current_alert_ids]
+
     async def update_alerts_forecast_zone(self):
         """Update alerts zone."""
-        self._alerts_forecast_zone = await self.get_alerts_forecast_zone()
+        alerts = await self.get_alerts_forecast_zone()
+        new_alerts = self._new_alerts(alerts, self._alerts_forecast_zone)
+        self._alerts_forecast_zone = alerts
+        return new_alerts
 
     async def update_alerts_county_zone(self):
         """Update alerts zone."""
-        self._alerts_county_zone = await self.get_alerts_county_zone()
+        alerts = await self.get_alerts_county_zone()
+        new_alerts = self._new_alerts(alerts, self._alerts_county_zone)
+        self._alerts_county_zone = alerts
+        return new_alerts
 
     async def update_alerts_fire_weather_zone(self):
         """Update alerts zone."""
-        self._alerts_fire_weather_zone = await self.get_alerts_fire_weather_zone()
+        alerts = await self.get_alerts_fire_weather_zone()
+        new_alerts = self._new_alerts(alerts, self._alerts_fire_weather_zone)
+        self._alerts_fire_weather_zone = alerts
+        return new_alerts
 
     @staticmethod
     def extract_observation_value(observation, value):
