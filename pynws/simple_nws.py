@@ -141,7 +141,7 @@ class SimpleNWS(Nws):
     @staticmethod
     def _unique_alert_ids(alerts):
         """Return set of unique alert_ids."""
-        return set([alert[ALERT_ID] for alert in alerts])
+        return {alert[ALERT_ID] for alert in alerts}
 
     def _new_alerts(self, alerts, current_alerts):
         """Return new alerts."""
