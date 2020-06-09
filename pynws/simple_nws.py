@@ -175,6 +175,7 @@ class SimpleNWS(Nws):
         """Update all alerts zones."""
         if not self.forecast_zone or not self.county_zone:
             await self.get_points()
+        if not self._all_zones:
             self._all_zones = {
                 self.forecast_zone,
                 self.county_zone,
