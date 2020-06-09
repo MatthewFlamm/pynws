@@ -95,6 +95,8 @@ class SimpleNWS(Nws):
         self._alerts_forecast_zone = []
         self._alerts_county_zone = []
         self._alerts_fire_weather_zone = []
+        self._alerts_all_zones = []
+        self._all_zones = []
 
     async def set_station(self, station=None):
         """
@@ -168,6 +170,34 @@ class SimpleNWS(Nws):
         new_alerts = self._new_alerts(alerts, self._alerts_fire_weather_zone)
         self._alerts_fire_weather_zone = alerts
         return new_alerts
+
+    async def update_alerts_all_zones(self):
+        """Update all alerts zones."""
+        if not self.forecast_zone or not self.county_zone:
+            await self.get_points()
+            self._all_zones = {
+                self.forecast_zone,
+                self.county_zone,
+                self.fire_weather_zone,
+            }
+        alerts_data = [
+            await self.get_alerts_active_zone(zone) for zone in self._all_zones
+        ]
+
+        alerts = []
+        for alert_list in alerts_data:
+            for alert in alert_list:
+                if alert["id"] not in self._unique_alert_ids(alerts):
+                    alerts.append(alert)
+
+        new_alerts = self._new_alerts(alerts, self._alerts_all_zones)
+        self._alerts_all_zones = alerts
+        return new_alerts
+
+    @property
+    def all_zones(self):
+        """All alert zones."""
+        return self._all_zones
 
     @staticmethod
     def extract_observation_value(observation, value):
@@ -274,3 +304,8 @@ class SimpleNWS(Nws):
     def alerts_fire_weather_zone(self):
         """Return alerts as a list of dict."""
         return self._alerts_fire_weather_zone
+
+    @property
+    def alerts_all_zones(self):
+        """Return alerts as a list of dict."""
+        return self._alerts_all_zones
