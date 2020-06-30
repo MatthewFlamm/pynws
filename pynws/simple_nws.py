@@ -27,14 +27,17 @@ WIND_DIRECTIONS = [
 
 
 def unchanged(value):
+    """Return same value."""
     return value
 
 
 def f_to_c(fahrenheit):
+    """Convert to Celsius."""
     return (fahrenheit - 32.0) / 1.8
 
 
 def m_p_s_to_km_p_hr(m_p_s):
+    """Convert to km/hr."""
     return m_p_s * 3.6
 
 
