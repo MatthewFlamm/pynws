@@ -24,7 +24,7 @@ async def example():
 pynws exposes the ability to retrieve raw data using `raw_data` module. `Nws` class offers ability to retrieve minimally processed data for a single location.  `SimpleNWS` class offers data caching and several other helpers for interpreting output.
 
 
-### Units for Observations
+### Units for Observations in SimpleNWS
 NWS API does not expose all possible units for observations.  Known units are converted to the following:
 
 |unit type   | known NWS units| pynws unit |
