@@ -25,6 +25,33 @@ WIND_DIRECTIONS = [
     "NNW",
 ]
 
+
+def unchanged(value):
+    """Return same value."""
+    return value
+
+
+def f_to_c(fahrenheit):
+    """Convert to Celsius."""
+    return (fahrenheit - 32.0) / 1.8
+
+
+def m_p_s_to_km_p_hr(m_p_s):
+    """Convert to km/hr."""
+    return m_p_s * 3.6
+
+
+unit_conversion = {
+    "unit:degC": unchanged,
+    "unit:degF": f_to_c,
+    "unit:km_hr-1": unchanged,
+    "unit:m_s-1": m_p_s_to_km_p_hr,
+    "unit:m": unchanged,
+    "unit:Pa": unchanged,
+    "unit:percent": unchanged,
+    "unit:degree_(angle)": unchanged,
+}
+
 WIND = {name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)}
 
 OBSERVATIONS = {
@@ -32,7 +59,7 @@ OBSERVATIONS = {
     "barometricPressure": None,
     "seaLevelPressure": ["press", "HPA", 100],
     "relativeHumidity": None,
-    "windSpeed": ["wind_speed", "MPS", None],
+    "windSpeed": ["wind_speed", "MPS", 3.6],
     "windDirection": ["wind_dir", None, None],
     "visibility": ["vis", "M", None],
     "elevation": None,
@@ -210,7 +237,7 @@ class SimpleNWS(Nws):
             obs_sub_value = observation[value].get("value")
             if obs_sub_value is None:
                 return None
-            return float(obs_sub_value)
+            return float(obs_sub_value), observation[value].get("unitCode")
         return observation[value]
 
     @property
@@ -225,7 +252,12 @@ class SimpleNWS(Nws):
             obs_list = [
                 self.extract_observation_value(o, obs) for o in self._observation
             ]
-            data[obs] = next(iter([o for o in obs_list if o]), None)
+            obs_item = next(iter([o for o in obs_list if o]), None)
+            if isinstance(obs_item, tuple):
+                data[obs] = unit_conversion[obs_item[1]](obs_item[0])
+            else:
+                data[obs] = obs_item
+
             if data[obs] is None and (
                 met is not None and self._metar_obs[0] is not None
             ):

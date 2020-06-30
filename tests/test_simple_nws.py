@@ -51,11 +51,24 @@ async def test_nws_observation(aiohttp_client, loop, mock_urls, observation_json
     assert observation["windDirection"] == 10
     assert observation["visibility"] == 10000
     assert observation["seaLevelPressure"] == 100000
-    assert observation["windSpeed"] == 10
+    assert observation["windSpeed"] == 36  # converted to km_gr
     assert observation["iconTime"] == "day"
-    assert observation["windGust"] == 10
+    assert observation["windGust"] == 36  # same
     assert observation["iconWeather"][0][0] == "A few clouds"
     assert observation["iconWeather"][0][1] is None
+
+
+async def test_nws_observation_units(aiohttp_client, loop, mock_urls):
+    app = setup_app(stations_observations="stations_observations_alternate_units.json")
+    client = await aiohttp_client(app)
+    nws = SimpleNWS(*LATLON, USERID, client)
+    await nws.set_station(STATION)
+    await nws.update_observation()
+    observation = nws.observation
+    assert observation
+    assert round(observation["temperature"], 1) == -12.2
+    assert observation["windSpeed"] == 10  # converted to km_gr
+    assert observation["windGust"] == 10
 
 
 async def test_nws_observation_metar(aiohttp_client, loop, mock_urls):
@@ -72,7 +85,7 @@ async def test_nws_observation_metar(aiohttp_client, loop, mock_urls):
     assert observation["windDirection"] == 350.0
     assert observation["visibility"] == 16093.44
     assert round(observation["seaLevelPressure"]) == 101761
-    assert round(observation["windSpeed"], 2) == 2.57
+    assert round(observation["windSpeed"], 2) == 9.26
     assert observation["windGust"] is None
 
 
