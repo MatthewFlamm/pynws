@@ -44,7 +44,7 @@ def m_p_s_to_km_p_hr(m_p_s):
 unit_conversion = {
     "unit:degC": unchanged,
     "unit:degF": f_to_c,
-    "unit:km_hr-1": unchanged,
+    "unit:km_h-1": unchanged,
     "unit:m_s-1": m_p_s_to_km_p_hr,
     "unit:m": unchanged,
     "unit:Pa": unchanged,
