@@ -83,12 +83,12 @@
                 },
                 "windSpeed": {
                     "value": 10,
-                    "unitCode": "unit:km_hr-1",
+                    "unitCode": "unit:km_h-1",
                     "qualityControl": "qc:V"
                 },
                 "windGust": {
                     "value": 10,
-                    "unitCode": "unit:km_hr-1",
+                    "unitCode": "unit:km_h-1",
                     "qualityControl": "qc:Z"
                 },
                 "barometricPressure": {
