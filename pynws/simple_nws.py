@@ -308,12 +308,10 @@ class SimpleNWS(Nws):
                 # needed for python 3.6
                 # https://stackoverflow.com/questions/30999230/how-to-parse-timezone-with-colon
                 if end_time[-3] == ":":
-                    end_time = end_time[:-3]+end_time[-2:]
-                if datetime.now(
-                    timezone.utc
-                ) - datetime.strptime(end_time,"%Y-%m-%dT%H:%M:%S%z") > timedelta(
-                    seconds=0
-                ):
+                    end_time = end_time[:-3] + end_time[-2:]
+                if datetime.now(timezone.utc) - datetime.strptime(
+                    end_time, "%Y-%m-%dT%H:%M:%S%z"
+                ) > timedelta(seconds=0):
                     continue
             if forecast_entry.get("temperature"):
                 forecast_entry["temperature"] = int(forecast_entry["temperature"])
