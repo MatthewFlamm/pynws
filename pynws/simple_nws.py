@@ -304,7 +304,7 @@ class SimpleNWS(Nws):
             if filter_time:
                 if not forecast_entry.get("endTime") or datetime.now(
                     timezone.utc
-                ) - datetime.fromisoformat(forecast_entry["endTime"]) > timedelta(
+                ) - datetime.strptime(forecast_entry["endTime"],"%Y-%m-%dT%H:%M:%S%z") > timedelta(
                     seconds=0
                 ):
                     continue
