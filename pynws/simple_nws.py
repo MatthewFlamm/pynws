@@ -302,9 +302,16 @@ class SimpleNWS(Nws):
         for forecast_entry in input_forecast:
             # get weather
             if filter_time:
-                if not forecast_entry.get("endTime") or datetime.now(
+                end_time = forecast_entry.get("endTime")
+                if not end_time:
+                    continue
+                # needed for python 3.6
+                # https://stackoverflow.com/questions/30999230/how-to-parse-timezone-with-colon
+                if end_time[-3] == ":":
+                    end_time = end_time[:-3]+end_time[-2:]
+                if datetime.now(
                     timezone.utc
-                ) - datetime.strptime(forecast_entry["endTime"],"%Y-%m-%dT%H:%M:%S%z") > timedelta(
+                ) - datetime.strptime(end_time,"%Y-%m-%dT%H:%M:%S%z") > timedelta(
                     seconds=0
                 ):
                     continue
