@@ -1,7 +1,8 @@
 aiohttp
+freezegun
 metar
 black
-isort
+isort<5
 pylint
 pytest
 pytest-asyncio

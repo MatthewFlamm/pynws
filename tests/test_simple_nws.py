@@ -1,6 +1,7 @@
-from pynws import NwsError, SimpleNWS
+from freezegun import freeze_time
 import pytest
 
+from pynws import NwsError, SimpleNWS
 from tests.helpers import data_return_function, setup_app
 
 LATLON = (0, 0)
@@ -150,6 +151,7 @@ async def test_nws_observation_missing_value(aiohttp_client, loop, mock_urls):
     assert observation["iconWeather"] is None
 
 
+@freeze_time("2019-10-13T14:30:00-04:00")
 async def test_nws_forecast(aiohttp_client, loop, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
@@ -165,6 +167,22 @@ async def test_nws_forecast(aiohttp_client, loop, mock_urls):
     assert forecast[0]["windBearing"] == 180
 
 
+@freeze_time("2019-10-14T21:30:00-04:00")
+async def test_nws_forecast_discard_stale(aiohttp_client, loop, mock_urls):
+    app = setup_app()
+    client = await aiohttp_client(app)
+    nws = SimpleNWS(*LATLON, USERID, client)
+    await nws.update_forecast_hourly(filter_time=True)
+    forecast = nws.forecast_hourly
+    assert forecast[0]["temperature"] == 77
+
+    await nws.update_forecast_hourly(filter_time=False)
+    forecast = nws.forecast_hourly
+
+    assert forecast[0]["temperature"] == 78
+
+
+@freeze_time("2019-10-14T20:30:00-04:00")
 async def test_nws_forecast_hourly(aiohttp_client, loop, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
@@ -172,9 +190,10 @@ async def test_nws_forecast_hourly(aiohttp_client, loop, mock_urls):
     await nws.update_forecast_hourly()
     forecast = nws.forecast_hourly
 
-    assert forecast
+    assert forecast[0]["temperature"] == 78
 
 
+@freeze_time("2019-10-13T14:30:00-04:00")
 async def test_nws_forecast_strings(aiohttp_client, loop, mock_urls):
     app = setup_app(gridpoints_forecast="gridpoints_forecast_strings.json")
     client = await aiohttp_client(app)
@@ -190,6 +209,7 @@ async def test_nws_forecast_strings(aiohttp_client, loop, mock_urls):
     assert forecast[0]["windBearing"] == 180
 
 
+@freeze_time("2019-10-13T14:30:00-04:00")
 async def test_nws_forecast_empty(aiohttp_client, loop, mock_urls):
     app = setup_app(gridpoints_forecast="gridpoints_forecast_empty.json")
     client = await aiohttp_client(app)
@@ -197,7 +217,7 @@ async def test_nws_forecast_empty(aiohttp_client, loop, mock_urls):
     await nws.update_forecast()
     forecast = nws.forecast
 
-    assert forecast
+    assert forecast == []
 
 
 async def test_nws_alerts_forecast_zone(aiohttp_client, loop, mock_urls):

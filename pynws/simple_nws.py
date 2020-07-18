@@ -1,4 +1,5 @@
 """Support for NWS weather service."""
+from datetime import datetime, timedelta, timezone
 from statistics import mean
 
 from metar import Metar
@@ -159,13 +160,17 @@ class SimpleNWS(Nws):
         self._observation = obs
         self._metar_obs = [self.extract_metar(iobs) for iobs in self._observation]
 
-    async def update_forecast(self):
+    async def update_forecast(self, filter_time=True):
         """Update forecast."""
-        self._forecast = await self.get_gridpoints_forecast()
+        self._forecast = self._convert_forecast(
+            await self.get_gridpoints_forecast(), filter_time
+        )
 
-    async def update_forecast_hourly(self):
+    async def update_forecast_hourly(self, filter_time=True):
         """Update forecast."""
-        self._forecast_hourly = await self.get_gridpoints_forecast_hourly()
+        self._forecast_hourly = self._convert_forecast(
+            await self.get_gridpoints_forecast_hourly(), filter_time
+        )
 
     @staticmethod
     def _unique_alert_ids(alerts):
@@ -281,21 +286,33 @@ class SimpleNWS(Nws):
     @property
     def forecast(self):
         """Return forecast."""
-        return self._convert_forecast(self._forecast)
+        return self._forecast
 
     @property
     def forecast_hourly(self):
         """Return forecast hourly."""
-        return self._convert_forecast(self._forecast_hourly)
+        return self._forecast_hourly
 
     @staticmethod
-    def _convert_forecast(input_forecast):
+    def _convert_forecast(input_forecast, filter_time):
         """Converts forecast to common dict."""
         if not input_forecast:
             return []
         forecast = []
         for forecast_entry in input_forecast:
             # get weather
+            if filter_time:
+                end_time = forecast_entry.get("endTime")
+                if not end_time:
+                    continue
+                # needed for python 3.6
+                # https://stackoverflow.com/questions/30999230/how-to-parse-timezone-with-colon
+                if end_time[-3] == ":":
+                    end_time = end_time[:-3] + end_time[-2:]
+                if datetime.now(timezone.utc) - datetime.strptime(
+                    end_time, "%Y-%m-%dT%H:%M:%S%z"
+                ) > timedelta(seconds=0):
+                    continue
             if forecast_entry.get("temperature"):
                 forecast_entry["temperature"] = int(forecast_entry["temperature"])
 
