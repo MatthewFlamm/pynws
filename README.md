@@ -2,6 +2,8 @@
 
 A python library to asynchronously retrieve weather observation from NWS/NOAA.
 
+![PyPI - Downloads](https://img.shields.io/pypi/dm/pynws?style=flat-square)
+
 ## Example
 See [example.py](example.py) for a runnable example.
 ```python
