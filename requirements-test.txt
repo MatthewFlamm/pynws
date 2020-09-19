@@ -1,7 +1,7 @@
 aiohttp
 freezegun
 metar
-black
+black==20.8b1
 isort<5
 pylint
 pytest
