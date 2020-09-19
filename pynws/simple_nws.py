@@ -108,12 +108,15 @@ class SimpleNWS(Nws):
     NWS simplified data.
 
     Uses normal api first.  If value is None, use metar info.
+
+    By default, forecasts that end before now will be filtered out.
     """
 
-    def __init__(self, lat, lon, api_key, session):
+    def __init__(self, lat, lon, api_key, session, filter_forecast=True):
         """Set up simplified NWS class."""
         super().__init__(session, api_key, (lat, lon))
 
+        self.filter_forecast = filter_forecast
         self._observation = None
         self._metar_obs = None
         self.station = None
@@ -160,17 +163,13 @@ class SimpleNWS(Nws):
         self._observation = obs
         self._metar_obs = [self.extract_metar(iobs) for iobs in self._observation]
 
-    async def update_forecast(self, filter_time=True):
+    async def update_forecast(self):
         """Update forecast."""
-        self._forecast = self._convert_forecast(
-            await self.get_gridpoints_forecast(), filter_time
-        )
+        self._forecast = await self.get_gridpoints_forecast()
 
-    async def update_forecast_hourly(self, filter_time=True):
-        """Update forecast."""
-        self._forecast_hourly = self._convert_forecast(
-            await self.get_gridpoints_forecast_hourly(), filter_time
-        )
+    async def update_forecast_hourly(self):
+        """Update forecast hourly."""
+        self._forecast_hourly = await self.get_gridpoints_forecast_hourly()
 
     @staticmethod
     def _unique_alert_ids(alerts):
@@ -286,22 +285,22 @@ class SimpleNWS(Nws):
     @property
     def forecast(self):
         """Return forecast."""
-        return self._forecast
+        return self._convert_forecast(self._forecast, self.filter_forecast)
 
     @property
     def forecast_hourly(self):
         """Return forecast hourly."""
-        return self._forecast_hourly
+        return self._convert_forecast(self._forecast_hourly, self.filter_forecast)
 
     @staticmethod
-    def _convert_forecast(input_forecast, filter_time):
+    def _convert_forecast(input_forecast, filter_forecast):
         """Converts forecast to common dict."""
         if not input_forecast:
             return []
         forecast = []
         for forecast_entry in input_forecast:
             # get weather
-            if filter_time:
+            if filter_forecast:
                 end_time = forecast_entry.get("endTime")
                 if not end_time:
                     continue
