@@ -171,12 +171,13 @@ async def test_nws_forecast(aiohttp_client, loop, mock_urls):
 async def test_nws_forecast_discard_stale(aiohttp_client, loop, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
-    nws = SimpleNWS(*LATLON, USERID, client)
-    await nws.update_forecast_hourly(filter_time=True)
+    nws = SimpleNWS(*LATLON, USERID, client, filter_forecast=True)
+    await nws.update_forecast_hourly()
     forecast = nws.forecast_hourly
     assert forecast[0]["temperature"] == 77
 
-    await nws.update_forecast_hourly(filter_time=False)
+    nws = SimpleNWS(*LATLON, USERID, client, filter_forecast=False)
+    await nws.update_forecast_hourly()
     forecast = nws.forecast_hourly
 
     assert forecast[0]["temperature"] == 78
