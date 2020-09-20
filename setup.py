@@ -19,7 +19,10 @@ setup(
     description="Python library to retrieve observations and forecasts from NWS/NOAA",
     packages=["pynws"],
     include_package_data=True,
-    install_requires=["aiohttp", "metar",],
+    install_requires=[
+        "aiohttp",
+        "metar",
+    ],
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3.6",
