@@ -107,7 +107,8 @@ def convert_weather(weather):
     return [(API_WEATHER_CODE.get(w[0], w[0]), w[1]) for w in weather]
 
 
-def parse_icon(icon):    """
+def parse_icon(icon):
+    """
     Parse icon url to NWS weather codes.
 
     Example:
