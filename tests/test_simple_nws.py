@@ -35,6 +35,7 @@ async def test_nws_set_station_none(aiohttp_client, loop, mock_urls):
         "stations_observations_multiple.json",
         "stations_observations_strings.json",
         "stations_observations_other_unitcode.json",
+        "stations_observations_multiple_unsorted.json",
     ],
 )
 async def test_nws_observation(aiohttp_client, loop, mock_urls, observation_json):
