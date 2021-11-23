@@ -4,7 +4,6 @@ import pytest
 from pynws import NwsError, SimpleNWS
 from pynws.const import (
     OBS_DEWPOINT,
-
     OBS_REL_HUMIDITY,
     OBS_SEA_PRESSURE,
     OBS_TEMPERATURE,
