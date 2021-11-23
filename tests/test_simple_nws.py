@@ -2,6 +2,20 @@ from freezegun import freeze_time
 import pytest
 
 from pynws import NwsError, SimpleNWS
+from pynws.const import (
+    OBS_DEWPOINT,
+
+    OBS_REL_HUMIDITY,
+    OBS_SEA_PRESSURE,
+    OBS_TEMPERATURE,
+    OBS_VISIBILITY,
+    OBS_WIND_DIRECTION,
+    OBS_WIND_GUST,
+    OBS_WIND_SPEED,
+    OBS_ICON_WEATHER,
+    OBS_ICON_TIME,
+)
+
 from tests.helpers import data_return_function, setup_app
 
 LATLON = (0, 0)
@@ -48,17 +62,17 @@ async def test_nws_observation(aiohttp_client, loop, mock_urls, observation_json
     await nws.update_observation()
     observation = nws.observation
     assert observation
-    assert observation["temperature"] == 10
-    assert observation["dewpoint"] == 10
-    assert observation["relativeHumidity"] == 10
-    assert observation["windDirection"] == 10
-    assert observation["visibility"] == 10000
-    assert observation["seaLevelPressure"] == 100000
-    assert observation["windSpeed"] == 36  # converted to km_gr
-    assert observation["iconTime"] == "day"
-    assert observation["windGust"] == 36  # same
-    assert observation["iconWeather"][0][0] == "A few clouds"
-    assert observation["iconWeather"][0][1] is None
+    assert observation[OBS_TEMPERATURE] == 10
+    assert observation[OBS_DEWPOINT] == 10
+    assert observation[OBS_REL_HUMIDITY] == 10
+    assert observation[OBS_WIND_DIRECTION] == 10
+    assert observation[OBS_VISIBILITY] == 10000
+    assert observation[OBS_SEA_PRESSURE] == 100000
+    assert observation[OBS_WIND_SPEED] == 36  # converted to km_gr
+    assert observation[OBS_ICON_TIME] == "day"
+    assert observation[OBS_WIND_GUST] == 36  # same
+    assert observation[OBS_ICON_WEATHER][0][0] == "A few clouds"
+    assert observation[OBS_ICON_WEATHER][0][1] is None
 
 
 async def test_nws_observation_units(aiohttp_client, loop, mock_urls):
@@ -69,9 +83,9 @@ async def test_nws_observation_units(aiohttp_client, loop, mock_urls):
     await nws.update_observation()
     observation = nws.observation
     assert observation
-    assert round(observation["temperature"], 1) == -12.2
-    assert observation["windSpeed"] == 10  # converted to km_gr
-    assert observation["windGust"] == 10
+    assert round(observation[OBS_TEMPERATURE], 1) == -12.2
+    assert observation[OBS_WIND_SPEED] == 10  # converted to km_gr
+    assert observation[OBS_WIND_GUST] == 10
 
 
 async def test_nws_observation_metar(aiohttp_client, loop, mock_urls):
@@ -82,14 +96,14 @@ async def test_nws_observation_metar(aiohttp_client, loop, mock_urls):
     await nws.update_observation()
     observation = nws.observation
 
-    assert observation["temperature"] == 25.6
-    assert observation["dewpoint"] is None
-    assert observation["relativeHumidity"] is None
-    assert observation["windDirection"] == 350.0
-    assert observation["visibility"] == 16093.44
-    assert round(observation["seaLevelPressure"]) == 101761
-    assert round(observation["windSpeed"], 2) == 9.26
-    assert observation["windGust"] is None
+    assert observation[OBS_TEMPERATURE] == 25.6
+    assert observation[OBS_DEWPOINT] is None
+    assert observation[OBS_REL_HUMIDITY] is None
+    assert observation[OBS_WIND_DIRECTION] == 350.0
+    assert observation[OBS_VISIBILITY] == 16093.44
+    assert round(observation[OBS_SEA_PRESSURE]) == 101761
+    assert round(observation[OBS_WIND_SPEED], 2) == 9.26
+    assert observation[OBS_WIND_GUST] is None
 
 
 async def test_nws_observation_metar_noparse(aiohttp_client, loop, mock_urls):
@@ -99,7 +113,7 @@ async def test_nws_observation_metar_noparse(aiohttp_client, loop, mock_urls):
     await nws.set_station(STATION)
     await nws.update_observation()
     observation = nws.observation
-    assert observation["temperature"] is None
+    assert observation[OBS_TEMPERATURE] is None
 
 
 async def test_nws_observation_empty(aiohttp_client, loop, mock_urls):
@@ -110,16 +124,16 @@ async def test_nws_observation_empty(aiohttp_client, loop, mock_urls):
     await nws.update_observation()
     observation = nws.observation
 
-    assert observation["temperature"] is None
-    assert observation["dewpoint"] is None
-    assert observation["relativeHumidity"] is None
-    assert observation["windDirection"] is None
-    assert observation["visibility"] is None
-    assert observation["seaLevelPressure"] is None
-    assert observation["windSpeed"] is None
-    assert observation["windGust"] is None
-    assert observation["iconTime"] is None
-    assert observation["iconWeather"] is None
+    assert observation[OBS_TEMPERATURE] is None
+    assert observation[OBS_DEWPOINT] is None
+    assert observation[OBS_REL_HUMIDITY] is None
+    assert observation[OBS_WIND_DIRECTION] is None
+    assert observation[OBS_VISIBILITY] is None
+    assert observation[OBS_SEA_PRESSURE] is None
+    assert observation[OBS_WIND_SPEED] is None
+    assert observation[OBS_WIND_GUST] is None
+    assert observation[OBS_ICON_TIME] is None
+    assert observation[OBS_ICON_WEATHER] is None
 
 
 async def test_nws_observation_noprop(aiohttp_client, loop, mock_urls):
@@ -141,16 +155,16 @@ async def test_nws_observation_missing_value(aiohttp_client, loop, mock_urls):
     await nws.update_observation()
     observation = nws.observation
 
-    assert observation["temperature"] is None
-    assert observation["dewpoint"] is None
-    assert observation["relativeHumidity"] is None
-    assert observation["windDirection"] is None
-    assert observation["visibility"] is None
-    assert observation["seaLevelPressure"] is None
-    assert observation["windSpeed"] is None
-    assert observation["windGust"] is None
-    assert observation["iconTime"] is None
-    assert observation["iconWeather"] is None
+    assert observation[OBS_TEMPERATURE] is None
+    assert observation[OBS_DEWPOINT] is None
+    assert observation[OBS_REL_HUMIDITY] is None
+    assert observation[OBS_WIND_DIRECTION] is None
+    assert observation[OBS_VISIBILITY] is None
+    assert observation[OBS_SEA_PRESSURE] is None
+    assert observation[OBS_WIND_SPEED] is None
+    assert observation[OBS_WIND_GUST] is None
+    assert observation[OBS_ICON_TIME] is None
+    assert observation[OBS_ICON_WEATHER] is None
 
 
 @freeze_time("2019-10-13T14:30:00-04:00")
@@ -161,10 +175,10 @@ async def test_nws_forecast(aiohttp_client, loop, mock_urls):
     await nws.update_forecast()
     forecast = nws.forecast
 
-    assert forecast[0]["iconWeather"][0][0] == "Thunderstorm (high cloud cover)"
-    assert forecast[0]["iconWeather"][0][1] == 40
-    assert forecast[0]["iconWeather"][1][0] == "Overcast"
-    assert forecast[0]["iconWeather"][1][1] is None
+    assert forecast[0][OBS_ICON_WEATHER][0][0] == "Thunderstorm (high cloud cover)"
+    assert forecast[0][OBS_ICON_WEATHER][0][1] == 40
+    assert forecast[0][OBS_ICON_WEATHER][1][0] == "Overcast"
+    assert forecast[0][OBS_ICON_WEATHER][1][1] is None
     assert forecast[0]["windSpeedAvg"] == 10
     assert forecast[0]["windBearing"] == 180
 
@@ -176,13 +190,13 @@ async def test_nws_forecast_discard_stale(aiohttp_client, loop, mock_urls):
     nws = SimpleNWS(*LATLON, USERID, client, filter_forecast=True)
     await nws.update_forecast_hourly()
     forecast = nws.forecast_hourly
-    assert forecast[0]["temperature"] == 77
+    assert forecast[0][OBS_TEMPERATURE] == 77
 
     nws = SimpleNWS(*LATLON, USERID, client, filter_forecast=False)
     await nws.update_forecast_hourly()
     forecast = nws.forecast_hourly
 
-    assert forecast[0]["temperature"] == 78
+    assert forecast[0][OBS_TEMPERATURE] == 78
 
 
 @freeze_time("2019-10-14T20:30:00-04:00")
@@ -193,7 +207,7 @@ async def test_nws_forecast_hourly(aiohttp_client, loop, mock_urls):
     await nws.update_forecast_hourly()
     forecast = nws.forecast_hourly
 
-    assert forecast[0]["temperature"] == 78
+    assert forecast[0][OBS_TEMPERATURE] == 78
 
 
 @freeze_time("2019-10-13T14:30:00-04:00")
@@ -204,10 +218,10 @@ async def test_nws_forecast_strings(aiohttp_client, loop, mock_urls):
     await nws.update_forecast()
     forecast = nws.forecast
 
-    assert forecast[0]["iconWeather"][0][0] == "Thunderstorm (high cloud cover)"
-    assert forecast[0]["iconWeather"][0][1] == 40
-    assert forecast[0]["iconWeather"][1][0] == "Overcast"
-    assert forecast[0]["iconWeather"][1][1] is None
+    assert forecast[0][OBS_ICON_WEATHER][0][0] == "Thunderstorm (high cloud cover)"
+    assert forecast[0][OBS_ICON_WEATHER][0][1] == 40
+    assert forecast[0][OBS_ICON_WEATHER][1][0] == "Overcast"
+    assert forecast[0][OBS_ICON_WEATHER][1][1] is None
     assert forecast[0]["windSpeedAvg"] == 10
     assert forecast[0]["windBearing"] == 180
 
