@@ -65,14 +65,14 @@ def m_p_s_to_km_p_hr(m_p_s):
 
 
 unit_conversion = {
-    "unit:degC": unchanged,
-    "unit:degF": f_to_c,
-    "unit:km_h-1": unchanged,
-    "unit:m_s-1": m_p_s_to_km_p_hr,
-    "unit:m": unchanged,
-    "unit:Pa": unchanged,
-    "unit:percent": unchanged,
-    "unit:degree_(angle)": unchanged,
+    "degC": unchanged,
+    "degF": f_to_c,
+    "km_h-1": unchanged,
+    "m_s-1": m_p_s_to_km_p_hr,
+    "m": unchanged,
+    "Pa": unchanged,
+    "percent": unchanged,
+    "degree_(angle)": unchanged,
 }
 
 WIND = {name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)}
@@ -100,6 +100,14 @@ OBSERVATIONS = {
     OBS_WIND_CHILL: None,
     OBS_HEAT_INDEX: None,
 }
+
+
+def convert_unit(unit_code, value):
+    """Convert value with unit code to preferred unit."""
+    for unit, converter in unit_conversion.items():
+        if unit in unit_code:
+            return converter(value)
+    raise ValueError(f"unit code: '{unit_code}' not recognized.")
 
 
 def convert_weather(weather):
@@ -182,7 +190,11 @@ class SimpleNWS(Nws):
         obs = await self.get_stations_observations(limit, start_time=start_time)
         if obs is None:
             return None
-        self._observation = obs
+        self._observation = sorted(
+            obs,
+            key=lambda item: self.extract_observation_value(item, "timestamp"),
+            reverse=True,
+        )
         self._metar_obs = [self.extract_metar(iobs) for iobs in self._observation]
 
     async def update_forecast(self):
@@ -280,7 +292,7 @@ class SimpleNWS(Nws):
             ]
             obs_item = next(iter([o for o in obs_list if o]), None)
             if isinstance(obs_item, tuple):
-                data[obs] = unit_conversion[obs_item[1]](obs_item[0])
+                data[obs] = convert_unit(obs_item[1], obs_item[0])
             else:
                 data[obs] = obs_item
 
