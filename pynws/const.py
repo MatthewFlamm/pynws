@@ -81,6 +81,11 @@ OBS_PRECIPITATION_3H = "precipitationLast3Hours"
 OBS_PRECIPITATION_6H = "precipitationLast6Hours"
 OBS_WIND_CHILL = "windChill"
 OBS_HEAT_INDEX = "heatIndex"
+OBS_RAW_MESSAGE = "rawMessage"
+
+OBS_ITEM_VALUE = "value"
+OBS_ITEM_UNIT_CODE = "unitCode"
+
 # derived observations
 OBS_ICON_TIME = "iconTime"
 OBS_ICON_WEATHER = "iconWeather"

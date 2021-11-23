@@ -26,7 +26,12 @@ OBS_PRECIPITATION_1H,
 OBS_PRECIPITATION_3H,
 OBS_PRECIPITATION_6H,
 OBS_WIND_CHILL,
-OBS_HEAT_INDEX,)
+OBS_HEAT_INDEX,
+OBS_RAW_MESSAGE,
+OBS_ITEM_VALUE,
+OBS_ITEM_UNIT_CODE,
+
+)
 from .nws import Nws
 
 WIND_DIRECTIONS = [
@@ -175,7 +180,7 @@ class SimpleNWS(Nws):
     @staticmethod
     def extract_metar(obs):
         """Return parsed metar if available."""
-        metar_msg = obs.get("rawMessage")
+        metar_msg = obs.get(OBS_RAW_MESSAGE)
         if metar_msg:
             try:
                 metar_obs = Metar.Metar(metar_msg)
@@ -192,7 +197,7 @@ class SimpleNWS(Nws):
             return None
         self._observation = sorted(
             obs,
-            key=lambda item: self.extract_observation_value(item, "timestamp"),
+            key=lambda item: self.extract_observation_value(item, OBS_TIMESTAMP),
             reverse=True,
         )
         self._metar_obs = [self.extract_metar(iobs) for iobs in self._observation]
@@ -272,10 +277,10 @@ class SimpleNWS(Nws):
         if obs_value is None:
             return None
         if isinstance(observation[value], dict):
-            obs_sub_value = observation[value].get("value")
+            obs_sub_value = observation[value].get(OBS_ITEM_VALUE)
             if obs_sub_value is None:
                 return None
-            return float(obs_sub_value), observation[value].get("unitCode")
+            return float(obs_sub_value), observation[value].get(OBS_ITEM_UNIT_CODE)
         return observation[value]
 
     @property
