@@ -33,9 +33,7 @@ def setup_app(
     app.router.add_get(
         "/stations_observations", data_return_function(stations_observations)
     )
-    app.router.add_get(
-        "/gridpoints", data_return_function(gridpoints)
-    )
+    app.router.add_get("/gridpoints", data_return_function(gridpoints))
     app.router.add_get(
         "/gridpoints_forecast", data_return_function(gridpoints_forecast)
     )
