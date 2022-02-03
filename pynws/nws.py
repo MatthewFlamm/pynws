@@ -1,6 +1,7 @@
 """pynws module."""
 from pynws.raw_data import (
     raw_alerts_active_zone,
+    raw_gridpoints,
     raw_gridpoints_forecast,
     raw_gridpoints_forecast_hourly,
     raw_points,
@@ -63,6 +64,15 @@ class Nws:
             self.county_zone = properties.get("county").split("/")[-1]
             self.fire_weather_zone = properties.get("fireWeatherZone").split("/")[-1]
         return properties
+
+    async def get_gridpoints(self):
+        """Return forecast from grid."""
+        if self.wfo is None:
+            await self.get_points()
+        raw_forecast = await raw_gridpoints(
+            self.wfo, self.x, self.y, self.session, self.userid
+        )
+        return raw_forecast["properties"]
 
     async def get_gridpoints_forecast(self):
         """Return forecast from grid."""

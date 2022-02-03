@@ -1,6 +1,7 @@
 """url formatter."""
 from pynws.const import (
     API_ALERTS_ACTIVE_ZONE,
+    API_GRIDPOINTS,
     API_GRIDPOINTS_FORECAST,
     API_GRIDPOINTS_FORECAST_HOURLY,
     API_POINTS,
@@ -18,6 +19,11 @@ def stations_observations_url(station):
 def points_stations_url(lat, lon):
     """formats station url"""
     return API_URL + API_POINTS_STATIONS.format(str(lat), str(lon))
+
+
+def gridpoints_url(wfo, x, y):
+    """gridpoint observation and forecast."""
+    return API_URL + API_GRIDPOINTS.format(wfo, x, y)
 
 
 def gridpoints_forecast_url(wfo, x, y):
