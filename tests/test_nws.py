@@ -55,7 +55,7 @@ async def test_nws_gridpoints(aiohttp_client, loop, mock_urls):
     gridpoints = await nws.get_gridpoints()
     assert nws.wfo
     assert gridpoints
-    assert isinstance(gridpoints, list)
+    assert isinstance(gridpoints, dict)
 
 
 async def test_nws_gridpoints_forecast(aiohttp_client, loop, mock_urls):

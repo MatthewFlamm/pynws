@@ -15,7 +15,7 @@ def mock_urls():
         "pynws.urls.gridpoints_url"
     ) as mock_gridpoints_url, patch(
         "pynws.urls.gridpoints_forecast_url"
-    ) as mock_gridpoints_forecast_urlpatch(
+    ) as mock_gridpoints_forecast_url, patch(
         "pynws.urls.gridpoints_forecast_hourly_url"
     ) as mock_gridpoints_forecast_hourly_url, patch(
         "pynws.urls.points_stations_url"
