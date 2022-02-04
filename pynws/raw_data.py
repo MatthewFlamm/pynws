@@ -52,7 +52,7 @@ async def raw_points(lat, lon, websession, userid):
     return jres
 
 
-async def raw_gridpoints(wfo, x, y, websession, userid):
+async def raw_forecast_all(wfo, x, y, websession, userid):
     """Return griddata response."""
     url = pynws.urls.forecast_all_url(wfo, x, y)
     header = get_header(userid)

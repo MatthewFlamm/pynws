@@ -1,7 +1,7 @@
 """pynws module."""
 from pynws.raw_data import (
     raw_alerts_active_zone,
-    raw_gridpoints,
+    raw_forecast_all,
     raw_gridpoints_forecast,
     raw_gridpoints_forecast_hourly,
     raw_points,
@@ -69,7 +69,7 @@ class Nws:
         """Return all data from grid."""
         if self.wfo is None:
             await self.get_points()
-        raw_data = await raw_gridpoints(
+        raw_data = await raw_forecast_all(
             self.wfo, self.x, self.y, self.session, self.userid
         )
         return raw_data["properties"]
