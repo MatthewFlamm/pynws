@@ -22,6 +22,7 @@ def setup_app(
     points_stations="points_stations.json",
     points="points.json",
     stations_observations="stations_observations.json",
+    forecast_all="forecast_all.json",
     gridpoints_forecast="gridpoints_forecast.json",
     gridpoints_forecast_hourly="gridpoints_forecast_hourly.json",
     alerts_active_zone="alerts_active_zone.json",
@@ -32,6 +33,7 @@ def setup_app(
     app.router.add_get(
         "/stations_observations", data_return_function(stations_observations)
     )
+    app.router.add_get("/gridpoints", data_return_function(forecast_all))
     app.router.add_get(
         "/gridpoints_forecast", data_return_function(gridpoints_forecast)
     )

@@ -43,13 +43,19 @@ async def test_stations_observations_start_datetime(aiohttp_client, loop, mock_u
         await raw_data.raw_stations_observations(STATION, client, USERID, start="1PM")
 
 
-async def test_gridpoints_forecaat(aiohttp_client, loop, mock_urls):
+async def test_forecast_all(aiohttp_client, loop, mock_urls):
+    app = setup_app()
+    client = await aiohttp_client(app)
+    await raw_data.raw_forecast_all(WFO, X, Y, client, USERID)
+
+
+async def test_gridpoints_forecast(aiohttp_client, loop, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     await raw_data.raw_gridpoints_forecast(WFO, X, Y, client, USERID)
 
 
-async def test_gridpoints_forecaat_hourly(aiohttp_client, loop, mock_urls):
+async def test_gridpoints_forecast_hourly(aiohttp_client, loop, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     await raw_data.raw_gridpoints_forecast_hourly(WFO, X, Y, client, USERID)
