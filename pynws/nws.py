@@ -66,16 +66,16 @@ class Nws:
         return properties
 
     async def get_forecast_all(self):
-        """Return all data from grid."""
+        """Return all forecast data from grid."""
         if self.wfo is None:
             await self.get_points()
-        raw_data = await raw_forecast_all(
+        raw_forecast = await raw_forecast_all(
             self.wfo, self.x, self.y, self.session, self.userid
         )
-        return raw_data["properties"]
+        return raw_forecast["properties"]
 
     async def get_gridpoints_forecast(self):
-        """Return forecast from grid."""
+        """Return daily forecast from grid."""
         if self.wfo is None:
             await self.get_points()
         raw_forecast = await raw_gridpoints_forecast(
