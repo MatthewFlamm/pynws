@@ -54,7 +54,7 @@ async def raw_points(lat, lon, websession, userid):
 
 async def raw_gridpoints(wfo, x, y, websession, userid):
     """Return griddata response."""
-    url = pynws.urls.gridpoints_url(wfo, x, y)
+    url = pynws.urls.forecast_all_url(wfo, x, y)
     header = get_header(userid)
     async with websession.get(url, headers=header) as res:
         res.raise_for_status()

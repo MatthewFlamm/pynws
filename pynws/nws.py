@@ -65,7 +65,7 @@ class Nws:
             self.fire_weather_zone = properties.get("fireWeatherZone").split("/")[-1]
         return properties
 
-    async def get_gridpoints(self):
+    async def get_forecast_all(self):
         """Return all data from grid."""
         if self.wfo is None:
             await self.get_points()
