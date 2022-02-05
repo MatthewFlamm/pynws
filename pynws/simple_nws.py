@@ -316,9 +316,7 @@ class SimpleNWS(Nws):
                 end_time = forecast_entry.get("endTime")
                 if not end_time:
                     continue
-                if datetime.now(timezone.utc) - datetime.strptime(
-                    end_time, "%Y-%m-%dT%H:%M:%S%z"
-                ) > timedelta(seconds=0):
+                if datetime.now(timezone.utc) > datetime.fromisoformat(end_time):
                     continue
             if forecast_entry.get("temperature"):
                 forecast_entry["temperature"] = int(forecast_entry["temperature"])
