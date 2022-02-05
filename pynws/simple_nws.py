@@ -1,5 +1,5 @@
 """Support for NWS weather service."""
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 from statistics import mean
 
 from metar import Metar
