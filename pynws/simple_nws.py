@@ -1,5 +1,5 @@
 """Support for NWS weather service."""
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 from statistics import mean
 
 from metar import Metar
@@ -316,13 +316,7 @@ class SimpleNWS(Nws):
                 end_time = forecast_entry.get("endTime")
                 if not end_time:
                     continue
-                # needed for python 3.6
-                # https://stackoverflow.com/questions/30999230/how-to-parse-timezone-with-colon
-                if end_time[-3] == ":":
-                    end_time = end_time[:-3] + end_time[-2:]
-                if datetime.now(timezone.utc) - datetime.strptime(
-                    end_time, "%Y-%m-%dT%H:%M:%S%z"
-                ) > timedelta(seconds=0):
+                if datetime.now(timezone.utc) > datetime.fromisoformat(end_time):
                     continue
             if forecast_entry.get("temperature"):
                 forecast_entry["temperature"] = int(forecast_entry["temperature"])
