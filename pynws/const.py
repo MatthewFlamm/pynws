@@ -60,3 +60,33 @@ API_WEATHER_CODE = {
     "blizzard": "Blizzard",
     "fog": "Fog/mist",
 }
+
+OBS_TEMPERATURE = "temperature"
+OBS_BARO_PRESSURE = "barometricPressure"
+OBS_SEA_PRESSURE = "seaLevelPressure"
+OBS_REL_HUMIDITY = "relativeHumidity"
+OBS_WIND_SPEED = "windSpeed"
+OBS_WIND_DIRECTION = "windDirection"
+OBS_VISIBILITY = "visibility"
+OBS_ELEVATION = "elevation"
+OBS_DESCRIPTION = "textDescription"
+OBS_DEWPOINT = "dewpoint"
+OBS_WIND_GUST = "windGust"
+OBS_STATION = "station"
+OBS_TIMESTAMP = "timestamp"
+OBS_ICON = "icon"
+OBS_MAX_TEMP_24H = "maxTemperatureLast24Hours"
+OBS_MIN_TEMP_24H = "minTemperatureLast24Hours"
+OBS_PRECIPITATION_1H = "precipitationLastHour"
+OBS_PRECIPITATION_3H = "precipitationLast3Hours"
+OBS_PRECIPITATION_6H = "precipitationLast6Hours"
+OBS_WIND_CHILL = "windChill"
+OBS_HEAT_INDEX = "heatIndex"
+OBS_RAW_MESSAGE = "rawMessage"
+
+OBS_ITEM_VALUE = "value"
+OBS_ITEM_UNIT_CODE = "unitCode"
+
+# derived observations
+OBS_ICON_TIME = "iconTime"
+OBS_ICON_WEATHER = "iconWeather"

@@ -4,7 +4,36 @@ from statistics import mean
 
 from metar import Metar
 
-from .const import ALERT_ID, API_WEATHER_CODE
+from .const import (
+    ALERT_ID,
+    API_WEATHER_CODE,
+    OBS_BARO_PRESSURE,
+    OBS_DESCRIPTION,
+    OBS_DEWPOINT,
+    OBS_ELEVATION,
+    OBS_HEAT_INDEX,
+    OBS_ICON,
+    OBS_ICON_TIME,
+    OBS_ICON_WEATHER,
+    OBS_ITEM_UNIT_CODE,
+    OBS_ITEM_VALUE,
+    OBS_MAX_TEMP_24H,
+    OBS_MIN_TEMP_24H,
+    OBS_PRECIPITATION_1H,
+    OBS_PRECIPITATION_3H,
+    OBS_PRECIPITATION_6H,
+    OBS_RAW_MESSAGE,
+    OBS_REL_HUMIDITY,
+    OBS_SEA_PRESSURE,
+    OBS_STATION,
+    OBS_TEMPERATURE,
+    OBS_TIMESTAMP,
+    OBS_VISIBILITY,
+    OBS_WIND_CHILL,
+    OBS_WIND_DIRECTION,
+    OBS_WIND_GUST,
+    OBS_WIND_SPEED,
+)
 from .nws import Nws
 
 WIND_DIRECTIONS = [
@@ -56,27 +85,27 @@ unit_conversion = {
 WIND = {name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)}
 
 OBSERVATIONS = {
-    "temperature": ["temp", "C", None],
-    "barometricPressure": None,
-    "seaLevelPressure": ["press", "HPA", 100],
-    "relativeHumidity": None,
-    "windSpeed": ["wind_speed", "MPS", 3.6],
-    "windDirection": ["wind_dir", None, None],
-    "visibility": ["vis", "M", None],
-    "elevation": None,
-    "textDescription": None,
-    "dewpoint": None,
-    "windGust": None,
-    "station": None,
-    "timestamp": None,
-    "icon": None,
-    "maxTemperatureLast24Hours": None,
-    "minTemperatureLast24Hours": None,
-    "precipitationLastHour": None,
-    "precipitationLast3Hours": None,
-    "precipitationLast6Hours": None,
-    "windChill": None,
-    "heatIndex": None,
+    OBS_TEMPERATURE: ["temp", "C", None],
+    OBS_BARO_PRESSURE: None,
+    OBS_SEA_PRESSURE: ["press", "HPA", 100],
+    OBS_REL_HUMIDITY: None,
+    OBS_WIND_SPEED: ["wind_speed", "MPS", 3.6],
+    OBS_WIND_DIRECTION: ["wind_dir", None, None],
+    OBS_VISIBILITY: ["vis", "M", None],
+    OBS_ELEVATION: None,
+    OBS_DESCRIPTION: None,
+    OBS_DEWPOINT: None,
+    OBS_WIND_GUST: None,
+    OBS_STATION: None,
+    OBS_TIMESTAMP: None,
+    OBS_ICON: None,
+    OBS_MAX_TEMP_24H: None,
+    OBS_MIN_TEMP_24H: None,
+    OBS_PRECIPITATION_1H: None,
+    OBS_PRECIPITATION_3H: None,
+    OBS_PRECIPITATION_6H: None,
+    OBS_WIND_CHILL: None,
+    OBS_HEAT_INDEX: None,
 }
 
 
@@ -153,7 +182,7 @@ class SimpleNWS(Nws):
     @staticmethod
     def extract_metar(obs):
         """Return parsed metar if available."""
-        metar_msg = obs.get("rawMessage")
+        metar_msg = obs.get(OBS_RAW_MESSAGE)
         if metar_msg:
             try:
                 metar_obs = Metar.Metar(metar_msg)
@@ -170,7 +199,7 @@ class SimpleNWS(Nws):
             return None
         self._observation = sorted(
             obs,
-            key=lambda item: self.extract_observation_value(item, "timestamp"),
+            key=lambda item: self.extract_observation_value(item, OBS_TIMESTAMP),
             reverse=True,
         )
         self._metar_obs = [self.extract_metar(iobs) for iobs in self._observation]
@@ -250,10 +279,10 @@ class SimpleNWS(Nws):
         if obs_value is None:
             return None
         if isinstance(observation[value], dict):
-            obs_sub_value = observation[value].get("value")
+            obs_sub_value = observation[value].get(OBS_ITEM_VALUE)
             if obs_sub_value is None:
                 return None
-            return float(obs_sub_value), observation[value].get("unitCode")
+            return float(obs_sub_value), observation[value].get(OBS_ITEM_UNIT_CODE)
         return observation[value]
 
     @property
@@ -285,13 +314,13 @@ class SimpleNWS(Nws):
                         data[obs] = met_prop.value()
                     if met[2] is not None:
                         data[obs] = data[obs] * met[2]
-        if data.get("icon"):
-            time, weather = parse_icon(data["icon"])
-            data["iconTime"] = time
-            data["iconWeather"] = convert_weather(weather)
+        if data.get(OBS_ICON):
+            time, weather = parse_icon(data[OBS_ICON])
+            data[OBS_ICON_TIME] = time
+            data[OBS_ICON_WEATHER] = convert_weather(weather)
         else:
-            data["iconTime"] = None
-            data["iconWeather"] = None
+            data[OBS_ICON_TIME] = None
+            data[OBS_ICON_WEATHER] = None
         return data
 
     @property
