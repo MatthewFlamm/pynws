@@ -1,5 +1,5 @@
 from pynws import Nws, NwsError, Forecast
-from pynws.const import LAYER_RELATIVE_HUMIDITY, LAYER_TEMPERATURE
+from pynws.layer import Layer
 from datetime import datetime
 import pytest
 
@@ -59,10 +59,10 @@ async def test_nws_all_forecast(aiohttp_client, mock_urls):
     assert forecast
     assert isinstance(forecast, Forecast)
     when = datetime.fromisoformat("2022-02-04T03:15:00+00:00")
-    tC, unit = forecast.get_layer_value(LAYER_TEMPERATURE, when)
+    tC, unit = forecast.get_layer_value(Layer.TEMPERATURE, when)
     assert tC == 18.88888888888889
     assert unit == "wmoUnit:degC"
-    rh, unit = forecast.get_layer_value(LAYER_RELATIVE_HUMIDITY, when)
+    rh, unit = forecast.get_layer_value(Layer.RELATIVE_HUMIDITY, when)
     assert rh == 97.0
     assert unit == "wmoUnit:percent"
 

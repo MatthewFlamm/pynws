@@ -1,7 +1,7 @@
 """Forecast class"""
 import re
 from datetime import datetime, timedelta, timezone
-
+from .layer import Layer
 
 ISO8601_PERIOD_REGEX = re.compile(
     r"^P"
@@ -62,6 +62,8 @@ class Forecast:
     def get_layer_value(self, layer, when):
         """Retrieve a forecast layer value for a point in time."""
 
+        if not isinstance(layer, Layer):
+            raise TypeError(f"{layer!r} is not a Layer enum")
         if not isinstance(when, datetime):
             raise TypeError(f"{when!r} is not a datetime")
 
