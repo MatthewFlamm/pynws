@@ -1,3 +1,4 @@
+"""Layer enums"""
 from .backports.enum import StrEnum
 
 

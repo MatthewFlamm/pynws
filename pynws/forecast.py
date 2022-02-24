@@ -44,6 +44,9 @@ class Forecast:
     def get_layer_values(self, layer):
         """Retrieve all forecast layer values."""
 
+        if not isinstance(layer, Layer):
+            raise TypeError(f"{layer!r} is not a Layer enum")
+
         if layer in self._layers:
             return self._layers[layer]
 
@@ -62,8 +65,6 @@ class Forecast:
     def get_layer_value(self, layer, when):
         """Retrieve a forecast layer value for a point in time."""
 
-        if not isinstance(layer, Layer):
-            raise TypeError(f"{layer!r} is not a Layer enum")
         if not isinstance(when, datetime):
             raise TypeError(f"{when!r} is not a datetime")
 
