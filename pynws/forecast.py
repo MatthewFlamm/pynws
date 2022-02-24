@@ -42,7 +42,7 @@ class Forecast:
         )
 
     def get_layer_values(self, layer):
-        """Retrieve all forecast layer value."""
+        """Retrieve all forecast layer values."""
 
         if layer in self._layers:
             return self._layers[layer]
