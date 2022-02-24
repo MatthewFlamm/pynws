@@ -8,18 +8,19 @@ ISO8601_PERIOD_REGEX = re.compile(
     r"((?P<weeks>\d+)W)?"
     r"((?P<days>\d+)D)?"
     r"((?:T)"
-        r"((?P<hours>\d+)H)?"
-        r"((?P<minutes>\d+)M)?"
-        r"((?P<seconds>\d+)S)?"
+    r"((?P<hours>\d+)H)?"
+    r"((?P<minutes>\d+)M)?"
+    r"((?P<seconds>\d+)S)?"
     r")?$"
 )
+
 
 class Forecast:
     """Class to retrieve forecast layer values for a point in time."""
 
     def __init__(self, properties):
         if not isinstance(properties, dict):
-            raise ValueError(f"'properties' must be a dictionary")
+            raise ValueError("'properties' must be a dictionary")
 
         self._properties = properties
         self._layers = {}
@@ -40,7 +41,9 @@ class Forecast:
             seconds=groups["seconds"],
         )
 
-    def _get_layer_values(self, layer):
+    def get_layer_values(self, layer):
+        """Retrieve all forecast layer value."""
+
         if layer in self._layers:
             return self._layers[layer]
 
@@ -60,11 +63,13 @@ class Forecast:
         """Retrieve a forecast layer value for a point in time."""
 
         if not isinstance(when, datetime):
-            raise ValueError(f"'when' must be a datetime")
+            raise ValueError("'when' must be a datetime")
 
         when = when.astimezone(timezone.utc)
-        layer_values, units = self._get_layer_values(layer)
+        layer_values, units = self.get_layer_values(layer)
 
         for start_time, end_time, value in layer_values:
             if start_time <= when < end_time:
                 return (value, units)
+
+        return (None, None)
