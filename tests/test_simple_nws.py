@@ -10,7 +10,7 @@ USERID = "test_user"
 ZONE = "test_zone"
 
 
-async def test_nws_set_station(aiohttp_client, loop, mock_urls):
+async def test_nws_set_station(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -19,7 +19,7 @@ async def test_nws_set_station(aiohttp_client, loop, mock_urls):
     assert nws.stations == [STATION]
 
 
-async def test_nws_set_station_none(aiohttp_client, loop, mock_urls):
+async def test_nws_set_station_none(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -38,7 +38,7 @@ async def test_nws_set_station_none(aiohttp_client, loop, mock_urls):
         "stations_observations_multiple_unsorted.json",
     ],
 )
-async def test_nws_observation(aiohttp_client, loop, mock_urls, observation_json):
+async def test_nws_observation(aiohttp_client, mock_urls, observation_json):
     app = setup_app(stations_observations=observation_json)
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -61,7 +61,7 @@ async def test_nws_observation(aiohttp_client, loop, mock_urls, observation_json
     assert observation["iconWeather"][0][1] is None
 
 
-async def test_nws_observation_units(aiohttp_client, loop, mock_urls):
+async def test_nws_observation_units(aiohttp_client, mock_urls):
     app = setup_app(stations_observations="stations_observations_alternate_units.json")
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -74,7 +74,7 @@ async def test_nws_observation_units(aiohttp_client, loop, mock_urls):
     assert observation["windGust"] == 10
 
 
-async def test_nws_observation_metar(aiohttp_client, loop, mock_urls):
+async def test_nws_observation_metar(aiohttp_client, mock_urls):
     app = setup_app(stations_observations="stations_observations_metar.json")
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -92,7 +92,7 @@ async def test_nws_observation_metar(aiohttp_client, loop, mock_urls):
     assert observation["windGust"] is None
 
 
-async def test_nws_observation_metar_noparse(aiohttp_client, loop, mock_urls):
+async def test_nws_observation_metar_noparse(aiohttp_client, mock_urls):
     app = setup_app(stations_observations="stations_observations_metar_noparse.json")
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -102,7 +102,7 @@ async def test_nws_observation_metar_noparse(aiohttp_client, loop, mock_urls):
     assert observation["temperature"] is None
 
 
-async def test_nws_observation_empty(aiohttp_client, loop, mock_urls):
+async def test_nws_observation_empty(aiohttp_client, mock_urls):
     app = setup_app(stations_observations="stations_observations_empty.json")
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -122,7 +122,7 @@ async def test_nws_observation_empty(aiohttp_client, loop, mock_urls):
     assert observation["iconWeather"] is None
 
 
-async def test_nws_observation_noprop(aiohttp_client, loop, mock_urls):
+async def test_nws_observation_noprop(aiohttp_client, mock_urls):
     app = setup_app(stations_observations="stations_observations_noprop.json")
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -133,7 +133,7 @@ async def test_nws_observation_noprop(aiohttp_client, loop, mock_urls):
     assert observation is None
 
 
-async def test_nws_observation_missing_value(aiohttp_client, loop, mock_urls):
+async def test_nws_observation_missing_value(aiohttp_client, mock_urls):
     app = setup_app(stations_observations="stations_observations_missing_value.json")
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -154,7 +154,7 @@ async def test_nws_observation_missing_value(aiohttp_client, loop, mock_urls):
 
 
 @freeze_time("2019-10-13T14:30:00-04:00")
-async def test_nws_forecast(aiohttp_client, loop, mock_urls):
+async def test_nws_forecast(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -170,7 +170,7 @@ async def test_nws_forecast(aiohttp_client, loop, mock_urls):
 
 
 @freeze_time("2019-10-14T21:30:00-04:00")
-async def test_nws_forecast_discard_stale(aiohttp_client, loop, mock_urls):
+async def test_nws_forecast_discard_stale(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client, filter_forecast=True)
@@ -186,7 +186,7 @@ async def test_nws_forecast_discard_stale(aiohttp_client, loop, mock_urls):
 
 
 @freeze_time("2019-10-14T20:30:00-04:00")
-async def test_nws_forecast_hourly(aiohttp_client, loop, mock_urls):
+async def test_nws_forecast_hourly(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -197,7 +197,7 @@ async def test_nws_forecast_hourly(aiohttp_client, loop, mock_urls):
 
 
 @freeze_time("2019-10-13T14:30:00-04:00")
-async def test_nws_forecast_strings(aiohttp_client, loop, mock_urls):
+async def test_nws_forecast_strings(aiohttp_client, mock_urls):
     app = setup_app(gridpoints_forecast="gridpoints_forecast_strings.json")
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -213,7 +213,7 @@ async def test_nws_forecast_strings(aiohttp_client, loop, mock_urls):
 
 
 @freeze_time("2019-10-13T14:30:00-04:00")
-async def test_nws_forecast_empty(aiohttp_client, loop, mock_urls):
+async def test_nws_forecast_empty(aiohttp_client, mock_urls):
     app = setup_app(gridpoints_forecast="gridpoints_forecast_empty.json")
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -223,7 +223,7 @@ async def test_nws_forecast_empty(aiohttp_client, loop, mock_urls):
     assert forecast == []
 
 
-async def test_nws_alerts_forecast_zone(aiohttp_client, loop, mock_urls):
+async def test_nws_alerts_forecast_zone(aiohttp_client, mock_urls):
     app = setup_app(
         alerts_active_zone=["alerts_active_zone.json", "alerts_active_zone_second.json"]
     )
@@ -244,7 +244,7 @@ async def test_nws_alerts_forecast_zone(aiohttp_client, loop, mock_urls):
     assert len(alerts) == 2
 
 
-async def test_nws_alerts_county_zone(aiohttp_client, loop, mock_urls):
+async def test_nws_alerts_county_zone(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -253,7 +253,7 @@ async def test_nws_alerts_county_zone(aiohttp_client, loop, mock_urls):
     assert alerts
 
 
-async def test_nws_alerts_fire_weather_zone(aiohttp_client, loop, mock_urls):
+async def test_nws_alerts_fire_weather_zone(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -262,7 +262,7 @@ async def test_nws_alerts_fire_weather_zone(aiohttp_client, loop, mock_urls):
     assert alerts
 
 
-async def test_nws_alerts_all_zones(aiohttp_client, loop, mock_urls):
+async def test_nws_alerts_all_zones(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -275,7 +275,7 @@ async def test_nws_alerts_all_zones(aiohttp_client, loop, mock_urls):
     assert len(alerts) == 1
 
 
-async def test_nws_alerts_all_zones_after_forecast(aiohttp_client, loop, mock_urls):
+async def test_nws_alerts_all_zones_after_forecast(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -289,7 +289,7 @@ async def test_nws_alerts_all_zones_after_forecast(aiohttp_client, loop, mock_ur
     assert len(alerts) == 1
 
 
-async def test_nws_alerts_all_zones_second_alert(aiohttp_client, loop, mock_urls):
+async def test_nws_alerts_all_zones_second_alert(aiohttp_client, mock_urls):
     app = setup_app(
         alerts_active_zone=["alerts_active_zone.json", "alerts_active_zone_second.json"]
     )

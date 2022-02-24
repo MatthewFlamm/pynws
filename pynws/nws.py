@@ -1,13 +1,14 @@
 """pynws module."""
-from pynws.raw_data import (
+from .raw_data import (
     raw_alerts_active_zone,
     raw_forecast_all,
-    raw_gridpoints_forecast,
-    raw_gridpoints_forecast_hourly,
+    raw_forecast_daily,
+    raw_forecast_hourly,
     raw_points,
     raw_points_stations,
     raw_stations_observations,
 )
+from .forecast import Forecast
 
 
 class NwsError(Exception):
@@ -38,7 +39,7 @@ class Nws:
     async def get_points_stations(self):
         """Returns station list"""
         if self.latlon is None:
-            raise NwsError("Need to set lattitude and longitude")
+            raise NwsError("Need to set latitude and longitude")
         res = await raw_points_stations(*self.latlon, self.session, self.userid)
         return [s["properties"]["stationIdentifier"] for s in res["features"]]
 
@@ -72,13 +73,13 @@ class Nws:
         raw_forecast = await raw_forecast_all(
             self.wfo, self.x, self.y, self.session, self.userid
         )
-        return raw_forecast["properties"]
+        return Forecast(raw_forecast["properties"])
 
     async def get_gridpoints_forecast(self):
         """Return daily forecast from grid."""
         if self.wfo is None:
             await self.get_points()
-        raw_forecast = await raw_gridpoints_forecast(
+        raw_forecast = await raw_forecast_daily(
             self.wfo, self.x, self.y, self.session, self.userid
         )
         return raw_forecast["properties"]["periods"]
@@ -87,7 +88,7 @@ class Nws:
         """Return hourly forecast from grid."""
         if self.wfo is None:
             await self.get_points()
-        raw_forecast = await raw_gridpoints_forecast_hourly(
+        raw_forecast = await raw_forecast_hourly(
             self.wfo, self.x, self.y, self.session, self.userid
         )
         return raw_forecast["properties"]["periods"]

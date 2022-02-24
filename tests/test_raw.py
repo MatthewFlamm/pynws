@@ -14,19 +14,19 @@ Y = 0
 ZONE = "test"
 
 
-async def test_points_stations(aiohttp_client, loop, mock_urls):
+async def test_points_stations(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     await raw_data.raw_points_stations(*LATLON, client, USERID)
 
 
-async def test_points(aiohttp_client, loop, mock_urls):
+async def test_points(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     await raw_data.raw_points(*LATLON, client, USERID)
 
 
-async def test_stations_observations(aiohttp_client, loop, mock_urls):
+async def test_stations_observations(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     await raw_data.raw_stations_observations(STATION, client, USERID)
@@ -36,32 +36,32 @@ async def test_stations_observations(aiohttp_client, loop, mock_urls):
     )
 
 
-async def test_stations_observations_start_datetime(aiohttp_client, loop, mock_urls):
+async def test_stations_observations_start_datetime(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     with pytest.raises(ValueError):
         await raw_data.raw_stations_observations(STATION, client, USERID, start="1PM")
 
 
-async def test_forecast_all(aiohttp_client, loop, mock_urls):
+async def test_forecast_all(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     await raw_data.raw_forecast_all(WFO, X, Y, client, USERID)
 
 
-async def test_gridpoints_forecast(aiohttp_client, loop, mock_urls):
+async def test_gridpoints_forecast(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
-    await raw_data.raw_gridpoints_forecast(WFO, X, Y, client, USERID)
+    await raw_data.raw_forecast_daily(WFO, X, Y, client, USERID)
 
 
-async def test_gridpoints_forecast_hourly(aiohttp_client, loop, mock_urls):
+async def test_gridpoints_forecast_hourly(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
-    await raw_data.raw_gridpoints_forecast_hourly(WFO, X, Y, client, USERID)
+    await raw_data.raw_forecast_hourly(WFO, X, Y, client, USERID)
 
 
-async def test_alerts_active_zone(aiohttp_client, loop, mock_urls):
+async def test_alerts_active_zone(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     await raw_data.raw_alerts_active_zone(ZONE, client, USERID)
