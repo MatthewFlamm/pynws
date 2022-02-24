@@ -58,13 +58,19 @@ async def test_nws_all_forecast(aiohttp_client, mock_urls):
     assert nws.wfo
     assert forecast
     assert isinstance(forecast, Forecast)
+
     when = datetime.fromisoformat("2022-02-04T03:15:00+00:00")
-    tC, unit = forecast.get_layer_value(Layer.TEMPERATURE, when)
-    assert tC == 18.88888888888889
-    assert unit == "wmoUnit:degC"
-    rh, unit = forecast.get_layer_value(Layer.RELATIVE_HUMIDITY, when)
-    assert rh == 97.0
-    assert unit == "wmoUnit:percent"
+
+    value = forecast.get_value_at_time(when, Layer.TEMPERATURE)
+    assert value == (18.88888888888889, "wmoUnit:degC")
+
+    values = forecast.get_values_at_time(when)
+    assert isinstance(values, dict)
+    assert Layer.TEMPERATURE in values
+    assert Layer.RELATIVE_HUMIDITY in values
+    assert Layer.PROBABILITY_OF_HURRICANE_WINDS not in values
+    assert values[Layer.TEMPERATURE] == (18.88888888888889, "wmoUnit:degC")
+    assert values[Layer.RELATIVE_HUMIDITY] == (97.0, "wmoUnit:percent")
 
 
 async def test_nws_daily_forecast(aiohttp_client, mock_urls):
