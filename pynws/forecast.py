@@ -20,7 +20,7 @@ class Forecast:
 
     def __init__(self, properties):
         if not isinstance(properties, dict):
-            raise ValueError("'properties' must be a dictionary")
+            raise TypeError(f"{properties!r} is not a dictionary")
 
         self._properties = properties
         self._layers = {}
@@ -63,7 +63,7 @@ class Forecast:
         """Retrieve a forecast layer value for a point in time."""
 
         if not isinstance(when, datetime):
-            raise ValueError("'when' must be a datetime")
+            raise TypeError(f"{when!r} is not a datetime")
 
         when = when.astimezone(timezone.utc)
         layer_values, units = self.get_layer_values(layer)
