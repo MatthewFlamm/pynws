@@ -3,6 +3,7 @@ from .backports.enum import StrEnum
 
 
 class Layer(StrEnum):
+    """Forecast layers"""
     TEMPERATURE = "temperature"
     DEWPOINT = "dewpoint"
     MAX_TEMPERATURE = "maxTemperature"
