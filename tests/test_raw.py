@@ -46,19 +46,19 @@ async def test_stations_observations_start_datetime(aiohttp_client, mock_urls):
 async def test_forecast_all(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
-    await raw_data.raw_forecast_all(WFO, X, Y, client, USERID)
+    await raw_data.raw_all_forecast(WFO, X, Y, client, USERID)
 
 
 async def test_gridpoints_forecast(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
-    await raw_data.raw_forecast_daily(WFO, X, Y, client, USERID)
+    await raw_data.raw_daily_forecast(WFO, X, Y, client, USERID)
 
 
 async def test_gridpoints_forecast_hourly(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
-    await raw_data.raw_forecast_hourly(WFO, X, Y, client, USERID)
+    await raw_data.raw_hourly_forecast(WFO, X, Y, client, USERID)
 
 
 async def test_alerts_active_zone(aiohttp_client, mock_urls):

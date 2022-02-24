@@ -52,7 +52,7 @@ async def raw_points(lat, lon, websession, userid):
     return jres
 
 
-async def raw_forecast_all(wfo, x, y, websession, userid):
+async def raw_all_forecast(wfo, x, y, websession, userid):
     """Return griddata response."""
     url = urls.forecast_all_url(wfo, x, y)
     header = get_header(userid)
@@ -62,7 +62,7 @@ async def raw_forecast_all(wfo, x, y, websession, userid):
     return jres
 
 
-async def raw_forecast_daily(wfo, x, y, websession, userid):
+async def raw_daily_forecast(wfo, x, y, websession, userid):
     """Return griddata response."""
     url = urls.forecast_daily_url(wfo, x, y)
     header = get_header(userid)
@@ -72,7 +72,7 @@ async def raw_forecast_daily(wfo, x, y, websession, userid):
     return jres
 
 
-async def raw_forecast_hourly(wfo, x, y, websession, userid):
+async def raw_hourly_forecast(wfo, x, y, websession, userid):
     """Return griddata response."""
     url = urls.forecast_hourly_url(wfo, x, y)
     header = get_header(userid)

@@ -158,8 +158,8 @@ async def test_nws_forecast(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
-    await nws.update_forecast()
-    forecast = nws.forecast
+    await nws.update_daily_forecast()
+    forecast = nws.daily_forecast
 
     assert forecast[0]["iconWeather"][0][0] == "Thunderstorm (high cloud cover)"
     assert forecast[0]["iconWeather"][0][1] == 40
@@ -174,13 +174,13 @@ async def test_nws_forecast_discard_stale(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client, filter_forecast=True)
-    await nws.update_forecast_hourly()
-    forecast = nws.forecast_hourly
+    await nws.update_hourly_forecast()
+    forecast = nws.hourly_forecast
     assert forecast[0]["temperature"] == 77
 
     nws = SimpleNWS(*LATLON, USERID, client, filter_forecast=False)
-    await nws.update_forecast_hourly()
-    forecast = nws.forecast_hourly
+    await nws.update_hourly_forecast()
+    forecast = nws.hourly_forecast
 
     assert forecast[0]["temperature"] == 78
 
@@ -190,8 +190,8 @@ async def test_nws_forecast_hourly(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
-    await nws.update_forecast_hourly()
-    forecast = nws.forecast_hourly
+    await nws.update_hourly_forecast()
+    forecast = nws.hourly_forecast
 
     assert forecast[0]["temperature"] == 78
 
@@ -201,8 +201,8 @@ async def test_nws_forecast_strings(aiohttp_client, mock_urls):
     app = setup_app(gridpoints_forecast="gridpoints_forecast_strings.json")
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
-    await nws.update_forecast()
-    forecast = nws.forecast
+    await nws.update_daily_forecast()
+    forecast = nws.daily_forecast
 
     assert forecast[0]["iconWeather"][0][0] == "Thunderstorm (high cloud cover)"
     assert forecast[0]["iconWeather"][0][1] == 40
@@ -217,8 +217,8 @@ async def test_nws_forecast_empty(aiohttp_client, mock_urls):
     app = setup_app(gridpoints_forecast="gridpoints_forecast_empty.json")
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
-    await nws.update_forecast()
-    forecast = nws.forecast
+    await nws.update_daily_forecast()
+    forecast = nws.daily_forecast
 
     assert forecast == []
 

@@ -1,9 +1,9 @@
 """pynws module."""
 from .raw_data import (
     raw_alerts_active_zone,
-    raw_forecast_all,
-    raw_forecast_daily,
-    raw_forecast_hourly,
+    raw_all_forecast,
+    raw_daily_forecast,
+    raw_hourly_forecast,
     raw_points,
     raw_points_stations,
     raw_stations_observations,
@@ -66,29 +66,29 @@ class Nws:
             self.fire_weather_zone = properties.get("fireWeatherZone").split("/")[-1]
         return properties
 
-    async def get_forecast_all(self):
+    async def get_all_forecast(self):
         """Return all forecast data from grid."""
         if self.wfo is None:
             await self.get_points()
-        raw_forecast = await raw_forecast_all(
+        raw_forecast = await raw_all_forecast(
             self.wfo, self.x, self.y, self.session, self.userid
         )
         return Forecast(raw_forecast["properties"])
 
-    async def get_gridpoints_forecast(self):
+    async def get_daily_forecast(self):
         """Return daily forecast from grid."""
         if self.wfo is None:
             await self.get_points()
-        raw_forecast = await raw_forecast_daily(
+        raw_forecast = await raw_daily_forecast(
             self.wfo, self.x, self.y, self.session, self.userid
         )
         return raw_forecast["properties"]["periods"]
 
-    async def get_gridpoints_forecast_hourly(self):
+    async def get_hourly_forecast(self):
         """Return hourly forecast from grid."""
         if self.wfo is None:
             await self.get_points()
-        raw_forecast = await raw_forecast_hourly(
+        raw_forecast = await raw_hourly_forecast(
             self.wfo, self.x, self.y, self.session, self.userid
         )
         return raw_forecast["properties"]["periods"]
