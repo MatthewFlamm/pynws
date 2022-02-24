@@ -54,7 +54,7 @@ async def raw_points(lat, lon, websession, userid):
 
 async def raw_all_forecast(wfo, x, y, websession, userid):
     """Return griddata response."""
-    url = urls.forecast_all_url(wfo, x, y)
+    url = urls.all_forecast_url(wfo, x, y)
     header = get_header(userid)
     async with websession.get(url, headers=header) as res:
         res.raise_for_status()
@@ -64,7 +64,7 @@ async def raw_all_forecast(wfo, x, y, websession, userid):
 
 async def raw_daily_forecast(wfo, x, y, websession, userid):
     """Return griddata response."""
-    url = urls.forecast_daily_url(wfo, x, y)
+    url = urls.daily_forecast_url(wfo, x, y)
     header = get_header(userid)
     async with websession.get(url, headers=header) as res:
         res.raise_for_status()
@@ -74,7 +74,7 @@ async def raw_daily_forecast(wfo, x, y, websession, userid):
 
 async def raw_hourly_forecast(wfo, x, y, websession, userid):
     """Return griddata response."""
-    url = urls.forecast_hourly_url(wfo, x, y)
+    url = urls.hourly_forecast_url(wfo, x, y)
     header = get_header(userid)
     async with websession.get(url, headers=header) as res:
         res.raise_for_status()

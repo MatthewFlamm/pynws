@@ -154,7 +154,7 @@ async def test_nws_observation_missing_value(aiohttp_client, mock_urls):
 
 
 @freeze_time("2019-10-13T14:30:00-04:00")
-async def test_nws_forecast(aiohttp_client, mock_urls):
+async def test_nws_daily_forecast(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -186,7 +186,7 @@ async def test_nws_forecast_discard_stale(aiohttp_client, mock_urls):
 
 
 @freeze_time("2019-10-14T20:30:00-04:00")
-async def test_nws_forecast_hourly(aiohttp_client, mock_urls):
+async def test_nws_hourly_forecast(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
