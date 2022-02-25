@@ -49,12 +49,12 @@ async def test_nws_stations_observations(aiohttp_client, mock_urls):
     assert isinstance(observations, list)
 
 
-async def test_nws_all_forecast(aiohttp_client, mock_urls):
+async def test_nws_forecast_all(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = Nws(client, USERID, LATLON)
     assert nws
-    forecast = await nws.get_all_forecast()
+    forecast = await nws.get_forecast_all()
     assert nws.wfo
     assert forecast
     assert isinstance(forecast, Forecast)
@@ -68,12 +68,12 @@ async def test_nws_all_forecast(aiohttp_client, mock_urls):
     assert values[Layer.WIND_SPEED] == (12.964, "wmoUnit:km_h-1")
 
 
-async def test_nws_daily_forecast(aiohttp_client, mock_urls):
+async def test_nws_gridpoints_forecast(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = Nws(client, USERID, LATLON)
     assert nws
-    forecast = await nws.get_daily_forecast()
+    forecast = await nws.get_gridpoints_forecast()
     assert nws.wfo
     assert forecast
     assert isinstance(forecast, list)
@@ -86,12 +86,12 @@ async def test_nws_daily_forecast(aiohttp_client, mock_urls):
     assert values["windSpeed"] == "10 mph"
 
 
-async def test_nws_hourly_forecast(aiohttp_client, mock_urls):
+async def test_nws_gridpoints_forecast_hourly(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = Nws(client, USERID, LATLON)
     assert nws
-    forecast = await nws.get_hourly_forecast()
+    forecast = await nws.get_gridpoints_forecast_hourly()
     assert nws.wfo
     assert forecast
     assert isinstance(forecast, list)

@@ -1,9 +1,9 @@
 """url formatter."""
 from .const import (
     API_ALERTS_ACTIVE_ZONE,
-    API_ALL_FORECAST,
-    API_DAILY_FORECAST,
-    API_HOURLY_FORECAST,
+    API_FORECAST_ALL,
+    API_GRIDPOINTS_FORECAST,
+    API_GRIDPOINTS_FORECAST_HOURLY,
     API_POINTS,
     API_POINTS_STATIONS,
     API_STATIONS_OBSERVATIONS,
@@ -21,19 +21,19 @@ def points_stations_url(lat, lon):
     return API_URL + API_POINTS_STATIONS.format(str(lat), str(lon))
 
 
-def all_forecast_url(wfo, x, y):
+def forecast_all_url(wfo, x, y):
     """gridpoint observation and forecast."""
-    return API_URL + API_ALL_FORECAST.format(wfo, x, y)
+    return API_URL + API_FORECAST_ALL.format(wfo, x, y)
 
 
-def daily_forecast_url(wfo, x, y):
+def gridpoints_forecast_url(wfo, x, y):
     """gridpoint forecast."""
-    return API_URL + API_DAILY_FORECAST.format(wfo, x, y)
+    return API_URL + API_GRIDPOINTS_FORECAST.format(wfo, x, y)
 
 
-def hourly_forecast_url(wfo, x, y):
+def gridpoints_forecast_hourly_url(wfo, x, y):
     """gridpoint forecast hpurly."""
-    return API_URL + API_HOURLY_FORECAST.format(wfo, x, y)
+    return API_URL + API_GRIDPOINTS_FORECAST_HOURLY.format(wfo, x, y)
 
 
 def points_url(lat, lon):

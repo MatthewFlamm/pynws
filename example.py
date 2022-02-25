@@ -13,10 +13,10 @@ async def example():
         nws = pynws.SimpleNWS(*PHILLY, USERID, session)
         await nws.set_station()
         await nws.update_observation()
-        await nws.update_daily_forecast()
+        await nws.update_forecast()
         await nws.update_alerts_forecast_zone()
         print(nws.observation)
-        print(nws.daily_forecast[0])
+        print(nws.forecast[0])
         print(nws.alerts_forecast_zone)
 
 

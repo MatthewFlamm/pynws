@@ -1,4 +1,6 @@
-"""Constants for pynws"""
+"""
+Constants for pynws
+"""
 import os
 
 from .version import __version__
@@ -12,9 +14,9 @@ API_POINTS_STATIONS = "points/{},{}/stations"
 API_STATIONS_OBSERVATIONS = "stations/{}/observations/"
 API_ACCEPT = "application/geo+json"
 API_USER = "pynws {}"
-API_ALL_FORECAST = "gridpoints/{}/{},{}"
-API_DAILY_FORECAST = "gridpoints/{}/{},{}/forecast"
-API_HOURLY_FORECAST = "gridpoints/{}/{},{}/forecast/hourly"
+API_FORECAST_ALL = "gridpoints/{}/{},{}"
+API_GRIDPOINTS_FORECAST = "gridpoints/{}/{},{}/forecast"
+API_GRIDPOINTS_FORECAST_HOURLY = "gridpoints/{}/{},{}/forecast/hourly"
 API_POINTS = "points/{},{}"
 API_ALERTS_ACTIVE_ZONE = "alerts/active/zone/{}"
 

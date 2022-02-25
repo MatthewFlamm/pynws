@@ -129,8 +129,8 @@ class SimpleNWS(Nws):
         self._metar_obs = None
         self.station = None
         self.stations = None
-        self._daily_forecast = None
-        self._hourly_forecast = None
+        self._forecast = None
+        self._forecast_hourly = None
         self._alerts_forecast_zone = []
         self._alerts_county_zone = []
         self._alerts_fire_weather_zone = []
@@ -175,13 +175,13 @@ class SimpleNWS(Nws):
         )
         self._metar_obs = [self.extract_metar(iobs) for iobs in self._observation]
 
-    async def update_daily_forecast(self):
-        """Update daily forecast."""
-        self._daily_forecast = await self.get_daily_forecast()
+    async def update_forecast(self):
+        """Update forecast."""
+        self._forecast = await self.get_gridpoints_forecast()
 
-    async def update_hourly_forecast(self):
-        """Update hourly forecast."""
-        self._hourly_forecast = await self.get_hourly_forecast()
+    async def update_forecast_hourly(self):
+        """Update forecast hourly."""
+        self._forecast_hourly = await self.get_gridpoints_forecast_hourly()
 
     @staticmethod
     def _unique_alert_ids(alerts):
@@ -295,14 +295,14 @@ class SimpleNWS(Nws):
         return data
 
     @property
-    def daily_forecast(self):
-        """Return daily forecast."""
-        return self._convert_forecast(self._daily_forecast, self.filter_forecast)
+    def forecast(self):
+        """Return forecast."""
+        return self._convert_forecast(self._forecast, self.filter_forecast)
 
     @property
-    def hourly_forecast(self):
-        """Return hourly forecast."""
-        return self._convert_forecast(self._hourly_forecast, self.filter_forecast)
+    def forecast_hourly(self):
+        """Return forecast hourly."""
+        return self._convert_forecast(self._forecast_hourly, self.filter_forecast)
 
     @staticmethod
     def _convert_forecast(input_forecast, filter_forecast):
