@@ -22,7 +22,8 @@ class Forecast:  # pylint: disable=too-few-public-methods
         if not isinstance(properties, dict):
             raise TypeError(f"{properties!r} is not a dictionary")
 
-        self._layers = layers = {}
+        self.update_time = datetime.fromisoformat(properties["updateTime"])
+        self.layers = layers = {}
 
         for prop_name, prop_value in properties.items():
             if not isinstance(prop_value, dict) or "values" not in prop_value:
@@ -30,14 +31,13 @@ class Forecast:  # pylint: disable=too-few-public-methods
 
             layer_values = []
 
-            units = prop_value.get("uom", None)
-
             for value in prop_value["values"]:
                 isodatetime, duration_str = value["validTime"].split("/")
                 start_time = datetime.fromisoformat(isodatetime)
                 end_time = start_time + Forecast._parse_duration(duration_str)
                 layer_values.append((start_time, end_time, value["value"]))
 
+            units = prop_value.get("uom", None)
             layers[prop_name] = (layer_values, units)
 
     @staticmethod
@@ -56,6 +56,11 @@ class Forecast:  # pylint: disable=too-few-public-methods
             seconds=groups["seconds"],
         )
 
+    @property
+    def last_update(self):
+        """When the forecast was last updated"""
+        return self.update_time
+
     def get_forecast_for_time(self, when):
         """Retrieve all forecast layers for a point in time."""
 
@@ -66,7 +71,7 @@ class Forecast:  # pylint: disable=too-few-public-methods
 
         result = {}
 
-        for layer_name, (layer_values, units) in self._layers.items():
+        for layer_name, (layer_values, units) in self.layers.items():
             for start_time, end_time, value in layer_values:
                 if start_time <= when < end_time:
                     result[layer_name] = (value, units)
