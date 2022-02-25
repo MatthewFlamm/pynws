@@ -1,10 +1,9 @@
 """Forecast class"""
 import re
 from datetime import datetime, timedelta, timezone
-from typing import Final
 
 
-ISO8601_PERIOD_REGEX: Final = re.compile(
+ISO8601_PERIOD_REGEX = re.compile(
     r"^P"
     r"((?P<weeks>\d+)W)?"
     r"((?P<days>\d+)D)?"
