@@ -1,5 +1,5 @@
 """Layer enums"""
-from .backports.enum import StrEnum
+from pynws.backports.enum import StrEnum
 
 
 class Layer(StrEnum):

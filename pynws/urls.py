@@ -1,5 +1,5 @@
 """url formatter."""
-from .const import (
+from pynws.const import (
     API_ALERTS_ACTIVE_ZONE,
     API_FORECAST_ALL,
     API_GRIDPOINTS_FORECAST,
