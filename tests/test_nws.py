@@ -61,16 +61,11 @@ async def test_nws_all_forecast(aiohttp_client, mock_urls):
 
     when = datetime.fromisoformat("2022-02-04T03:15:00+00:00")
 
-    value = forecast.get_value_at_time(when, Layer.TEMPERATURE)
-    assert value == (18.88888888888889, "wmoUnit:degC")
-
-    values = forecast.get_values_at_time(when)
+    values = forecast.get_forecast_for_time(when)
     assert isinstance(values, dict)
-    assert Layer.TEMPERATURE in values
-    assert Layer.RELATIVE_HUMIDITY in values
-    assert Layer.PROBABILITY_OF_HURRICANE_WINDS not in values
     assert values[Layer.TEMPERATURE] == (18.88888888888889, "wmoUnit:degC")
     assert values[Layer.RELATIVE_HUMIDITY] == (97.0, "wmoUnit:percent")
+    assert values[Layer.WIND_SPEED] == (12.964, "wmoUnit:km_h-1")
 
 
 async def test_nws_daily_forecast(aiohttp_client, mock_urls):
@@ -83,6 +78,13 @@ async def test_nws_daily_forecast(aiohttp_client, mock_urls):
     assert forecast
     assert isinstance(forecast, list)
 
+    values = forecast[0]
+    assert isinstance(values, dict)
+    assert values["startTime"] == "2019-10-13T14:00:00-04:00"
+    assert values["temperature"] == 41
+    assert values["temperatureUnit"] == "F"
+    assert values["windSpeed"] == "10 mph"
+
 
 async def test_nws_hourly_forecast(aiohttp_client, mock_urls):
     app = setup_app()
@@ -93,6 +95,13 @@ async def test_nws_hourly_forecast(aiohttp_client, mock_urls):
     assert nws.wfo
     assert forecast
     assert isinstance(forecast, list)
+
+    values = forecast[0]
+    assert isinstance(values, dict)
+    assert values["startTime"] == "2019-10-14T20:00:00-04:00"
+    assert values["temperature"] == 78
+    assert values["temperatureUnit"] == "F"
+    assert values["windSpeed"] == "0 mph"
 
 
 async def test_nws_alerts_active_zone(aiohttp_client, mock_urls):
