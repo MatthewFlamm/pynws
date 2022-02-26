@@ -1,6 +1,8 @@
 """Forecast class"""
 import re
 from datetime import datetime, timedelta, timezone
+from typing import Any
+from pynws.layer import Layer
 
 
 ISO8601_PERIOD_REGEX = re.compile(
@@ -18,7 +20,7 @@ ISO8601_PERIOD_REGEX = re.compile(
 class Forecast:  # pylint: disable=too-few-public-methods
     """Class to retrieve forecast layer values for a point in time."""
 
-    def __init__(self, properties):
+    def __init__(self, properties: dict[str, Any]):
         if not isinstance(properties, dict):
             raise TypeError(f"{properties!r} is not a dictionary")
 
@@ -42,7 +44,7 @@ class Forecast:  # pylint: disable=too-few-public-methods
             layers[prop_name] = (layer_values, units)
 
     @staticmethod
-    def _parse_duration(duration_str):
+    def _parse_duration(duration_str: str) -> timedelta:
         match = ISO8601_PERIOD_REGEX.match(duration_str)
         groups = match.groupdict()
 
@@ -58,24 +60,44 @@ class Forecast:  # pylint: disable=too-few-public-methods
         )
 
     @property
-    def last_update(self):
+    def last_update(self) -> datetime:
         """When the forecast was last updated"""
         return self.update_time
 
-    def get_forecast_for_time(self, when):
+    @staticmethod
+    def _get_layer_value_for_time(
+        when, layer_values: tuple[datetime, datetime, Any], units: str | None
+    ) -> tuple[Any, str | None]:
+        for start_time, end_time, value in layer_values:
+            if start_time <= when < end_time:
+                return (value, units)
+        return (None, None)
+
+    def get_forecast_for_time(self, when: datetime) -> dict[Any, str | None]:
         """Retrieve all forecast layers for a point in time."""
 
         if not isinstance(when, datetime):
             raise TypeError(f"{when!r} is not a datetime")
 
         when = when.astimezone(timezone.utc)
-
-        result = {}
-
+        forecast = {}
         for layer_name, (layer_values, units) in self.layers.items():
-            for start_time, end_time, value in layer_values:
-                if start_time <= when < end_time:
-                    result[layer_name] = (value, units)
-                    break
+            forecast[layer_name] = self._get_layer_value_for_time(
+                when, layer_values, units
+            )
+        return forecast
 
-        return result
+    def get_forecast_layer_for_time(
+        self, layer: Layer, when: datetime
+    ) -> tuple[Any, str | None]:
+        """Retrieve single forecast layer for a point in time."""
+
+        if not isinstance(layer, Layer):
+            raise TypeError(f"{layer!r} is not a Layer")
+        if not isinstance(when, datetime):
+            raise TypeError(f"{when!r} is not a datetime")
+
+        when = when.astimezone(timezone.utc)
+        if (values_and_unit := self.layers.get(layer)) :
+            return self._get_layer_value_for_time(when, *values_and_unit)
+        return (None, None)

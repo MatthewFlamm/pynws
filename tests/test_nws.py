@@ -67,6 +67,9 @@ async def test_nws_forecast_all(aiohttp_client, loop, mock_urls):
     assert values[Layer.RELATIVE_HUMIDITY] == (97.0, "percent")
     assert values[Layer.WIND_SPEED] == (12.964, "km_h-1")
 
+    value = forecast.get_forecast_layer_for_time(Layer.TEMPERATURE, when)
+    assert value == (18.88888888888889, "degC")
+
 
 async def test_nws_gridpoints_forecast(aiohttp_client, loop, mock_urls):
     app = setup_app()
