@@ -98,6 +98,7 @@ class Forecast:  # pylint: disable=too-few-public-methods
             raise TypeError(f"{when!r} is not a datetime")
 
         when = when.astimezone(timezone.utc)
-        if (values_and_unit := self.layers.get(layer)) :
+        values_and_unit = self.layers.get(layer)
+        if values_and_unit:
             return self._get_layer_value_for_time(when, *values_and_unit)
         return (None, None)
