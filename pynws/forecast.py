@@ -38,7 +38,7 @@ class Forecast:  # pylint: disable=too-few-public-methods
             for value in prop_value["values"]:
                 isodatetime, duration_str = value["validTime"].split("/")
                 start_time = datetime.fromisoformat(isodatetime)
-                end_time = start_time + Forecast._parse_duration(duration_str)
+                end_time = start_time + self._parse_duration(duration_str)
                 layer_values.append((start_time, end_time, value["value"]))
 
             units = prop_value.get("uom")
