@@ -37,7 +37,8 @@ class Forecast:  # pylint: disable=too-few-public-methods
                 end_time = start_time + Forecast._parse_duration(duration_str)
                 layer_values.append((start_time, end_time, value["value"]))
 
-            units = prop_value.get("uom", None)
+            units = prop_value.get("uom")
+            units = units.split(":")[-1] if units else None
             layers[prop_name] = (layer_values, units)
 
     @staticmethod
