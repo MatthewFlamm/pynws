@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import re
 from datetime import datetime, timedelta, timezone
-from typing import Any
+from typing import Any, Generator
 from pynws.layer import Layer
 
 
@@ -18,8 +18,10 @@ ISO8601_PERIOD_REGEX = re.compile(
     r")?$"
 )
 
+ONE_HOUR = timedelta(hours=1)
 
-class Forecast:  # pylint: disable=too-few-public-methods
+
+class Forecast:
     """Class to retrieve forecast layer values for a point in time."""
 
     def __init__(self, properties: dict[str, Any]):
@@ -104,3 +106,18 @@ class Forecast:  # pylint: disable=too-few-public-methods
         if values_and_unit:
             return self._get_layer_value_for_time(when, *values_and_unit)
         return (None, None)
+
+    def get_hourly_forecasts(
+        self, start_time: datetime, hours: int = 12
+    ) -> Generator[dict[str, Any]]:
+        """Retrieve a sequence of hourly forecasts with all layers"""
+
+        current_time = start_time.replace(minute=0, second=0, microsecond=0)
+        for _ in range(hours):
+            hourly = self.get_forecast_for_time(current_time)
+            if not hourly:
+                break
+            hourly["startTime"] = current_time.isoformat()
+            current_time += ONE_HOUR
+            hourly["endTime"] = current_time.isoformat()
+            yield hourly
