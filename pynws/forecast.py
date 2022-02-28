@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import re
 from datetime import datetime, timedelta, timezone
-from typing import Any, Generator
+from typing import Any, Generator, Iterable
 from pynws.layer import Layer
 
 
@@ -91,6 +91,17 @@ class Forecast:
             )
         return forecast
 
+    def get_forecast_for_times(
+        self, iterable_when: Iterable[datetime]
+    ) -> Generator[dict[str, Any]]:
+        """Retrieve all forecast layers for a list of times."""
+
+        if not isinstance(iterable_when, Iterable):
+            raise TypeError(f"{iterable_when!r} is not an Iterable")
+
+        for when in iterable_when:
+            yield self.get_forecast_for_time(when)
+
     def get_forecast_layer_for_time(
         self, layer: Layer, when: datetime
     ) -> tuple[Any, str | None]:
@@ -112,12 +123,10 @@ class Forecast:
     ) -> Generator[dict[str, Any]]:
         """Retrieve a sequence of hourly forecasts with all layers"""
 
-        current_time = start_time.replace(minute=0, second=0, microsecond=0)
-        for _ in range(hours):
-            hourly = self.get_forecast_for_time(current_time)
-            if not hourly:
-                break
-            hourly["startTime"] = current_time.isoformat()
-            current_time += ONE_HOUR
-            hourly["endTime"] = current_time.isoformat()
-            yield hourly
+        if not isinstance(start_time, datetime):
+            raise TypeError(f"{start_time!r} is not a datetime")
+
+        start_time = start_time.replace(minute=0, second=0, microsecond=0)
+        iterable_when = [start_time + timedelta(hours=hour) for hour in range(hours)]
+        for time_forecast in self.get_forecast_for_times(iterable_when):
+            yield time_forecast

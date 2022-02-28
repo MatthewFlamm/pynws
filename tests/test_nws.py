@@ -1,4 +1,5 @@
 from pynws import Nws, NwsError, Forecast
+from pynws.forecast import ONE_HOUR
 from pynws.layer import Layer
 from datetime import datetime
 from types import GeneratorType
@@ -68,6 +69,14 @@ async def test_nws_forecast_all(aiohttp_client, loop, mock_urls):
     assert values[Layer.TEMPERATURE] == (18.88888888888889, "degC")
     assert values[Layer.RELATIVE_HUMIDITY] == (97.0, "percent")
     assert values[Layer.WIND_SPEED] == (12.964, "km_h-1")
+
+    # get_hourly_forecasts tests
+    hourly_forecasts = forecast.get_forecast_for_times([when, when + ONE_HOUR])
+    assert isinstance(hourly_forecasts, GeneratorType)
+    hourly_forecasts = list(hourly_forecasts)
+    assert len(hourly_forecasts) == 2
+    for hourly_forecast in hourly_forecasts:
+        assert isinstance(hourly_forecast, dict)
 
     # get_forecast_layer_for_time tests
     value = forecast.get_forecast_layer_for_time(Layer.TEMPERATURE, when)
