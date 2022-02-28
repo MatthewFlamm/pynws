@@ -127,6 +127,5 @@ class Forecast:
             raise TypeError(f"{start_time!r} is not a datetime")
 
         start_time = start_time.replace(minute=0, second=0, microsecond=0)
-        iterable_when = [start_time + timedelta(hours=hour) for hour in range(hours)]
-        for time_forecast in self.get_forecast_for_times(iterable_when):
-            yield time_forecast
+        for hour in range(hours):
+            yield self.get_forecast_for_time(start_time + timedelta(hours=hour))
