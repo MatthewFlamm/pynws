@@ -50,7 +50,7 @@ class Nws:
             self.station, self.session, self.userid, limit, start_time
         )
         observations = [o["properties"] for o in res["features"]]
-        return sorted(observations, key=lambda o: o["timestamp"])
+        return sorted(observations, key=lambda o: o.get("timestamp"))
 
     async def get_points(self):
         """Saves griddata from latlon."""
