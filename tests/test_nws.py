@@ -1,6 +1,6 @@
-from pynws import Nws, NwsError, Forecast
+from pynws import Nws, NwsError, DetailedForecast
 from pynws.forecast import ONE_HOUR
-from pynws.layer import Layer
+from pynws.const import Detail
 from datetime import datetime
 from types import GeneratorType
 import pytest
@@ -51,44 +51,45 @@ async def test_nws_stations_observations(aiohttp_client, loop, mock_urls):
     assert isinstance(observations, list)
 
 
-async def test_nws_forecast_all(aiohttp_client, loop, mock_urls):
+async def test_nws_detailed_forecast(aiohttp_client, loop, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = Nws(client, USERID, LATLON)
     assert nws
-    forecast = await nws.get_forecast_all()
+    forecast = await nws.get_detailed_forecast()
     assert nws.wfo
     assert forecast
-    assert isinstance(forecast, Forecast)
+    assert isinstance(forecast, DetailedForecast)
 
     when = datetime.fromisoformat("2022-02-04T03:15:00+00:00")
 
-    # get_forecast_for_time tests
-    values = forecast.get_forecast_for_time(when)
-    assert isinstance(values, dict)
-    assert values[Layer.TEMPERATURE] == (18.88888888888889, "degC")
-    assert values[Layer.RELATIVE_HUMIDITY] == (97.0, "percent")
-    assert values[Layer.WIND_SPEED] == (12.964, "km_h-1")
+    # get_details_for_time tests
+    details = forecast.get_details_for_time(when)
+    assert isinstance(details, dict)
+    assert details[Detail.TEMPERATURE] == (18.88888888888889, "degC")
+    assert details[Detail.RELATIVE_HUMIDITY] == (97.0, "percent")
+    assert details[Detail.WIND_SPEED] == (12.964, "km_h-1")
 
-    # get_hourly_forecasts tests
-    hourly_forecasts = forecast.get_forecast_for_times([when, when + ONE_HOUR])
-    assert isinstance(hourly_forecasts, GeneratorType)
-    hourly_forecasts = list(hourly_forecasts)
-    assert len(hourly_forecasts) == 2
-    for hourly_forecast in hourly_forecasts:
-        assert isinstance(hourly_forecast, dict)
+    # get_details_for_times tests
+    hourly_details = forecast.get_details_for_times([when, when + ONE_HOUR])
+    assert isinstance(hourly_details, GeneratorType)
+    hourly_details = list(hourly_details)
+    assert len(hourly_details) == 2
+    for details in hourly_details:
+        assert isinstance(details, dict)
 
-    # get_forecast_layer_for_time tests
-    value = forecast.get_forecast_layer_for_time(Layer.TEMPERATURE, when)
+    # get_detail_for_time tests
+    value = forecast.get_detail_for_time(Detail.TEMPERATURE, when)
     assert value == (18.88888888888889, "degC")
 
-    # get_hourly_forecasts tests
-    hourly_forecasts = forecast.get_hourly_forecasts(when, 15)
-    assert isinstance(hourly_forecasts, GeneratorType)
-    hourly_forecasts = list(hourly_forecasts)
-    assert len(hourly_forecasts) == 15
-    for hourly_forecast in hourly_forecasts:
-        assert isinstance(hourly_forecast, dict)
+    # get_details_by_hour tests
+    hourly_details = forecast.get_details_by_hour(when, 15)
+    assert isinstance(hourly_details, GeneratorType)
+    hourly_details = list(hourly_details)
+    assert len(hourly_details) == 15
+    for details in hourly_details:
+        assert isinstance(details, dict)
+        assert Detail.TEMPERATURE in details
 
 
 async def test_nws_gridpoints_forecast(aiohttp_client, loop, mock_urls):
