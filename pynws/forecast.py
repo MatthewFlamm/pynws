@@ -3,11 +3,11 @@ from __future__ import annotations
 
 import re
 from datetime import datetime, timedelta, timezone
-from typing import Any, Final, Generator, Iterable
+from typing import Any, Generator, Iterable
 from pynws.const import Detail
 
 
-ISO8601_PERIOD_REGEX: Final = re.compile(
+ISO8601_PERIOD_REGEX = re.compile(
     r"^P"
     r"((?P<weeks>\d+)W)?"
     r"((?P<days>\d+)D)?"
@@ -18,7 +18,7 @@ ISO8601_PERIOD_REGEX: Final = re.compile(
     r")?$"
 )
 
-ONE_HOUR: Final = timedelta(hours=1)
+ONE_HOUR = timedelta(hours=1)
 
 
 class DetailedForecast:
