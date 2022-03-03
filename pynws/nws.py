@@ -8,6 +8,7 @@ from pynws.raw_data import (
     raw_points_stations,
     raw_stations_observations,
 )
+from pynws.forecast import Forecast
 
 
 class NwsError(Exception):
@@ -72,7 +73,7 @@ class Nws:
         raw_forecast = await raw_forecast_all(
             self.wfo, self.x, self.y, self.session, self.userid
         )
-        return raw_forecast["properties"]
+        return Forecast(raw_forecast["properties"])
 
     async def get_gridpoints_forecast(self):
         """Return daily forecast from grid."""
