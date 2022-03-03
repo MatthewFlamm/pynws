@@ -7,6 +7,7 @@ from pynws.const import (
     API_POINTS,
     API_POINTS_STATIONS,
     API_STATIONS_OBSERVATIONS,
+    API_STATIONS_OBSERVATIONS_LATEST,
     API_URL,
 )
 
@@ -14,6 +15,11 @@ from pynws.const import (
 def stations_observations_url(station):
     """Formats observation url."""
     return API_URL + API_STATIONS_OBSERVATIONS.format(station)
+
+
+def stations_observations_latest_url(station):
+    """Formats observation url."""
+    return API_URL + API_STATIONS_OBSERVATIONS_LATEST.format(station)
 
 
 def points_stations_url(lat, lon):

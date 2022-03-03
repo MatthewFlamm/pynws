@@ -7,6 +7,7 @@ from pynws.raw_data import (
     raw_points,
     raw_points_stations,
     raw_stations_observations,
+    raw_stations_observations_latest,
 )
 
 
@@ -51,6 +52,15 @@ class Nws:
         )
         observations = [o["properties"] for o in res["features"]]
         return sorted(observations, key=lambda o: o.get("timestamp"))
+
+    async def get_stations_observations_latest(self):
+        """Returns latest observation"""
+        if self.station is None:
+            raise NwsError("Need to set station")
+        res = await raw_stations_observations_latest(
+            self.station, self.session, self.userid
+        )
+        return res.get("properties")
 
     async def get_points(self):
         """Saves griddata from latlon."""

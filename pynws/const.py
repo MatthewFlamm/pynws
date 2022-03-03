@@ -12,6 +12,7 @@ version = __version__
 API_URL = "https://api.weather.gov/"
 API_POINTS_STATIONS = "points/{},{}/stations"
 API_STATIONS_OBSERVATIONS = "stations/{}/observations/"
+API_STATIONS_OBSERVATIONS_LATEST = "stations/{}/observations/latest"
 API_ACCEPT = "application/geo+json"
 API_USER = "pynws {}"
 API_FORECAST_ALL = "gridpoints/{}/{},{}"
