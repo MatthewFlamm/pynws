@@ -25,7 +25,9 @@ def mock_urls():
         "pynws.urls.alerts_active_zone_url"
     ) as mock_alerts_active_zone_url:
         mock_stations_observations_url.return_value = "/stations_observations"
-        mock_stations_observations_latest_url.return_value = "/stations_observations_latest"
+        mock_stations_observations_latest_url.return_value = (
+            "/stations_observations_latest"
+        )
         mock_points_url.return_value = "/points"
         mock_forecast_all_url.return_value = "/gridpoints"
         mock_gridpoints_forecast_url.return_value = "/gridpoints_forecast"
