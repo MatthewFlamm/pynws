@@ -1,10 +1,10 @@
-"""Forecast class"""
+"""Forecast classes"""
 from __future__ import annotations
 
 import re
 from datetime import datetime, timedelta, timezone
 from typing import Any, Generator, Iterable
-from pynws.layer import Layer
+from pynws.const import Detail
 
 
 ISO8601_PERIOD_REGEX = re.compile(
@@ -21,31 +21,31 @@ ISO8601_PERIOD_REGEX = re.compile(
 ONE_HOUR = timedelta(hours=1)
 
 
-class Forecast:
-    """Class to retrieve forecast layer values for a point in time."""
+class DetailedForecast:
+    """Class to retrieve forecast values for a point in time."""
 
     def __init__(self, properties: dict[str, Any]):
         if not isinstance(properties, dict):
             raise TypeError(f"{properties!r} is not a dictionary")
 
         self.update_time = datetime.fromisoformat(properties["updateTime"])
-        self.layers = layers = {}
+        self.details = details = {}
 
         for prop_name, prop_value in properties.items():
             if not isinstance(prop_value, dict) or "values" not in prop_value:
                 continue
 
-            layer_values = []
+            time_values = []
 
             for value in prop_value["values"]:
                 isodatetime, duration_str = value["validTime"].split("/")
                 start_time = datetime.fromisoformat(isodatetime)
                 end_time = start_time + self._parse_duration(duration_str)
-                layer_values.append((start_time, end_time, value["value"]))
+                time_values.append((start_time, end_time, value["value"]))
 
             units = prop_value.get("uom")
             units = units.split(":")[-1] if units else None
-            layers[prop_name] = (layer_values, units)
+            details[prop_name] = time_values, units
 
     @staticmethod
     def _parse_duration(duration_str: str) -> timedelta:
@@ -69,63 +69,63 @@ class Forecast:
         return self.update_time
 
     @staticmethod
-    def _get_layer_value_for_time(
-        when, layer_values: tuple[datetime, datetime, Any], units: str | None
+    def _find_detail_for_time(
+        when, time_values: tuple[datetime, datetime, Any], units: str | None
     ) -> tuple[Any, str | None]:
-        for start_time, end_time, value in layer_values:
+        for start_time, end_time, value in time_values:
             if start_time <= when < end_time:
-                return (value, units)
-        return (None, None)
+                return value, units
+        return None, None
 
-    def get_forecast_for_time(self, when: datetime) -> dict[Any, str | None]:
-        """Retrieve all forecast layers for a point in time."""
+    def get_details_for_time(
+        self, when: datetime
+    ) -> dict[Detail, tuple[Any, str | None]]:
+        """Retrieve all forecast details for a point in time."""
 
         if not isinstance(when, datetime):
             raise TypeError(f"{when!r} is not a datetime")
 
         when = when.astimezone(timezone.utc)
-        forecast = {}
-        for layer_name, (layer_values, units) in self.layers.items():
-            forecast[layer_name] = self._get_layer_value_for_time(
-                when, layer_values, units
-            )
-        return forecast
+        details = {}
+        for detail, (time_values, units) in self.details.items():
+            details[detail] = self._find_detail_for_time(when, time_values, units)
+        return details
 
-    def get_forecast_for_times(
+    def get_details_for_times(
         self, iterable_when: Iterable[datetime]
-    ) -> Generator[dict[str, Any]]:
-        """Retrieve all forecast layers for a list of times."""
+    ) -> Generator[dict[Detail, tuple[Any, Any]]]:
+        """Retrieve all forecast details for a list of times."""
 
         if not isinstance(iterable_when, Iterable):
             raise TypeError(f"{iterable_when!r} is not an Iterable")
 
         for when in iterable_when:
-            yield self.get_forecast_for_time(when)
+            yield self.get_details_for_time(when)
 
-    def get_forecast_layer_for_time(
-        self, layer: Layer, when: datetime
+    def get_detail_for_time(
+        self, detail: Detail, when: datetime
     ) -> tuple[Any, str | None]:
-        """Retrieve single forecast layer for a point in time."""
+        """Retrieve single forecast detail for a point in time."""
 
-        if not isinstance(layer, Layer):
-            raise TypeError(f"{layer!r} is not a Layer")
+        if not isinstance(detail, Detail):
+            raise TypeError(f"{detail!r} is not a Detail")
         if not isinstance(when, datetime):
             raise TypeError(f"{when!r} is not a datetime")
 
         when = when.astimezone(timezone.utc)
-        values_and_unit = self.layers.get(layer)
-        if values_and_unit:
-            return self._get_layer_value_for_time(when, *values_and_unit)
-        return (None, None)
+        time_values, units = self.details.get(detail)
+        if time_values and units:
+            return self._find_detail_for_time(when, time_values, units)
+        return None, None
 
-    def get_hourly_forecasts(
+    def get_details_by_hour(
         self, start_time: datetime, hours: int = 12
-    ) -> Generator[dict[str, Any]]:
-        """Retrieve a sequence of hourly forecasts with all layers"""
+    ) -> Generator[dict[Detail, Any]]:
+        """Retrieve a sequence of hourly forecast details"""
 
         if not isinstance(start_time, datetime):
             raise TypeError(f"{start_time!r} is not a datetime")
 
         start_time = start_time.replace(minute=0, second=0, microsecond=0)
         for hour in range(hours):
-            yield self.get_forecast_for_time(start_time + timedelta(hours=hour))
+            yield self.get_details_for_time(start_time + timedelta(hours=hour))

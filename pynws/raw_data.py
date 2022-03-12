@@ -57,9 +57,9 @@ async def raw_points(lat, lon, websession, userid):
     return await _make_request(websession, url, header)
 
 
-async def raw_forecast_all(wfo, x, y, websession, userid):
+async def raw_detailed_forecast(wfo, x, y, websession, userid):
     """Return griddata response."""
-    url = pynws.urls.forecast_all_url(wfo, x, y)
+    url = pynws.urls.detailed_forecast_url(wfo, x, y)
     header = get_header(userid)
     return await _make_request(websession, url, header)
 
