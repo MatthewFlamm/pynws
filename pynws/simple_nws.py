@@ -168,11 +168,7 @@ class SimpleNWS(Nws):
         obs = await self.get_stations_observations(limit, start_time=start_time)
         if obs is None:
             return None
-        self._observation = sorted(
-            obs,
-            key=lambda item: self.extract_observation_value(item, "timestamp"),
-            reverse=True,
-        )
+        self._observation = obs
         self._metar_obs = [self.extract_metar(iobs) for iobs in self._observation]
 
     async def update_forecast(self):
