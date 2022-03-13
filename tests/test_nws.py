@@ -51,6 +51,19 @@ async def test_nws_stations_observations(aiohttp_client, loop, mock_urls):
     assert isinstance(observations, list)
 
 
+async def test_nws_stations_observations_latest(aiohttp_client, loop, mock_urls):
+    app = setup_app()
+    client = await aiohttp_client(app)
+    nws = Nws(client, USERID, LATLON)
+    assert nws
+    with pytest.raises(NwsError):
+        await nws.get_stations_observations_latest()
+    nws.station = STATION
+    observation = await nws.get_stations_observations_latest()
+    assert observation
+    assert isinstance(observation, dict)
+
+
 async def test_nws_detailed_forecast(aiohttp_client, loop, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)

@@ -43,6 +43,13 @@ async def raw_stations_observations(station, websession, userid, limit=0, start=
     return await _make_request(websession, url, header, params)
 
 
+async def raw_stations_observations_latest(station, websession, userid):
+    """Get observation response from station"""
+    url = pynws.urls.stations_observations_latest_url(station)
+    header = get_header(userid)
+    return await _make_request(websession, url, header)
+
+
 async def raw_points_stations(lat, lon, websession, userid):
     """Get list of stations for lat/lon"""
     url = pynws.urls.points_stations_url(lat, lon)
