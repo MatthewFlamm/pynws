@@ -130,8 +130,8 @@ class DetailedForecast:
         for _ in range(hours):
             end_time = start_time + ONE_HOUR
             details = {
-                Detail.START_TIME: datetime.isoformat(start_time),
-                Detail.END_TIME: datetime.isoformat(end_time),
+                str(Detail.START_TIME): datetime.isoformat(start_time),
+                str(Detail.END_TIME): datetime.isoformat(end_time),
             }
             details.update(self.get_details_for_time(start_time))
             yield details
