@@ -307,6 +307,7 @@ class SimpleNWS(Nws):
 
     @property
     def detailed_forecast(self):
+        """Return detailed forecast."""
         return self._detailed_forecast
 
     @staticmethod
