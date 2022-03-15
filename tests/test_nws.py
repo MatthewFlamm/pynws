@@ -1,6 +1,7 @@
 from pynws import Nws, NwsError, DetailedForecast
-from pynws.forecast import ONE_HOUR
+from pynws.forecast import ONE_HOUR, Value
 from pynws.const import Detail
+from pynws.units import Unit
 from datetime import datetime
 from types import GeneratorType
 import pytest
@@ -79,9 +80,13 @@ async def test_nws_detailed_forecast(aiohttp_client, loop, mock_urls):
     # get_details_for_time tests
     details = forecast.get_details_for_time(when)
     assert isinstance(details, dict)
-    assert details[Detail.TEMPERATURE] == (18.88888888888889, "degC")
-    assert details[Detail.RELATIVE_HUMIDITY] == (97.0, "percent")
-    assert details[Detail.WIND_SPEED] == (12.964, "km_h-1")
+    for key in details.keys():
+        assert isinstance(key, Detail)
+    temperature = details[Detail.TEMPERATURE]
+    assert isinstance(temperature, Value)
+    assert temperature.value == 18.88888888888889
+    assert temperature.unit == Unit.CELSIUS
+    assert temperature.value_as_unit(Unit.FAHRENHEIT) == 66
 
     # get_details_for_times tests
     hourly_details = forecast.get_details_for_times([when, when + ONE_HOUR])
@@ -92,8 +97,11 @@ async def test_nws_detailed_forecast(aiohttp_client, loop, mock_urls):
         assert isinstance(details, dict)
 
     # get_detail_for_time tests
-    value = forecast.get_detail_for_time(Detail.TEMPERATURE, when)
-    assert value == (18.88888888888889, "degC")
+    temperature = forecast.get_detail_for_time(Detail.TEMPERATURE, when)
+    assert isinstance(temperature, Value)
+    assert temperature.value == 18.88888888888889
+    assert temperature.unit == Unit.CELSIUS
+    assert temperature.value_as_unit(Unit.FAHRENHEIT) == 66
 
     # get_details_by_hour tests
     hourly_details = forecast.get_details_by_hour(when, 15)
@@ -102,7 +110,18 @@ async def test_nws_detailed_forecast(aiohttp_client, loop, mock_urls):
     assert len(hourly_details) == 15
     for details in hourly_details:
         assert isinstance(details, dict)
+        # float values
         assert Detail.TEMPERATURE in details
+        temperature = details[Detail.TEMPERATURE]
+        assert isinstance(temperature, Value)
+        assert isinstance(temperature.value, float)
+        assert temperature.unit == Unit.CELSIUS
+        # non-float values
+        assert Detail.WEATHER in details
+        weather = details[Detail.WEATHER]
+        assert isinstance(weather, Value)
+        assert isinstance(weather.value, list)
+        assert weather.unit == Unit.NONE
 
 
 async def test_nws_gridpoints_forecast(aiohttp_client, loop, mock_urls):
