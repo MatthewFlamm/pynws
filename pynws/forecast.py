@@ -118,7 +118,9 @@ class DetailedForecast:
         when = when.astimezone(timezone.utc)
         details = {}
         for detail, (time_values, units) in self.details.items():
-            details[Detail(detail)] = self._find_detail_for_time(when, time_values, units)
+            details[Detail(detail)] = self._find_detail_for_time(
+                when, time_values, units
+            )
         return details
 
     def get_details_for_times(
