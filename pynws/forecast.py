@@ -150,7 +150,7 @@ class DetailedForecast:
 
     def get_details_by_hour(
         self, start_time: datetime, hours: int = 12
-    ) -> Generator[dict[Detail, Value | str | None]]:
+    ) -> Generator[dict[Detail, Value | None]]:
         """Retrieve a sequence of hourly forecast details"""
 
         if not isinstance(start_time, datetime):
