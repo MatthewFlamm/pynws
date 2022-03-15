@@ -131,6 +131,7 @@ class SimpleNWS(Nws):
         self.stations = None
         self._forecast = None
         self._forecast_hourly = None
+        self._detailed_forecast = None
         self._alerts_forecast_zone = []
         self._alerts_county_zone = []
         self._alerts_fire_weather_zone = []
