@@ -179,6 +179,10 @@ class SimpleNWS(Nws):
         """Update forecast hourly."""
         self._forecast_hourly = await self.get_gridpoints_forecast_hourly()
 
+    async def update_detailed_forecast(self):
+        """Update forecast."""
+        self._detailed_forecast = await self.get_detailed_forecast()
+
     @staticmethod
     def _unique_alert_ids(alerts):
         """Return set of unique alert_ids."""
@@ -299,6 +303,10 @@ class SimpleNWS(Nws):
     def forecast_hourly(self):
         """Return forecast hourly."""
         return self._convert_forecast(self._forecast_hourly, self.filter_forecast)
+
+    @property
+    def detailed_forecast(self):
+        return self._detailed_forecast
 
     @staticmethod
     def _convert_forecast(input_forecast, filter_forecast):
