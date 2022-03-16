@@ -1,5 +1,5 @@
 from pynws import Nws, NwsError, DetailedForecast
-from pynws.forecast import ONE_HOUR, Value
+from pynws.forecast import ONE_HOUR, QuantitativeValue
 from pynws.const import Detail
 from pynws.units import Unit
 from datetime import datetime
@@ -83,7 +83,7 @@ async def test_nws_detailed_forecast(aiohttp_client, loop, mock_urls):
     for key in details.keys():
         assert isinstance(key, Detail)
     temperature = details[Detail.TEMPERATURE]
-    assert isinstance(temperature, Value)
+    assert isinstance(temperature, QuantitativeValue)
     assert temperature.value == 18.88888888888889
     assert temperature.unit == Unit.CELSIUS
     assert temperature.value_as_unit(Unit.FAHRENHEIT) == 66
@@ -98,7 +98,7 @@ async def test_nws_detailed_forecast(aiohttp_client, loop, mock_urls):
 
     # get_detail_for_time tests
     temperature = forecast.get_detail_for_time(Detail.TEMPERATURE, when)
-    assert isinstance(temperature, Value)
+    assert isinstance(temperature, QuantitativeValue)
     assert temperature.value == 18.88888888888889
     assert temperature.unit == Unit.CELSIUS
     assert temperature.value_as_unit(Unit.FAHRENHEIT) == 66
@@ -113,13 +113,13 @@ async def test_nws_detailed_forecast(aiohttp_client, loop, mock_urls):
         # float values
         assert Detail.TEMPERATURE in details
         temperature = details[Detail.TEMPERATURE]
-        assert isinstance(temperature, Value)
+        assert isinstance(temperature, QuantitativeValue)
         assert isinstance(temperature.value, float)
         assert temperature.unit == Unit.CELSIUS
         # non-float values
         assert Detail.WEATHER in details
         weather = details[Detail.WEATHER]
-        assert isinstance(weather, Value)
+        assert isinstance(weather, QuantitativeValue)
         assert isinstance(weather.value, list)
         assert weather.unit == Unit.NONE
 

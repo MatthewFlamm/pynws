@@ -22,7 +22,7 @@ ISO8601_PERIOD_REGEX = re.compile(
 ONE_HOUR = timedelta(hours=1)
 
 
-class Value:
+class QuantitativeValue:
     """Class to store a value within a forecast."""
 
     def __init__(self, value: Any, unit: Unit | str | None):
@@ -102,13 +102,13 @@ class DetailedForecast:
     @staticmethod
     def _find_detail_for_time(
         when, time_values: tuple[datetime, datetime, Any], units: str | None
-    ) -> Value | None:
+    ) -> QuantitativeValue | None:
         for start_time, end_time, value in time_values:
             if start_time <= when < end_time:
-                return Value(value, units)
+                return QuantitativeValue(value, units)
         return None
 
-    def get_details_for_time(self, when: datetime) -> dict[Detail, Value | None]:
+    def get_details_for_time(self, when: datetime) -> dict[Detail, QuantitativeValue | None]:
         """Retrieve all forecast details for a point in time."""
 
         if not isinstance(when, datetime):
@@ -124,7 +124,7 @@ class DetailedForecast:
 
     def get_details_for_times(
         self, iterable_when: Iterable[datetime]
-    ) -> Generator[dict[Detail, Value | None]]:
+    ) -> Generator[dict[Detail, QuantitativeValue | None]]:
         """Retrieve all forecast details for a list of times."""
 
         if not isinstance(iterable_when, Iterable):
@@ -133,7 +133,7 @@ class DetailedForecast:
         for when in iterable_when:
             yield self.get_details_for_time(when)
 
-    def get_detail_for_time(self, detail: Detail, when: datetime) -> Value | None:
+    def get_detail_for_time(self, detail: Detail, when: datetime) -> QuantitativeValue | None:
         """Retrieve single forecast detail for a point in time."""
 
         if not isinstance(detail, Detail):
@@ -149,7 +149,7 @@ class DetailedForecast:
 
     def get_details_by_hour(
         self, start_time: datetime, hours: int = 12
-    ) -> Generator[dict[Detail, Value | None]]:
+    ) -> Generator[dict[Detail, QuantitativeValue | None]]:
         """Retrieve a sequence of hourly forecast details"""
 
         if not isinstance(start_time, datetime):
