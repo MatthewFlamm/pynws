@@ -108,7 +108,9 @@ class DetailedForecast:
                 return QuantitativeValue(value, units)
         return None
 
-    def get_details_for_time(self, when: datetime) -> dict[Detail, QuantitativeValue | None]:
+    def get_details_for_time(
+        self, when: datetime
+    ) -> dict[Detail, QuantitativeValue | None]:
         """Retrieve all forecast details for a point in time."""
 
         if not isinstance(when, datetime):
@@ -133,7 +135,9 @@ class DetailedForecast:
         for when in iterable_when:
             yield self.get_details_for_time(when)
 
-    def get_detail_for_time(self, detail: Detail, when: datetime) -> QuantitativeValue | None:
+    def get_detail_for_time(
+        self, detail: Detail, when: datetime
+    ) -> QuantitativeValue | None:
         """Retrieve single forecast detail for a point in time."""
 
         if not isinstance(detail, Detail):
