@@ -14,21 +14,21 @@ SECONDS_PER_HOUR = 3600
 class Unit(StrEnum):
     """Unit of measurement names"""
 
-    CELSIUS = "degC"
-    DEGREE = "degree_(angle)"
+    CELSIUS = "wmoUnit:degC"
+    DEGREE = "wmoUnit:degree_(angle)"
     FAHRENHEIT = "degF"
-    FOOT = "ft"
+    FOOT = "wmoUnit:ft"
     INCH = "in"
-    KILOMETERS_PER_HOUR = "km_h-1"
-    METER = "m"
-    METERS_PER_SECOND = "m_s-1"
+    KILOMETERS_PER_HOUR = "wmoUnit:km_h-1"
+    METER = "wmoUnit:m"
+    METERS_PER_SECOND = "wmoUnit:m_s-1"
     MILES_PER_HOUR = "mi_h-1"
-    MILLIMETER = "mm"
+    MILLIMETER = "wmoUnit:mm"
     NONE = ""
-    PASCAL = "Pa"
-    PERCENT = "percent"
+    PASCAL = "wmoUnit:Pa"
+    PERCENT = "wmoUnit:percent"
     PSI = "psi"
-    SECONDS = "s"
+    SECONDS = "nwsUnit:s"
 
 
 # fmt: off

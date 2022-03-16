@@ -76,7 +76,6 @@ class DetailedForecast:
                 time_values.append((start_time, end_time, value["value"]))
 
             units = prop_value.get("uom")
-            units = units.split(":")[-1] if units else None
             details[prop_name] = time_values, units
 
     @staticmethod
