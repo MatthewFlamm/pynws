@@ -67,6 +67,8 @@ API_WEATHER_CODE = {
 class Detail(StrEnum):
     """Detailed forecast value names"""
 
+    START_TIME = "startTime"
+    END_TIME = "endTime"
     TEMPERATURE = "temperature"
     DEWPOINT = "dewpoint"
     MAX_TEMPERATURE = "maxTemperature"

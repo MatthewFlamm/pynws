@@ -126,5 +126,12 @@ class DetailedForecast:
             raise TypeError(f"{start_time!r} is not a datetime")
 
         start_time = start_time.replace(minute=0, second=0, microsecond=0)
-        for hour in range(hours):
-            yield self.get_details_for_time(start_time + timedelta(hours=hour))
+        for _ in range(hours):
+            end_time = start_time + ONE_HOUR
+            details = {
+                str(Detail.START_TIME): datetime.isoformat(start_time),
+                str(Detail.END_TIME): datetime.isoformat(end_time),
+            }
+            details.update(self.get_details_for_time(start_time))
+            yield details
+            start_time = end_time

@@ -98,6 +98,7 @@ class SimpleNWS(Nws):
         self.stations = None
         self._forecast = None
         self._forecast_hourly = None
+        self._detailed_forecast = None
         self._alerts_forecast_zone = []
         self._alerts_county_zone = []
         self._alerts_fire_weather_zone = []
@@ -145,6 +146,10 @@ class SimpleNWS(Nws):
     async def update_forecast_hourly(self):
         """Update forecast hourly."""
         self._forecast_hourly = await self.get_gridpoints_forecast_hourly()
+
+    async def update_detailed_forecast(self):
+        """Update forecast."""
+        self._detailed_forecast = await self.get_detailed_forecast()
 
     @staticmethod
     def _unique_alert_ids(alerts):
@@ -266,6 +271,11 @@ class SimpleNWS(Nws):
     def forecast_hourly(self):
         """Return forecast hourly."""
         return self._convert_forecast(self._forecast_hourly, self.filter_forecast)
+
+    @property
+    def detailed_forecast(self):
+        """Return detailed forecast."""
+        return self._detailed_forecast
 
     @staticmethod
     def _convert_forecast(input_forecast, filter_forecast):
