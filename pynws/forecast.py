@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import re
 from datetime import datetime, timedelta, timezone
-from typing import Any, Generator, Iterable
+from typing import Any, Generator, Iterable, Union
 from pynws.const import Detail
 from pynws.units import get_converter
 
@@ -21,7 +21,7 @@ ISO8601_PERIOD_REGEX = re.compile(
 
 ONE_HOUR = timedelta(hours=1)
 
-DetailValue = int | float | list | None
+DetailValue = Union[int, float, list, None]
 
 
 class DetailedForecast:
