@@ -5,6 +5,7 @@ import re
 from datetime import datetime, timedelta, timezone
 from typing import Any, Generator, Iterable
 from pynws.const import Detail
+from pynws.units import get_converter
 
 
 ISO8601_PERIOD_REGEX = re.compile(
@@ -35,17 +36,21 @@ class DetailedForecast:
             if not isinstance(prop_value, dict) or "values" not in prop_value:
                 continue
 
+            unit_code = prop_value.get("uom")
+            converter = get_converter(unit_code) if unit_code else None
+
             time_values = []
 
             for value in prop_value["values"]:
                 isodatetime, duration_str = value["validTime"].split("/")
                 start_time = datetime.fromisoformat(isodatetime)
                 end_time = start_time + self._parse_duration(duration_str)
-                time_values.append((start_time, end_time, value["value"]))
+                value = value["value"]
+                if converter and value:
+                    value = converter(value)
+                time_values.append((start_time, end_time, value))
 
-            units = prop_value.get("uom")
-            units = units.split(":")[-1] if units else None
-            details[prop_name] = time_values, units
+            details[prop_name] = time_values
 
     @staticmethod
     def _parse_duration(duration_str: str) -> timedelta:
@@ -69,17 +74,13 @@ class DetailedForecast:
         return self.update_time
 
     @staticmethod
-    def _find_detail_for_time(
-        when, time_values: tuple[datetime, datetime, Any], units: str | None
-    ) -> tuple[Any, str | None]:
+    def _get_value_for_time(when, time_values: tuple[datetime, datetime, Any]) -> Any:
         for start_time, end_time, value in time_values:
             if start_time <= when < end_time:
-                return value, units
-        return None, None
+                return value
+        return None
 
-    def get_details_for_time(
-        self, when: datetime
-    ) -> dict[Detail, tuple[Any, str | None]]:
+    def get_details_for_time(self, when: datetime) -> dict[Detail, Any]:
         """Retrieve all forecast details for a point in time."""
 
         if not isinstance(when, datetime):
@@ -87,8 +88,8 @@ class DetailedForecast:
 
         when = when.astimezone(timezone.utc)
         details = {}
-        for detail, (time_values, units) in self.details.items():
-            details[detail] = self._find_detail_for_time(when, time_values, units)
+        for detail, time_values in self.details.items():
+            details[detail] = self._get_value_for_time(when, time_values)
         return details
 
     def get_details_for_times(
@@ -113,10 +114,8 @@ class DetailedForecast:
             raise TypeError(f"{when!r} is not a datetime")
 
         when = when.astimezone(timezone.utc)
-        time_values, units = self.details.get(detail)
-        if time_values and units:
-            return self._find_detail_for_time(when, time_values, units)
-        return None, None
+        time_values = self.details.get(detail)
+        return self._get_value_for_time(when, time_values) if time_values else None
 
     def get_details_by_hour(
         self, start_time: datetime, hours: int = 12

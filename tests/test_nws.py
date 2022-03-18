@@ -79,9 +79,9 @@ async def test_nws_detailed_forecast(aiohttp_client, loop, mock_urls):
     # get_details_for_time tests
     details = forecast.get_details_for_time(when)
     assert isinstance(details, dict)
-    assert details[Detail.TEMPERATURE] == (18.88888888888889, "degC")
-    assert details[Detail.RELATIVE_HUMIDITY] == (97.0, "percent")
-    assert details[Detail.WIND_SPEED] == (12.964, "km_h-1")
+    assert details[Detail.TEMPERATURE] == 18.88888888888889  # celsius implied
+    assert details[Detail.RELATIVE_HUMIDITY] == 97.0  # percent implied
+    assert details[Detail.WIND_SPEED] == 12.964  # km/h implied
 
     # get_details_for_times tests
     hourly_details = forecast.get_details_for_times([when, when + ONE_HOUR])
@@ -93,7 +93,7 @@ async def test_nws_detailed_forecast(aiohttp_client, loop, mock_urls):
 
     # get_detail_for_time tests
     value = forecast.get_detail_for_time(Detail.TEMPERATURE, when)
-    assert value == (18.88888888888889, "degC")
+    assert value == 18.88888888888889  # celsius implied
 
     # get_details_by_hour tests
     hourly_details = forecast.get_details_by_hour(when, 15)

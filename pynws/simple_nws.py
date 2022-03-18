@@ -6,6 +6,7 @@ from metar import Metar
 
 from .const import ALERT_ID, API_WEATHER_CODE
 from .nws import Nws
+from .units import convert_unit
 
 WIND_DIRECTIONS = [
     "N",
@@ -26,32 +27,6 @@ WIND_DIRECTIONS = [
     "NNW",
 ]
 
-
-def unchanged(value):
-    """Return same value."""
-    return value
-
-
-def f_to_c(fahrenheit):
-    """Convert to Celsius."""
-    return (fahrenheit - 32.0) / 1.8
-
-
-def m_p_s_to_km_p_hr(m_p_s):
-    """Convert to km/hr."""
-    return m_p_s * 3.6
-
-
-unit_conversion = {
-    "degC": unchanged,
-    "degF": f_to_c,
-    "km_h-1": unchanged,
-    "m_s-1": m_p_s_to_km_p_hr,
-    "m": unchanged,
-    "Pa": unchanged,
-    "percent": unchanged,
-    "degree_(angle)": unchanged,
-}
 
 WIND = {name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)}
 
@@ -78,14 +53,6 @@ OBSERVATIONS = {
     "windChill": None,
     "heatIndex": None,
 }
-
-
-def convert_unit(unit_code, value):
-    """Convert value with unit code to preferred unit."""
-    for unit, converter in unit_conversion.items():
-        if unit in unit_code:
-            return converter(value)
-    raise ValueError(f"unit code: '{unit_code}' not recognized.")
 
 
 def convert_weather(weather):
