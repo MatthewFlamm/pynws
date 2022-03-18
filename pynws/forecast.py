@@ -21,6 +21,8 @@ ISO8601_PERIOD_REGEX = re.compile(
 
 ONE_HOUR = timedelta(hours=1)
 
+DetailValue = int | float | list | None
+
 
 class DetailedForecast:
     """Class to retrieve forecast values for a point in time."""
@@ -70,19 +72,34 @@ class DetailedForecast:
 
     @property
     def last_update(self) -> datetime:
-        """When the forecast was last updated"""
+        """When the forecast was last updated.
+
+        Returns:
+            datetime: When the forecast was last updated
+        """
         return self.update_time
 
     @staticmethod
-    def _get_value_for_time(when, time_values: tuple[datetime, datetime, Any]) -> Any:
+    def _get_value_for_time(
+        when, time_values: tuple[datetime, datetime, DetailValue]
+    ) -> DetailValue:
         for start_time, end_time, value in time_values:
             if start_time <= when < end_time:
                 return value
         return None
 
-    def get_details_for_time(self, when: datetime) -> dict[Detail, Any]:
-        """Retrieve all forecast details for a point in time."""
+    def get_details_for_time(self, when: datetime) -> dict[Detail, DetailValue]:
+        """Retrieve all forecast details for a point in time.
 
+        Args:
+            when (datetime): Point in time of requested forecast.
+
+        Raises:
+            TypeError: If 'when' argument is not a 'datetime'.
+
+        Returns:
+            dict[Detail, DetailValue]: All forecast details for the specified time.
+        """
         if not isinstance(when, datetime):
             raise TypeError(f"{when!r} is not a datetime")
 
@@ -94,20 +111,39 @@ class DetailedForecast:
 
     def get_details_for_times(
         self, iterable_when: Iterable[datetime]
-    ) -> Generator[dict[Detail, tuple[Any, Any]]]:
-        """Retrieve all forecast details for a list of times."""
+    ) -> Generator[dict[Detail, DetailValue]]:
+        """Retrieve all forecast details for a list of times.
 
+        Args:
+            iterable_when (Iterable[datetime]): List of times to retrieve.
+
+        Raises:
+            TypeError: If 'iterable_when' argument is not a collection.
+
+        Yields:
+            Generator[dict[Detail, DetailValue]]: Sequence of forecast details
+            corresponding with the list of times to retrieve.
+        """
         if not isinstance(iterable_when, Iterable):
             raise TypeError(f"{iterable_when!r} is not an Iterable")
 
         for when in iterable_when:
             yield self.get_details_for_time(when)
 
-    def get_detail_for_time(
-        self, detail: Detail, when: datetime
-    ) -> tuple[Any, str | None]:
-        """Retrieve single forecast detail for a point in time."""
+    def get_detail_for_time(self, detail: Detail, when: datetime) -> DetailValue:
+        """Retrieve single forecast detail for a point in time.
 
+        Args:
+            detail (Detail): Forecast detail to retrieve.
+            when (datetime): Point in time of requested forecast detail.
+
+        Raises:
+            TypeError: If 'detail' argument is not a 'Detail'.
+            TypeError: If 'when' argument is not a 'datetime'.
+
+        Returns:
+            DetailValue: Requested forecast detail value for the specified time.
+        """
         if not isinstance(detail, Detail):
             raise TypeError(f"{detail!r} is not a Detail")
         if not isinstance(when, datetime):
@@ -119,9 +155,20 @@ class DetailedForecast:
 
     def get_details_by_hour(
         self, start_time: datetime, hours: int = 12
-    ) -> Generator[dict[Detail, Any]]:
-        """Retrieve a sequence of hourly forecast details"""
+    ) -> Generator[dict[Detail, DetailValue]]:
+        """Retrieve a sequence of hourly forecast details
 
+        Args:
+            start_time (datetime): First time to retrieve.
+            hours (int, optional): Number of hours to retrieve. Defaults to 12.
+
+        Raises:
+            TypeError: If 'start_time' argument is not a 'datetime'.
+
+        Yields:
+            Generator[dict[Detail, DetailValue]]: Sequence of forecast detail
+            values with one details dictionary per requested hour.
+        """
         if not isinstance(start_time, datetime):
             raise TypeError(f"{start_time!r} is not a datetime")
 
