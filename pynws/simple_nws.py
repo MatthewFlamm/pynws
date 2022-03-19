@@ -1,4 +1,5 @@
 """Support for NWS weather service."""
+from typing import Any, Union
 from datetime import datetime, timezone
 from statistics import mean
 
@@ -6,6 +7,7 @@ from metar import Metar
 
 from .const import ALERT_ID, API_WEATHER_CODE
 from .nws import Nws
+from .forecast import DetailedForecast
 from .units import convert_unit
 
 WIND_DIRECTIONS = [
@@ -273,8 +275,13 @@ class SimpleNWS(Nws):
         return self._convert_forecast(self._forecast_hourly, self.filter_forecast)
 
     @property
-    def detailed_forecast(self):
-        """Return detailed forecast."""
+    def detailed_forecast(self) -> Union[DetailedForecast, None]:
+        """Return detailed forecast.
+
+        Returns:
+            Union[DetailedForecast, None]: Returns None if update_detailed_forecast
+            hasn't been called.
+        """
         return self._detailed_forecast
 
     @staticmethod
