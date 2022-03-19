@@ -150,13 +150,13 @@ class DetailedForecast:
         return self._get_value_for_time(when, time_values) if time_values else None
 
     def get_details_by_hour(
-        self, start_time: datetime, hours: int = 12
+        self, start_time: datetime, hours: int = 24
     ) -> Generator[dict[Detail, DetailValue]]:
         """Retrieve a sequence of hourly forecast details
 
         Args:
             start_time (datetime): First time to retrieve.
-            hours (int, optional): Number of hours to retrieve. Defaults to 12.
+            hours (int, optional): Number of hours to retrieve.
 
         Raises:
             TypeError: If 'start_time' argument is not a 'datetime'.
