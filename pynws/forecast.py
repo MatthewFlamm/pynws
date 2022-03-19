@@ -70,6 +70,7 @@ class DetailedForecast:
             seconds=groups["seconds"],
         )
 
+
     @property
     def last_update(self) -> datetime:
         """When the forecast was last updated.
@@ -79,6 +80,7 @@ class DetailedForecast:
         """
         return self.update_time
 
+
     @staticmethod
     def _get_value_for_time(
         when, time_values: tuple[datetime, datetime, DetailValue]
@@ -87,6 +89,7 @@ class DetailedForecast:
             if start_time <= when < end_time:
                 return value
         return None
+
 
     def get_details_for_time(self, when: datetime) -> dict[Detail, DetailValue]:
         """Retrieve all forecast details for a point in time.
@@ -109,6 +112,7 @@ class DetailedForecast:
             details[detail] = self._get_value_for_time(when, time_values)
         return details
 
+
     def get_details_for_times(
         self, iterable_when: Iterable[datetime]
     ) -> Generator[dict[Detail, DetailValue]]:
@@ -125,10 +129,11 @@ class DetailedForecast:
             corresponding with the list of times to retrieve.
         """
         if not isinstance(iterable_when, Iterable):
-            raise TypeError(f"{iterable_when!r} is not an Iterable")
+            raise TypeError(f"{iterable_when!r} is not iterable")
 
         for when in iterable_when:
             yield self.get_details_for_time(when)
+
 
     def get_detail_for_time(self, detail: Detail, when: datetime) -> DetailValue:
         """Retrieve single forecast detail for a point in time.
@@ -152,6 +157,7 @@ class DetailedForecast:
         when = when.astimezone(timezone.utc)
         time_values = self.details.get(detail)
         return self._get_value_for_time(when, time_values) if time_values else None
+
 
     def get_details_by_hour(
         self, start_time: datetime, hours: int = 12
