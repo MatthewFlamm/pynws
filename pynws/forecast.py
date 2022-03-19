@@ -35,7 +35,9 @@ class DetailedForecast:
         self.details = details = {}
 
         for prop_name, prop_value in properties.items():
-            if not isinstance(prop_value, dict) or "values" not in prop_value:
+            try:
+                detail = Detail(prop_name)
+            except ValueError:
                 continue
 
             unit_code = prop_value.get("uom")
@@ -52,7 +54,7 @@ class DetailedForecast:
                     value = converter(value)
                 time_values.append((start_time, end_time, value))
 
-            details[prop_name] = time_values
+            details[detail] = time_values
 
     @staticmethod
     def _parse_duration(duration_str: str) -> timedelta:
@@ -172,8 +174,8 @@ class DetailedForecast:
         for _ in range(hours):
             end_time = start_time + ONE_HOUR
             details = {
-                str(Detail.START_TIME): datetime.isoformat(start_time),
-                str(Detail.END_TIME): datetime.isoformat(end_time),
+                Detail.START_TIME: datetime.isoformat(start_time),
+                Detail.END_TIME: datetime.isoformat(end_time),
             }
             details.update(self.get_details_for_time(start_time))
             yield details
