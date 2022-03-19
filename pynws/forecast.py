@@ -72,11 +72,7 @@ class DetailedForecast:
 
     @property
     def last_update(self) -> datetime:
-        """When the forecast was last updated.
-
-        Returns:
-            datetime: When the forecast was last updated
-        """
+        """When the forecast was last updated."""
         return self.update_time
 
     @staticmethod
