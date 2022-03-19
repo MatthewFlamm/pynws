@@ -4,8 +4,8 @@ from __future__ import annotations
 import re
 from datetime import datetime, timedelta, timezone
 from typing import Any, Generator, Iterable, Union
-from pynws.const import Detail
-from pynws.units import get_converter
+from .const import Detail
+from .units import get_converter
 
 
 ISO8601_PERIOD_REGEX = re.compile(
