@@ -1,5 +1,5 @@
 """Support for NWS weather service."""
-from typing import Any, Union
+from typing import Union
 from datetime import datetime, timezone
 from statistics import mean
 
