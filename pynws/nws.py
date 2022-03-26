@@ -1,6 +1,6 @@
 """pynws module."""
-from pynws.forecast import DetailedForecast
-from pynws.raw_data import (
+from __future__ import annotations
+from .raw_data import (
     raw_alerts_active_zone,
     raw_detailed_forecast,
     raw_gridpoints_forecast,
@@ -10,6 +10,7 @@ from pynws.raw_data import (
     raw_stations_observations,
     raw_stations_observations_latest,
 )
+from .forecast import DetailedForecast
 
 
 class NwsError(Exception):
@@ -77,8 +78,12 @@ class Nws:
             self.fire_weather_zone = properties.get("fireWeatherZone").split("/")[-1]
         return properties
 
-    async def get_detailed_forecast(self):
-        """Return all forecast data from grid."""
+    async def get_detailed_forecast(self: Nws) -> DetailedForecast:
+        """Return all forecast data from grid.
+
+        Returns:
+            DetailedForecast: Object with all forecast details for all available times.
+        """
         if self.wfo is None:
             await self.get_points()
         raw_forecast = await raw_detailed_forecast(
