@@ -32,7 +32,6 @@ class DetailedForecast:
 
         self.update_time = datetime.fromisoformat(properties["updateTime"])
         self.details: Dict[_T_Detail_str, Any] = {}
-        details = self.details
 
         for prop_name, prop_value in properties.items():
             if not isinstance(prop_value, dict) or "values" not in prop_value:
@@ -48,7 +47,7 @@ class DetailedForecast:
 
             units = prop_value.get("uom")
             units = units.split(":")[-1] if units else None
-            details[prop_name] = time_values, units
+            self.details[prop_name] = time_values, units
 
     @staticmethod
     def _parse_duration(duration_str: str) -> timedelta:
