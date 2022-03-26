@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, TypeVar
+from typing import Any, List, TypeVar
 
 _StrEnumT = TypeVar("_StrEnumT", bound="StrEnum")
 
@@ -24,7 +24,7 @@ class StrEnum(str, Enum):
 
     @staticmethod
     def _generate_next_value_(  # pylint: disable=arguments-differ # https://github.com/PyCQA/pylint/issues/5371
-        name: str, start: int, count: int, last_values: list[Any]
+        name: str, start: int, count: int, last_values: List[Any]
     ) -> Any:
         """
         Make `auto()` explicitly unsupported.

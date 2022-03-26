@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import re
 from datetime import datetime, timedelta, timezone
-from typing import Any, Generator, Iterable, Union
+from typing import Any, Generator, Iterable, List, Tuple, Union
 from .const import Detail
 from .units import get_converter
 
@@ -22,7 +22,7 @@ ISO8601_PERIOD_REGEX = re.compile(
 ONE_HOUR = timedelta(hours=1)
 
 DetailValue = Union[int, float, list, str, None]
-_TimeValues = list[tuple[datetime, datetime, DetailValue]]
+_TimeValues = List[Tuple[datetime, datetime, DetailValue]]
 
 
 class DetailedForecast:

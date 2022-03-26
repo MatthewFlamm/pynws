@@ -1,6 +1,6 @@
 """Unit conversion"""
 
-from tokenize import Number
+from numbers import Number
 from typing import Callable
 
 
