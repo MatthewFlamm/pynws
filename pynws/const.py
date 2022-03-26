@@ -1,6 +1,7 @@
 """
 Constants for pynws
 """
+from enum import unique
 import os
 
 from .backports.enum import StrEnum
@@ -64,6 +65,7 @@ API_WEATHER_CODE = {
 }
 
 
+@unique
 class Detail(StrEnum):
     """Detailed forecast value names"""
 
