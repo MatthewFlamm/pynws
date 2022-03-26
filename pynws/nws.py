@@ -1,4 +1,5 @@
 """pynws module."""
+from pynws.forecast import DetailedForecast
 from pynws.raw_data import (
     raw_alerts_active_zone,
     raw_detailed_forecast,
@@ -9,7 +10,6 @@ from pynws.raw_data import (
     raw_stations_observations,
     raw_stations_observations_latest,
 )
-from pynws.forecast import DetailedForecast
 
 
 class NwsError(Exception):

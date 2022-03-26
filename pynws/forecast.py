@@ -1,11 +1,11 @@
 """Forecast classes"""
 from __future__ import annotations
 
-import re
 from datetime import datetime, timedelta, timezone
-from typing import Any, Generator, Iterable
-from pynws.const import Detail
+import re
+from typing import Any, Dict, Generator, Iterable, Union
 
+from pynws.const import Detail
 
 ISO8601_PERIOD_REGEX = re.compile(
     r"^P"
@@ -20,16 +20,19 @@ ISO8601_PERIOD_REGEX = re.compile(
 
 ONE_HOUR = timedelta(hours=1)
 
+_T_Detail_str = Union[Detail, str]
+
 
 class DetailedForecast:
     """Class to retrieve forecast values for a point in time."""
 
-    def __init__(self, properties: dict[str, Any]):
+    def __init__(self, properties: Dict[_T_Detail_str, Any]):
         if not isinstance(properties, dict):
             raise TypeError(f"{properties!r} is not a dictionary")
 
         self.update_time = datetime.fromisoformat(properties["updateTime"])
-        self.details = details = {}
+        self.details: Dict[_T_Detail_str, Any] = {}
+        details = self.details
 
         for prop_name, prop_value in properties.items():
             if not isinstance(prop_value, dict) or "values" not in prop_value:
@@ -50,17 +53,17 @@ class DetailedForecast:
     @staticmethod
     def _parse_duration(duration_str: str) -> timedelta:
         match = ISO8601_PERIOD_REGEX.match(duration_str)
+        if not match:
+            raise ValueError(f"duration_str not recognized: got {duration_str}")
         groups = match.groupdict()
-
-        for key, val in groups.items():
-            groups[key] = int(val or "0")
+        groups_int = {key: int(val or "0") for key, val in groups.items()}
 
         return timedelta(
-            weeks=groups["weeks"],
-            days=groups["days"],
-            hours=groups["hours"],
-            minutes=groups["minutes"],
-            seconds=groups["seconds"],
+            weeks=groups_int["weeks"],
+            days=groups_int["days"],
+            hours=groups_int["hours"],
+            minutes=groups_int["minutes"],
+            seconds=groups_int["seconds"],
         )
 
     @property
@@ -79,7 +82,7 @@ class DetailedForecast:
 
     def get_details_for_time(
         self, when: datetime
-    ) -> dict[Detail, tuple[Any, str | None]]:
+    ) -> Dict[_T_Detail_str, tuple[Any, str | None]]:
         """Retrieve all forecast details for a point in time."""
 
         if not isinstance(when, datetime):
@@ -93,7 +96,7 @@ class DetailedForecast:
 
     def get_details_for_times(
         self, iterable_when: Iterable[datetime]
-    ) -> Generator[dict[Detail, tuple[Any, Any]]]:
+    ) -> Generator[Dict[_T_Detail_str, tuple[Any, Any]], None, None]:
         """Retrieve all forecast details for a list of times."""
 
         if not isinstance(iterable_when, Iterable):
@@ -103,7 +106,7 @@ class DetailedForecast:
             yield self.get_details_for_time(when)
 
     def get_detail_for_time(
-        self, detail: Detail, when: datetime
+        self, detail: _T_Detail_str, when: datetime
     ) -> tuple[Any, str | None]:
         """Retrieve single forecast detail for a point in time."""
 
@@ -113,14 +116,14 @@ class DetailedForecast:
             raise TypeError(f"{when!r} is not a datetime")
 
         when = when.astimezone(timezone.utc)
-        time_values, units = self.details.get(detail)
+        time_values, units = self.details[detail]
         if time_values and units:
             return self._find_detail_for_time(when, time_values, units)
         return None, None
 
     def get_details_by_hour(
         self, start_time: datetime, hours: int = 12
-    ) -> Generator[dict[Detail, Any]]:
+    ) -> Generator[Dict[_T_Detail_str, Any], None, None]:
         """Retrieve a sequence of hourly forecast details"""
 
         if not isinstance(start_time, datetime):
@@ -129,9 +132,9 @@ class DetailedForecast:
         start_time = start_time.replace(minute=0, second=0, microsecond=0)
         for _ in range(hours):
             end_time = start_time + ONE_HOUR
-            details = {
-                str(Detail.START_TIME): datetime.isoformat(start_time),
-                str(Detail.END_TIME): datetime.isoformat(end_time),
+            details: Dict[_T_Detail_str, Any] = {
+                Detail.START_TIME: datetime.isoformat(start_time),
+                Detail.END_TIME: datetime.isoformat(end_time),
             }
             details.update(self.get_details_for_time(start_time))
             yield details
