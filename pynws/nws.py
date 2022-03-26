@@ -1,4 +1,5 @@
 """pynws module."""
+from __future__ import annotations
 from .raw_data import (
     raw_alerts_active_zone,
     raw_detailed_forecast,
@@ -77,7 +78,7 @@ class Nws:
             self.fire_weather_zone = properties.get("fireWeatherZone").split("/")[-1]
         return properties
 
-    async def get_detailed_forecast(self) -> DetailedForecast:
+    async def get_detailed_forecast(self: Nws) -> DetailedForecast:
         """Return all forecast data from grid.
 
         Returns:

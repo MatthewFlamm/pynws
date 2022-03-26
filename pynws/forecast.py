@@ -28,7 +28,7 @@ _TimeValues = list[tuple[datetime, datetime, DetailValue]]
 class DetailedForecast:
     """Class to retrieve forecast values for a point in time."""
 
-    def __init__(self, properties: dict[str, Any]):
+    def __init__(self: DetailedForecast, properties: dict[str, Any]):
         if not isinstance(properties, dict):
             raise TypeError(f"{properties!r} is not a dictionary")
 
@@ -77,7 +77,7 @@ class DetailedForecast:
         )
 
     @property
-    def last_update(self) -> datetime:
+    def last_update(self: DetailedForecast) -> datetime:
         """When the forecast was last updated."""
         return self.update_time
 
@@ -88,7 +88,9 @@ class DetailedForecast:
                 return value
         return None
 
-    def get_details_for_time(self, when: datetime) -> dict[Detail, DetailValue]:
+    def get_details_for_time(
+        self: DetailedForecast, when: datetime
+    ) -> dict[Detail, DetailValue]:
         """Retrieve all forecast details for a point in time.
 
         Args:
@@ -111,7 +113,7 @@ class DetailedForecast:
         return details
 
     def get_details_for_times(
-        self, iterable_when: Iterable[datetime]
+        self: DetailedForecast, iterable_when: Iterable[datetime]
     ) -> Generator[dict[Detail, DetailValue], None, None]:
         """Retrieve all forecast details for a list of times.
 
@@ -132,7 +134,7 @@ class DetailedForecast:
             yield self.get_details_for_time(when)
 
     def get_detail_for_time(
-        self, detail_arg: Union[Detail, str], when: datetime
+        self: DetailedForecast, detail_arg: Union[Detail, str], when: datetime
     ) -> DetailValue:
         """Retrieve single forecast detail for a point in time.
 
@@ -158,7 +160,7 @@ class DetailedForecast:
         return self._get_value_for_time(when, time_values) if time_values else None
 
     def get_details_by_hour(
-        self, start_time: datetime, hours: int = 24
+        self: DetailedForecast, start_time: datetime, hours: int = 24
     ) -> Generator[dict[Detail, DetailValue], None, None]:
         """Retrieve a sequence of hourly forecast details
 

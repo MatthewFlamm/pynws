@@ -1,5 +1,6 @@
 """Support for NWS weather service."""
-from typing import Union
+from __future__ import annotations
+from typing import Optional
 from datetime import datetime, timezone
 from statistics import mean
 
@@ -100,7 +101,7 @@ class SimpleNWS(Nws):
         self.stations = None
         self._forecast = None
         self._forecast_hourly = None
-        self._detailed_forecast = None
+        self._detailed_forecast: Optional[DetailedForecast] = None
         self._alerts_forecast_zone = []
         self._alerts_county_zone = []
         self._alerts_fire_weather_zone = []
@@ -275,11 +276,11 @@ class SimpleNWS(Nws):
         return self._convert_forecast(self._forecast_hourly, self.filter_forecast)
 
     @property
-    def detailed_forecast(self) -> Union[DetailedForecast, None]:
+    def detailed_forecast(self: SimpleNWS) -> Optional[DetailedForecast]:
         """Return detailed forecast.
 
         Returns:
-            Union[DetailedForecast, None]: Returns None if update_detailed_forecast
+            Optional[DetailedForecast]: Returns None if update_detailed_forecast
             hasn't been called.
         """
         return self._detailed_forecast
