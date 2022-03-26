@@ -1,3 +1,4 @@
+from __future__ import annotations
 from freezegun import freeze_time
 import pytest
 

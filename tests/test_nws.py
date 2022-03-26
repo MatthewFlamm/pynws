@@ -1,3 +1,4 @@
+from __future__ import annotations
 from pynws import Nws, NwsError, DetailedForecast
 from pynws.forecast import ONE_HOUR
 from pynws.const import Detail
