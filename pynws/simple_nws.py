@@ -1,6 +1,5 @@
 """Support for NWS weather service."""
 from __future__ import annotations
-from numbers import Number
 from typing import Any, Dict, List, Optional, Tuple
 from datetime import datetime, timezone
 from statistics import mean
