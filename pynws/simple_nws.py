@@ -260,7 +260,7 @@ class SimpleNWS(Nws):
             else:
                 data[obs] = obs_item
 
-            if not data[obs] and met and self._metar_obs and self._metar_obs[0]:
+            if data[obs] is None and met and self._metar_obs and self._metar_obs[0]:
                 met_prop = getattr(self._metar_obs[0], met[0])
                 if met_prop:
                     if met[1]:

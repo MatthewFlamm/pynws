@@ -34,17 +34,17 @@ async def raw_stations_observations(
     websession: ClientSession,
     userid: str,
     limit: int = 0,
-    start_time: datetime = None,
+    start: datetime = None,
 ):
     """Get observation response from station"""
     params: Dict[str, Any] = {}
     if limit > 0:
         params["limit"] = limit
 
-    if start_time:
-        if not isinstance(start_time, datetime):
+    if start:
+        if not isinstance(start, datetime):
             raise ValueError
-        params["start"] = start_time.isoformat(timespec="seconds")
+        params["start"] = start.isoformat(timespec="seconds")
 
     url = urls.stations_observations_url(station)
     header = get_header(userid)
