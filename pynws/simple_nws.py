@@ -60,13 +60,15 @@ OBSERVATIONS: Dict[str, Optional[_ObservationParams]] = {
     "heatIndex": None,
 }
 
+_WeatherCodes = List[Tuple[str, Optional[int]]]
 
-def convert_weather(weather):
+
+def convert_weather(weather: _WeatherCodes) -> _WeatherCodes:
     """Convert short code to readable name."""
     return [(API_WEATHER_CODE.get(w[0], w[0]), w[1]) for w in weather]
 
 
-def parse_icon(icon):
+def parse_icon(icon: str) -> Tuple[str, _WeatherCodes]:
     """
     Parse icon url to NWS weather codes.
 
@@ -81,7 +83,7 @@ def parse_icon(icon):
     weather = [i.split("?")[0] for i in icon_list[6:]]
     code = [w.split(",")[0] for w in weather]
     chance = [int(w.split(",")[1]) if len(w.split(",")) == 2 else None for w in weather]
-    return time, tuple(zip(code, chance))
+    return time, list(zip(code, chance))
 
 
 class SimpleNWS(Nws):
@@ -118,7 +120,7 @@ class SimpleNWS(Nws):
         self._alerts_all_zones: List[str] = []
         self._all_zones: List[str] = []
 
-    async def set_station(self: SimpleNWS, station: Optional[str] = None):
+    async def set_station(self: SimpleNWS, station: Optional[str] = None) -> None:
         """
         Set station or retrieve station list.
         If no station is supplied, the first retrieved value is set.
@@ -132,7 +134,7 @@ class SimpleNWS(Nws):
             self.station = self.stations[0]
 
     @staticmethod
-    def extract_metar(obs):
+    def extract_metar(obs: Dict[str, Any]) -> Optional[Metar.Metar]:
         """Return parsed metar if available."""
         metar_msg = obs.get("rawMessage")
         if metar_msg:
@@ -146,13 +148,12 @@ class SimpleNWS(Nws):
 
     async def update_observation(
         self: SimpleNWS, limit: int = 0, start_time: datetime = None
-    ):
+    ) -> None:
         """Update observation."""
         obs = await self.get_stations_observations(limit, start_time=start_time)
-        if obs is None:
-            return None
-        self._observation = obs
-        self._metar_obs = [self.extract_metar(iobs) for iobs in self._observation]
+        if obs:
+            self._observation = obs
+            self._metar_obs = [self.extract_metar(iobs) for iobs in self._observation]
 
     async def update_forecast(self: SimpleNWS) -> None:
         """Update forecast."""
@@ -199,17 +200,14 @@ class SimpleNWS(Nws):
 
     async def update_alerts_all_zones(self: SimpleNWS):
         """Update all alerts zones."""
-        if not self.forecast_zone or not self.county_zone or not self.fire_weather_zone:
+        if not self.forecast_zone:
             await self.get_points()
-        if not self.forecast_zone or not self.county_zone or not self.fire_weather_zone:
-            raise NwsError("Forecast, county, or fire weather zone is missing")
+        if not self.forecast_zone:
+            raise NwsError("Forecast zone is missing")
         if not self._all_zones:
-            zones_set = {
-                self.forecast_zone,
-                self.county_zone,
-                self.fire_weather_zone,
-            }
-            self._all_zones = list(zones_set)
+            # Use Set[str] to de-dupe zones
+            zones_set = {self.forecast_zone, self.county_zone, self.fire_weather_zone}
+            self._all_zones = [zone for zone in zones_set if zone]
         alerts_data = [
             await self.get_alerts_active_zone(zone) for zone in self._all_zones
         ]

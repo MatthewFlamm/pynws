@@ -82,7 +82,7 @@ class Nws:
         res = await raw_stations_observations_latest(
             self.station, self.session, self.userid
         )
-        return res.get("properties")
+        return cast(Dict[str, Any], res.get("properties"))
 
     async def get_points(self: Nws) -> None:
         """Saves griddata from latlon."""
