@@ -71,7 +71,9 @@ class Nws:
             self.station, self.session, self.userid, limit, start_time
         )
         observations = [o["properties"] for o in res["features"]]
-        return sorted(observations, key=lambda o: cast(str, o.get("timestamp")), reverse=True)
+        return sorted(
+            observations, key=lambda o: cast(str, o.get("timestamp")), reverse=True
+        )
 
     async def get_stations_observations_latest(self: Nws) -> Dict[str, Any]:
         """Returns latest observation"""

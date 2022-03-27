@@ -35,12 +35,12 @@ WIND_DIRECTIONS = [
 
 WIND = {name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)}
 
-_ObservationParams = Tuple[str, Optional[str], Optional[Number]]
+_ObservationParams = Tuple[str, Optional[str], Optional[float]]
 
 OBSERVATIONS: Dict[str, Optional[_ObservationParams]] = {
     "temperature": ("temp", "C", None),
     "barometricPressure": None,
-    "seaLevelPressure": ("press", "HPA", 100),
+    "seaLevelPressure": ("press", "HPA", 100.0),
     "relativeHumidity": None,
     "windSpeed": ("wind_speed", "MPS", 3.6),
     "windDirection": ("wind_dir", None, None),
@@ -205,11 +205,12 @@ class SimpleNWS(Nws):
         if not self.forecast_zone or not self.county_zone or not self.fire_weather_zone:
             raise NwsError("Forecast, county, or fire weather zone is missing")
         if not self._all_zones:
-            self._all_zones = {
+            zones_set = {
                 self.forecast_zone,
                 self.county_zone,
                 self.fire_weather_zone,
             }
+            self._all_zones = list(zones_set)
         alerts_data = [
             await self.get_alerts_active_zone(zone) for zone in self._all_zones
         ]
