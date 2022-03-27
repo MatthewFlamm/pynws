@@ -32,7 +32,7 @@ async def test_stations_observations(aiohttp_client, loop, mock_urls):
     await raw_data.raw_stations_observations(STATION, client, USERID)
     await raw_data.raw_stations_observations(STATION, client, USERID, limit=2)
     await raw_data.raw_stations_observations(
-        STATION, client, USERID, start=datetime.now(timezone.utc)
+        STATION, client, USERID, start_time=datetime.now(timezone.utc)
     )
 
 
@@ -40,7 +40,9 @@ async def test_stations_observations_start_datetime(aiohttp_client, loop, mock_u
     app = setup_app()
     client = await aiohttp_client(app)
     with pytest.raises(ValueError):
-        await raw_data.raw_stations_observations(STATION, client, USERID, start="1PM")
+        await raw_data.raw_stations_observations(
+            STATION, client, USERID, start_time="1PM"
+        )
 
 
 async def test_detailed_forecast(aiohttp_client, loop, mock_urls):

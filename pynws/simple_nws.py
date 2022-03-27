@@ -1,13 +1,15 @@
 """Support for NWS weather service."""
 from __future__ import annotations
-from typing import Optional
+from numbers import Number
+from typing import Any, Dict, List, Optional, Tuple
 from datetime import datetime, timezone
 from statistics import mean
+from aiohttp import ClientSession
 
 from metar import Metar
 
 from .const import ALERT_ID, API_WEATHER_CODE
-from .nws import Nws
+from .nws import Nws, NwsError
 from .forecast import DetailedForecast
 from .units import convert_unit
 
@@ -33,14 +35,16 @@ WIND_DIRECTIONS = [
 
 WIND = {name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)}
 
-OBSERVATIONS = {
-    "temperature": ["temp", "C", None],
+_ObservationParams = Tuple[str, Optional[str], Optional[Number]]
+
+OBSERVATIONS: Dict[str, Optional[_ObservationParams]] = {
+    "temperature": ("temp", "C", None),
     "barometricPressure": None,
-    "seaLevelPressure": ["press", "HPA", 100],
+    "seaLevelPressure": ("press", "HPA", 100),
     "relativeHumidity": None,
-    "windSpeed": ["wind_speed", "MPS", 3.6],
-    "windDirection": ["wind_dir", None, None],
-    "visibility": ["vis", "M", None],
+    "windSpeed": ("wind_speed", "MPS", 3.6),
+    "windDirection": ("wind_dir", None, None),
+    "visibility": ("vis", "M", None),
     "elevation": None,
     "textDescription": None,
     "dewpoint": None,
@@ -90,25 +94,32 @@ class SimpleNWS(Nws):
     By default, forecasts that end before now will be filtered out.
     """
 
-    def __init__(self, lat, lon, api_key, session, filter_forecast=True):
+    def __init__(
+        self: SimpleNWS,
+        lat: float,
+        lon: float,
+        api_key: str,
+        session: ClientSession,
+        filter_forecast: bool = True,
+    ):
         """Set up simplified NWS class."""
         super().__init__(session, api_key, (lat, lon))
 
         self.filter_forecast = filter_forecast
-        self._observation = None
-        self._metar_obs = None
-        self.station = None
-        self.stations = None
-        self._forecast = None
-        self._forecast_hourly = None
+        self._observation: Optional[List[Dict[str, Any]]] = None
+        self._metar_obs: Optional[List[Metar.Metar]] = None
+        self.station: Optional[str] = None
+        self.stations: Optional[List[str]] = None
+        self._forecast: Optional[List[Dict[str, Any]]] = None
+        self._forecast_hourly: Optional[List[Dict[str, Any]]] = None
         self._detailed_forecast: Optional[DetailedForecast] = None
-        self._alerts_forecast_zone = []
-        self._alerts_county_zone = []
-        self._alerts_fire_weather_zone = []
-        self._alerts_all_zones = []
-        self._all_zones = []
+        self._alerts_forecast_zone: List[Dict[str, Any]] = []
+        self._alerts_county_zone: List[Dict[str, Any]] = []
+        self._alerts_fire_weather_zone: List[Dict[str, Any]] = []
+        self._alerts_all_zones: List[str] = []
+        self._all_zones: List[str] = []
 
-    async def set_station(self, station=None):
+    async def set_station(self: SimpleNWS, station: Optional[str] = None):
         """
         Set station or retrieve station list.
         If no station is supplied, the first retrieved value is set.
@@ -134,7 +145,9 @@ class SimpleNWS(Nws):
             metar_obs = None
         return metar_obs
 
-    async def update_observation(self, limit=0, start_time=None):
+    async def update_observation(
+        self: SimpleNWS, limit: int = 0, start_time: datetime = None
+    ):
         """Update observation."""
         obs = await self.get_stations_observations(limit, start_time=start_time)
         if obs is None:
@@ -142,15 +155,15 @@ class SimpleNWS(Nws):
         self._observation = obs
         self._metar_obs = [self.extract_metar(iobs) for iobs in self._observation]
 
-    async def update_forecast(self):
+    async def update_forecast(self: SimpleNWS) -> None:
         """Update forecast."""
         self._forecast = await self.get_gridpoints_forecast()
 
-    async def update_forecast_hourly(self):
+    async def update_forecast_hourly(self: SimpleNWS) -> None:
         """Update forecast hourly."""
         self._forecast_hourly = await self.get_gridpoints_forecast_hourly()
 
-    async def update_detailed_forecast(self):
+    async def update_detailed_forecast(self: SimpleNWS) -> None:
         """Update forecast."""
         self._detailed_forecast = await self.get_detailed_forecast()
 
@@ -159,36 +172,38 @@ class SimpleNWS(Nws):
         """Return set of unique alert_ids."""
         return {alert[ALERT_ID] for alert in alerts}
 
-    def _new_alerts(self, alerts, current_alerts):
+    def _new_alerts(self: SimpleNWS, alerts, current_alerts):
         """Return new alerts."""
         current_alert_ids = self._unique_alert_ids(current_alerts)
         return [alert for alert in alerts if alert[ALERT_ID] not in current_alert_ids]
 
-    async def update_alerts_forecast_zone(self):
+    async def update_alerts_forecast_zone(self: SimpleNWS):
         """Update alerts zone."""
         alerts = await self.get_alerts_forecast_zone()
         new_alerts = self._new_alerts(alerts, self._alerts_forecast_zone)
         self._alerts_forecast_zone = alerts
         return new_alerts
 
-    async def update_alerts_county_zone(self):
+    async def update_alerts_county_zone(self: SimpleNWS):
         """Update alerts zone."""
         alerts = await self.get_alerts_county_zone()
         new_alerts = self._new_alerts(alerts, self._alerts_county_zone)
         self._alerts_county_zone = alerts
         return new_alerts
 
-    async def update_alerts_fire_weather_zone(self):
+    async def update_alerts_fire_weather_zone(self: SimpleNWS):
         """Update alerts zone."""
         alerts = await self.get_alerts_fire_weather_zone()
         new_alerts = self._new_alerts(alerts, self._alerts_fire_weather_zone)
         self._alerts_fire_weather_zone = alerts
         return new_alerts
 
-    async def update_alerts_all_zones(self):
+    async def update_alerts_all_zones(self: SimpleNWS):
         """Update all alerts zones."""
-        if not self.forecast_zone or not self.county_zone:
+        if not self.forecast_zone or not self.county_zone or not self.fire_weather_zone:
             await self.get_points()
+        if not self.forecast_zone or not self.county_zone or not self.fire_weather_zone:
+            raise NwsError("Forecast, county, or fire weather zone is missing")
         if not self._all_zones:
             self._all_zones = {
                 self.forecast_zone,
@@ -199,7 +214,7 @@ class SimpleNWS(Nws):
             await self.get_alerts_active_zone(zone) for zone in self._all_zones
         ]
 
-        alerts = []
+        alerts: List[Any] = []
         for alert_list in alerts_data:
             for alert in alert_list:
                 if alert["id"] not in self._unique_alert_ids(alerts):
@@ -210,7 +225,7 @@ class SimpleNWS(Nws):
         return new_alerts
 
     @property
-    def all_zones(self):
+    def all_zones(self: SimpleNWS):
         """All alert zones."""
         return self._all_zones
 
@@ -228,13 +243,13 @@ class SimpleNWS(Nws):
         return observation[value]
 
     @property
-    def observation(self):
+    def observation(self: SimpleNWS) -> Optional[Dict[str, Any]]:
         """Observation dict"""
 
         if self._observation is None or self._observation == []:
             return None
 
-        data = {}
+        data: Dict[str, Any] = {}
         for obs, met in OBSERVATIONS.items():
             obs_list = [
                 self.extract_observation_value(o, obs) for o in self._observation
@@ -245,9 +260,7 @@ class SimpleNWS(Nws):
             else:
                 data[obs] = obs_item
 
-            if data[obs] is None and (
-                met is not None and self._metar_obs[0] is not None
-            ):
+            if not data[obs] and met and self._metar_obs and self._metar_obs[0]:
                 met_prop = getattr(self._metar_obs[0], met[0])
                 if met_prop:
                     if met[1]:
@@ -256,6 +269,7 @@ class SimpleNWS(Nws):
                         data[obs] = met_prop.value()
                     if met[2] is not None:
                         data[obs] = data[obs] * met[2]
+
         if data.get("icon"):
             time, weather = parse_icon(data["icon"])
             data["iconTime"] = time
@@ -266,12 +280,12 @@ class SimpleNWS(Nws):
         return data
 
     @property
-    def forecast(self):
+    def forecast(self: SimpleNWS):
         """Return forecast."""
         return self._convert_forecast(self._forecast, self.filter_forecast)
 
     @property
-    def forecast_hourly(self):
+    def forecast_hourly(self: SimpleNWS):
         """Return forecast hourly."""
         return self._convert_forecast(self._forecast_hourly, self.filter_forecast)
 
@@ -286,7 +300,7 @@ class SimpleNWS(Nws):
         return self._detailed_forecast
 
     @staticmethod
-    def _convert_forecast(input_forecast, filter_forecast):
+    def _convert_forecast(input_forecast, filter_forecast) -> List[Any]:
         """Converts forecast to common dict."""
         if not input_forecast:
             return []
@@ -327,21 +341,21 @@ class SimpleNWS(Nws):
         return forecast
 
     @property
-    def alerts_forecast_zone(self):
+    def alerts_forecast_zone(self: SimpleNWS):
         """Return alerts as a list of dict."""
         return self._alerts_forecast_zone
 
     @property
-    def alerts_county_zone(self):
+    def alerts_county_zone(self: SimpleNWS):
         """Return alerts as a list of dict."""
         return self._alerts_county_zone
 
     @property
-    def alerts_fire_weather_zone(self):
+    def alerts_fire_weather_zone(self: SimpleNWS):
         """Return alerts as a list of dict."""
         return self._alerts_fire_weather_zone
 
     @property
-    def alerts_all_zones(self):
+    def alerts_all_zones(self: SimpleNWS):
         """Return alerts as a list of dict."""
         return self._alerts_all_zones

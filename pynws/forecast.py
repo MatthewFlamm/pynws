@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import re
 from datetime import datetime, timedelta, timezone
-from typing import Any, Generator, Iterable, List, Tuple, Union
+from typing import Any, Dict, Generator, Iterable, List, Tuple, Union
 from .const import Detail
 from .units import get_converter
 
@@ -28,12 +28,12 @@ _TimeValues = List[Tuple[datetime, datetime, DetailValue]]
 class DetailedForecast:
     """Class to retrieve forecast values for a point in time."""
 
-    def __init__(self: DetailedForecast, properties: dict[str, Any]):
+    def __init__(self: DetailedForecast, properties: Dict[str, Any]):
         if not isinstance(properties, dict):
             raise TypeError(f"{properties!r} is not a dictionary")
 
         self.update_time = datetime.fromisoformat(properties["updateTime"])
-        self.details: dict[Detail, _TimeValues] = {}
+        self.details: Dict[Detail, _TimeValues] = {}
 
         for prop_name, prop_value in properties.items():
             try:
@@ -64,7 +64,7 @@ class DetailedForecast:
             raise ValueError(f"{duration_str!r} is not an ISO 8601 string")
         groups = match.groupdict()
 
-        values: dict[str, float] = {}
+        values: Dict[str, float] = {}
         for key, val in groups.items():
             values[key] = float(val or "0")
 
@@ -90,7 +90,7 @@ class DetailedForecast:
 
     def get_details_for_time(
         self: DetailedForecast, when: datetime
-    ) -> dict[Detail, DetailValue]:
+    ) -> Dict[Detail, DetailValue]:
         """Retrieve all forecast details for a point in time.
 
         Args:
@@ -100,21 +100,21 @@ class DetailedForecast:
             TypeError: If 'when' argument is not a 'datetime'.
 
         Returns:
-            dict[Detail, DetailValue]: All forecast details for the specified time.
+            Dict[Detail, DetailValue]: All forecast details for the specified time.
         """
         if not isinstance(when, datetime):
             raise TypeError(f"{when!r} is not a datetime")
 
         when = when.astimezone(timezone.utc)
 
-        details: dict[Detail, DetailValue] = {}
+        details: Dict[Detail, DetailValue] = {}
         for detail, time_values in self.details.items():
             details[detail] = self._get_value_for_time(when, time_values)
         return details
 
     def get_details_for_times(
         self: DetailedForecast, iterable_when: Iterable[datetime]
-    ) -> Generator[dict[Detail, DetailValue], None, None]:
+    ) -> Generator[Dict[Detail, DetailValue], None, None]:
         """Retrieve all forecast details for a list of times.
 
         Args:
@@ -124,7 +124,7 @@ class DetailedForecast:
             TypeError: If 'iterable_when' argument is not a collection.
 
         Yields:
-            Generator[dict[Detail, DetailValue]]: Sequence of forecast details
+            Generator[Dict[Detail, DetailValue]]: Sequence of forecast details
             corresponding with the list of times to retrieve.
         """
         if not isinstance(iterable_when, Iterable):
@@ -161,7 +161,7 @@ class DetailedForecast:
 
     def get_details_by_hour(
         self: DetailedForecast, start_time: datetime, hours: int = 24
-    ) -> Generator[dict[Detail, DetailValue], None, None]:
+    ) -> Generator[Dict[Detail, DetailValue], None, None]:
         """Retrieve a sequence of hourly forecast details
 
         Args:
@@ -172,7 +172,7 @@ class DetailedForecast:
             TypeError: If 'start_time' argument is not a 'datetime'.
 
         Yields:
-            Generator[dict[Detail, DetailValue]]: Sequence of forecast detail
+            Generator[Dict[Detail, DetailValue]]: Sequence of forecast detail
             values with one details dictionary per requested hour.
         """
         if not isinstance(start_time, datetime):
@@ -181,7 +181,7 @@ class DetailedForecast:
         start_time = start_time.replace(minute=0, second=0, microsecond=0)
         for _ in range(hours):
             end_time = start_time + ONE_HOUR
-            details: dict[Detail, DetailValue] = {
+            details: Dict[Detail, DetailValue] = {
                 Detail.START_TIME: datetime.isoformat(start_time),
                 Detail.END_TIME: datetime.isoformat(end_time),
             }
