@@ -10,7 +10,7 @@ from .const import API_ACCEPT, API_USER
 _LOGGER = logging.getLogger(__name__)
 
 
-def get_header(userid: str) -> dict[str, str]:
+def get_header(userid: str) -> Dict[str, str]:
     """Get header.
 
     NWS recommends including an email in userid.
