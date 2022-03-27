@@ -1,6 +1,6 @@
 """Support for NWS weather service."""
 from __future__ import annotations
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 from datetime import datetime, timezone
 from statistics import mean
 from aiohttp import ClientSession
@@ -228,7 +228,9 @@ class SimpleNWS(Nws):
         return self._all_zones
 
     @staticmethod
-    def extract_observation_value(observation, value):
+    def extract_observation_value(
+        observation: Dict[str, Any], value: str
+    ) -> Union[None, Tuple[float, str], str]:
         """Returns observation or observation value."""
         obs_value = observation.get(value)
         if obs_value is None:
@@ -278,12 +280,12 @@ class SimpleNWS(Nws):
         return data
 
     @property
-    def forecast(self: SimpleNWS):
+    def forecast(self: SimpleNWS) -> List[Dict[str, Any]]:
         """Return forecast."""
         return self._convert_forecast(self._forecast, self.filter_forecast)
 
     @property
-    def forecast_hourly(self: SimpleNWS):
+    def forecast_hourly(self: SimpleNWS) -> List[Dict[str, Any]]:
         """Return forecast hourly."""
         return self._convert_forecast(self._forecast_hourly, self.filter_forecast)
 
@@ -298,18 +300,21 @@ class SimpleNWS(Nws):
         return self._detailed_forecast
 
     @staticmethod
-    def _convert_forecast(input_forecast, filter_forecast) -> List[Any]:
+    def _convert_forecast(
+        input_forecast: Optional[List[Dict[str, Any]]], filter_forecast: bool
+    ) -> List[Dict[str, Any]]:
         """Converts forecast to common dict."""
         if not input_forecast:
             return []
         forecast = []
+        now = datetime.now(timezone.utc)
         for forecast_entry in input_forecast:
             # get weather
             if filter_forecast:
                 end_time = forecast_entry.get("endTime")
                 if not end_time:
                     continue
-                if datetime.now(timezone.utc) > datetime.fromisoformat(end_time):
+                if now > datetime.fromisoformat(end_time):
                     continue
             if forecast_entry.get("temperature"):
                 forecast_entry["temperature"] = int(forecast_entry["temperature"])
