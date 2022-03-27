@@ -8,3 +8,5 @@ pytest
 pytest-asyncio
 pytest-cov
 pytest-aiohttp
+mypy
+
