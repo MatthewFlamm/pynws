@@ -1,7 +1,7 @@
 """Functions to retrieve raw data."""
 from datetime import datetime
 import logging
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 from aiohttp import ClientSession
 
 from . import urls
@@ -18,7 +18,12 @@ def get_header(userid: str) -> Dict[str, str]:
     return {"accept": API_ACCEPT, "User-Agent": API_USER.format(userid)}
 
 
-async def _make_request(websession: ClientSession, url: str, header: Dict[str, str], params: Optional[Dict[str, Any]]=None):
+async def _make_request(
+    websession: ClientSession,
+    url: str,
+    header: Dict[str, str],
+    params: Optional[Dict[str, Any]] = None,
+):
     """Make request."""
     async with websession.get(url, headers=header, params=params) as res:
         _LOGGER.debug("Request for %s returned code: %s", url, res.status)
