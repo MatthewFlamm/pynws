@@ -147,7 +147,7 @@ class SimpleNWS(Nws):
         return metar_obs
 
     async def update_observation(
-        self: SimpleNWS, limit: int = 0, start_time: datetime = None
+        self: SimpleNWS, limit: int = 0, start_time: Optional[datetime] = None
     ) -> None:
         """Update observation."""
         obs = await self.get_stations_observations(limit, start_time=start_time)

@@ -39,7 +39,7 @@ async def raw_stations_observations(
     websession: ClientSession,
     userid: str,
     limit: int = 0,
-    start: datetime = None,
+    start: Optional[datetime] = None,
 ) -> Dict[str, Any]:
     """Get observation response from station"""
     params: Dict[str, Any] = {}

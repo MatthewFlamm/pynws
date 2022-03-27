@@ -62,7 +62,7 @@ class Nws:
         return [s["properties"]["stationIdentifier"] for s in res["features"]]
 
     async def get_stations_observations(
-        self: Nws, limit: int = 0, start_time: datetime = None
+        self: Nws, limit: int = 0, start_time: Optional[datetime] = None
     ) -> List[Dict[str, Any]]:
         """Returns observation list"""
         if self.station is None:
