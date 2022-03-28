@@ -25,4 +25,4 @@ jobs:
         pip install -r requirements-test.txt
     - name: isort
       run: |
-        isort -rc pynws
+        isort pynws
