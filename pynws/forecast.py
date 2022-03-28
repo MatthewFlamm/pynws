@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import re
 from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, Generator, Iterable, List, Tuple, Union
+from typing import Any, Dict, Iterable, Iterator, List, Tuple, Union
 from .const import Detail
 from .units import get_converter
 
@@ -114,7 +114,7 @@ class DetailedForecast:
 
     def get_details_for_times(
         self: DetailedForecast, iterable_when: Iterable[datetime]
-    ) -> Generator[Dict[Detail, DetailValue], None, None]:
+    ) -> Iterator[Dict[Detail, DetailValue]]:
         """Retrieve all forecast details for a list of times.
 
         Args:
@@ -124,7 +124,7 @@ class DetailedForecast:
             TypeError: If 'iterable_when' argument is not a collection.
 
         Yields:
-            Generator[Dict[Detail, DetailValue]]: Sequence of forecast details
+            Iterator[Dict[Detail, DetailValue]]: Sequence of forecast details
             corresponding with the list of times to retrieve.
         """
         if not isinstance(iterable_when, Iterable):
@@ -143,7 +143,7 @@ class DetailedForecast:
             when (datetime): Point in time of requested forecast detail.
 
         Raises:
-            TypeError: If 'detail' argument is not a 'Detail'.
+            TypeError: If 'detail' argument is not a 'Detail' or 'str'.
             TypeError: If 'when' argument is not a 'datetime'.
 
         Returns:
@@ -161,7 +161,7 @@ class DetailedForecast:
 
     def get_details_by_hour(
         self: DetailedForecast, start_time: datetime, hours: int = 24
-    ) -> Generator[Dict[Detail, DetailValue], None, None]:
+    ) -> Iterator[Dict[Detail, DetailValue]]:
         """Retrieve a sequence of hourly forecast details
 
         Args:
@@ -172,7 +172,7 @@ class DetailedForecast:
             TypeError: If 'start_time' argument is not a 'datetime'.
 
         Yields:
-            Generator[Dict[Detail, DetailValue]]: Sequence of forecast detail
+            Iterator[Dict[Detail, DetailValue]]: Sequence of forecast detail
             values with one details dictionary per requested hour.
         """
         if not isinstance(start_time, datetime):

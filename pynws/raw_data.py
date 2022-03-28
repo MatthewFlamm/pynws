@@ -23,7 +23,7 @@ async def _make_request(
     url: str,
     header: Dict[str, str],
     params: Optional[Dict[str, Any]] = None,
-):
+) -> Dict[str, Any]:
     """Make request."""
     async with websession.get(url, headers=header, params=params) as res:
         _LOGGER.debug("Request for %s returned code: %s", url, res.status)

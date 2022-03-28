@@ -1,6 +1,6 @@
 """Support for NWS weather service."""
 from __future__ import annotations
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
 from datetime import datetime, timezone
 from statistics import mean
 from aiohttp import ClientSession
@@ -117,7 +117,7 @@ class SimpleNWS(Nws):
         self._alerts_forecast_zone: List[Dict[str, Any]] = []
         self._alerts_county_zone: List[Dict[str, Any]] = []
         self._alerts_fire_weather_zone: List[Dict[str, Any]] = []
-        self._alerts_all_zones: List[str] = []
+        self._alerts_all_zones: List[Dict[str, Any]] = []
         self._all_zones: List[str] = []
 
     async def set_station(self: SimpleNWS, station: Optional[str] = None) -> None:
@@ -168,37 +168,41 @@ class SimpleNWS(Nws):
         self._detailed_forecast = await self.get_detailed_forecast()
 
     @staticmethod
-    def _unique_alert_ids(alerts):
+    def _unique_alert_ids(alerts: List[Dict[str, Any]]) -> Iterable[str]:
         """Return set of unique alert_ids."""
         return {alert[ALERT_ID] for alert in alerts}
 
-    def _new_alerts(self: SimpleNWS, alerts, current_alerts):
+    def _new_alerts(
+        self: SimpleNWS,
+        alerts: List[Dict[str, Any]],
+        current_alerts: List[Dict[str, Any]],
+    ) -> List[Dict[str, Any]]:
         """Return new alerts."""
         current_alert_ids = self._unique_alert_ids(current_alerts)
         return [alert for alert in alerts if alert[ALERT_ID] not in current_alert_ids]
 
-    async def update_alerts_forecast_zone(self: SimpleNWS):
+    async def update_alerts_forecast_zone(self: SimpleNWS) -> List[Dict[str, Any]]:
         """Update alerts zone."""
         alerts = await self.get_alerts_forecast_zone()
         new_alerts = self._new_alerts(alerts, self._alerts_forecast_zone)
         self._alerts_forecast_zone = alerts
         return new_alerts
 
-    async def update_alerts_county_zone(self: SimpleNWS):
+    async def update_alerts_county_zone(self: SimpleNWS) -> List[Dict[str, Any]]:
         """Update alerts zone."""
         alerts = await self.get_alerts_county_zone()
         new_alerts = self._new_alerts(alerts, self._alerts_county_zone)
         self._alerts_county_zone = alerts
         return new_alerts
 
-    async def update_alerts_fire_weather_zone(self: SimpleNWS):
+    async def update_alerts_fire_weather_zone(self: SimpleNWS) -> List[Dict[str, Any]]:
         """Update alerts zone."""
         alerts = await self.get_alerts_fire_weather_zone()
         new_alerts = self._new_alerts(alerts, self._alerts_fire_weather_zone)
         self._alerts_fire_weather_zone = alerts
         return new_alerts
 
-    async def update_alerts_all_zones(self: SimpleNWS):
+    async def update_alerts_all_zones(self: SimpleNWS) -> List[Dict[str, Any]]:
         """Update all alerts zones."""
         if not self.forecast_zone:
             await self.get_points()
@@ -212,7 +216,7 @@ class SimpleNWS(Nws):
             await self.get_alerts_active_zone(zone) for zone in self._all_zones
         ]
 
-        alerts: List[Any] = []
+        alerts: List[Dict[str, Any]] = []
         for alert_list in alerts_data:
             for alert in alert_list:
                 if alert["id"] not in self._unique_alert_ids(alerts):
@@ -223,7 +227,7 @@ class SimpleNWS(Nws):
         return new_alerts
 
     @property
-    def all_zones(self: SimpleNWS):
+    def all_zones(self: SimpleNWS) -> List[str]:
         """All alert zones."""
         return self._all_zones
 
@@ -344,21 +348,21 @@ class SimpleNWS(Nws):
         return forecast
 
     @property
-    def alerts_forecast_zone(self: SimpleNWS):
+    def alerts_forecast_zone(self: SimpleNWS) -> Optional[List[Dict[str, Any]]]:
         """Return alerts as a list of dict."""
         return self._alerts_forecast_zone
 
     @property
-    def alerts_county_zone(self: SimpleNWS):
+    def alerts_county_zone(self: SimpleNWS) -> Optional[List[Dict[str, Any]]]:
         """Return alerts as a list of dict."""
         return self._alerts_county_zone
 
     @property
-    def alerts_fire_weather_zone(self: SimpleNWS):
+    def alerts_fire_weather_zone(self: SimpleNWS) -> Optional[List[Dict[str, Any]]]:
         """Return alerts as a list of dict."""
         return self._alerts_fire_weather_zone
 
     @property
-    def alerts_all_zones(self: SimpleNWS):
+    def alerts_all_zones(self: SimpleNWS) -> Optional[List[Dict[str, Any]]]:
         """Return alerts as a list of dict."""
         return self._alerts_all_zones
