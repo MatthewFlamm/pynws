@@ -23,7 +23,7 @@ async def _make_request(
     websession: ClientSession,
     url: str,
     header: Mapping[str, str],
-    params: Optional[Mapping[str, Any]] = None,
+    params: Optional[Mapping[str, str]] = None,
 ) -> Mapping[str, Any]:
     """Make request."""
     async with websession.get(url, headers=header, params=params) as res:
