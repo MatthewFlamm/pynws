@@ -36,7 +36,9 @@ async def test_stations_observations(aiohttp_client, event_loop, mock_urls):
     )
 
 
-async def test_stations_observations_start_datetime(aiohttp_client, event_loop, mock_urls):
+async def test_stations_observations_start_datetime(
+    aiohttp_client, event_loop, mock_urls
+):
     app = setup_app()
     client = await aiohttp_client(app)
     with pytest.raises(ValueError):

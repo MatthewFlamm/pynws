@@ -275,7 +275,9 @@ async def test_nws_alerts_all_zones(aiohttp_client, event_loop, mock_urls):
     assert len(alerts) == 1
 
 
-async def test_nws_alerts_all_zones_after_forecast(aiohttp_client, event_loop, mock_urls):
+async def test_nws_alerts_all_zones_after_forecast(
+    aiohttp_client, event_loop, mock_urls
+):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
