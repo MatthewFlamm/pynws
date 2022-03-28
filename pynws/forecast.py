@@ -3,10 +3,20 @@ from __future__ import annotations
 
 import re
 from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, Iterable, Iterator, List, Tuple, Union
+from typing import (
+    Any,
+    Iterable,
+    Iterator,
+    Mapping,
+    MutableMapping,
+    MutableSequence,
+    Sequence,
+    Tuple,
+    Union,
+)
+
 from .const import Detail
 from .units import get_converter
-
 
 ISO8601_PERIOD_REGEX = re.compile(
     r"^P"
@@ -22,18 +32,18 @@ ISO8601_PERIOD_REGEX = re.compile(
 ONE_HOUR = timedelta(hours=1)
 
 DetailValue = Union[int, float, list, str, None]
-_TimeValues = List[Tuple[datetime, datetime, DetailValue]]
+_TimeValues = Sequence[Tuple[datetime, datetime, DetailValue]]
 
 
 class DetailedForecast:
     """Class to retrieve forecast values for a point in time."""
 
-    def __init__(self: DetailedForecast, properties: Dict[str, Any]):
+    def __init__(self: DetailedForecast, properties: Mapping[str, Any]):
         if not isinstance(properties, dict):
             raise TypeError(f"{properties!r} is not a dictionary")
 
         self.update_time = datetime.fromisoformat(properties["updateTime"])
-        self.details: Dict[Detail, _TimeValues] = {}
+        self.details: Mapping[Detail, _TimeValues] = {}
 
         for prop_name, prop_value in properties.items():
             try:
@@ -44,7 +54,7 @@ class DetailedForecast:
             unit_code = prop_value.get("uom")
             converter = get_converter(unit_code) if unit_code else None
 
-            time_values: _TimeValues = []
+            time_values: MutableSequence[Tuple[datetime, datetime, DetailValue]] = []
 
             for value in prop_value["values"]:
                 isodatetime, duration_str = value["validTime"].split("/")
@@ -64,7 +74,7 @@ class DetailedForecast:
             raise ValueError(f"{duration_str!r} is not an ISO 8601 string")
         groups = match.groupdict()
 
-        values: Dict[str, float] = {}
+        values: MutableMapping[str, float] = {}
         for key, val in groups.items():
             values[key] = float(val or "0")
 
@@ -90,7 +100,7 @@ class DetailedForecast:
 
     def get_details_for_time(
         self: DetailedForecast, when: datetime
-    ) -> Dict[Detail, DetailValue]:
+    ) -> Mapping[Detail, DetailValue]:
         """Retrieve all forecast details for a point in time.
 
         Args:
@@ -100,31 +110,31 @@ class DetailedForecast:
             TypeError: If 'when' argument is not a 'datetime'.
 
         Returns:
-            Dict[Detail, DetailValue]: All forecast details for the specified time.
+            Mapping[Detail, DetailValue]: All forecast details for the specified time.
         """
         if not isinstance(when, datetime):
             raise TypeError(f"{when!r} is not a datetime")
 
         when = when.astimezone(timezone.utc)
 
-        details: Dict[Detail, DetailValue] = {}
+        details: MutableMapping[Detail, DetailValue] = {}
         for detail, time_values in self.details.items():
             details[detail] = self._get_value_for_time(when, time_values)
         return details
 
     def get_details_for_times(
         self: DetailedForecast, iterable_when: Iterable[datetime]
-    ) -> Iterator[Dict[Detail, DetailValue]]:
+    ) -> Iterator[Mapping[Detail, DetailValue]]:
         """Retrieve all forecast details for a list of times.
 
         Args:
-            iterable_when (Iterable[datetime]): List of times to retrieve.
+            iterable_when (Iterable[datetime]): Sequence of times to retrieve.
 
         Raises:
             TypeError: If 'iterable_when' argument is not a collection.
 
         Yields:
-            Iterator[Dict[Detail, DetailValue]]: Sequence of forecast details
+            Iterator[Mapping[Detail, DetailValue]]: Sequence of forecast details
             corresponding with the list of times to retrieve.
         """
         if not isinstance(iterable_when, Iterable):
@@ -161,7 +171,7 @@ class DetailedForecast:
 
     def get_details_by_hour(
         self: DetailedForecast, start_time: datetime, hours: int = 24
-    ) -> Iterator[Dict[Detail, DetailValue]]:
+    ) -> Iterator[Mapping[Detail, DetailValue]]:
         """Retrieve a sequence of hourly forecast details
 
         Args:
@@ -172,7 +182,7 @@ class DetailedForecast:
             TypeError: If 'start_time' argument is not a 'datetime'.
 
         Yields:
-            Iterator[Dict[Detail, DetailValue]]: Sequence of forecast detail
+            Iterator[Mapping[Detail, DetailValue]]: Sequence of forecast detail
             values with one details dictionary per requested hour.
         """
         if not isinstance(start_time, datetime):
@@ -181,7 +191,7 @@ class DetailedForecast:
         start_time = start_time.replace(minute=0, second=0, microsecond=0)
         for _ in range(hours):
             end_time = start_time + ONE_HOUR
-            details: Dict[Detail, DetailValue] = {
+            details: MutableMapping[Detail, DetailValue] = {
                 Detail.START_TIME: datetime.isoformat(start_time),
                 Detail.END_TIME: datetime.isoformat(end_time),
             }
