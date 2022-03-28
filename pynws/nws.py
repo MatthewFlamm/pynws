@@ -31,19 +31,19 @@ class Nws:
         self: Nws,
         session: ClientSession,
         userid: str,
-        latlon: Tuple[float, float],
+        latlon: Optional[Tuple[float, float]] = None,
         station: Optional[str] = None,
     ):
         if not session:
             raise NwsError(f"{session!r} is required")
         if not isinstance(userid, str) or not userid:
             raise NwsError(f"{userid!r} is required")
-        if not isinstance(latlon, tuple) or len(latlon) != 2:
-            raise NwsError(f"{latlon!r} is required to be tuple[lat, lon]")
+        if latlon and (not isinstance(latlon, tuple) or len(latlon) != 2):
+            raise NwsError(f"{latlon!r} is required to be tuple[float, float]")
 
         self.session: ClientSession = session
         self.userid: str = userid
-        self.latlon: Tuple[float, float] = latlon
+        self.latlon: Optional[Tuple[float, float]] = latlon
         self.station: Optional[str] = station
 
         self.wfo: Optional[str] = None
@@ -86,6 +86,8 @@ class Nws:
 
     async def get_points(self: Nws) -> None:
         """Saves griddata from latlon."""
+        if self.latlon is None:
+            raise NwsError("Latitude and longitude are required")
         data = await raw_points(*self.latlon, self.session, self.userid)
 
         properties = data.get("properties")
