@@ -19,7 +19,7 @@ from .forecast import DetailedForecast
 class NwsError(Exception):
     """Error in Nws Class"""
 
-    def __init__(self, message):
+    def __init__(self: NwsError, message: str):
         super().__init__(message)
         self.message = message
 

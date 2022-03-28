@@ -82,7 +82,7 @@ class DetailedForecast:
         return self.update_time
 
     @staticmethod
-    def _get_value_for_time(when, time_values: _TimeValues) -> DetailValue:
+    def _get_value_for_time(when: datetime, time_values: _TimeValues) -> DetailValue:
         for start_time, end_time, value in time_values:
             if start_time <= when < end_time:
                 return value
