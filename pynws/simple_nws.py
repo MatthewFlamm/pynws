@@ -1,5 +1,6 @@
 """Support for NWS weather service."""
 from __future__ import annotations
+
 from typing import (
     Any,
     Dict,
@@ -19,8 +20,8 @@ from aiohttp import ClientSession
 from metar import Metar
 
 from .const import ALERT_ID, API_WEATHER_CODE
-from .nws import Nws, NwsError
 from .forecast import DetailedForecast
+from .nws import Nws, NwsError
 from .units import convert_unit
 
 WIND_DIRECTIONS = [

@@ -1,8 +1,8 @@
 """
 Constants for pynws
 """
-from enum import unique
 import os
+from enum import unique
 
 from .backports.enum import StrEnum
 from .version import __version__

@@ -1,8 +1,11 @@
 """pynws module."""
 from __future__ import annotations
+
 from typing import Any, Mapping, Optional, Sequence, Tuple, cast
 from datetime import datetime
 from aiohttp import ClientSession
+
+from .forecast import DetailedForecast
 from .raw_data import (
     raw_alerts_active_zone,
     raw_detailed_forecast,
@@ -13,7 +16,6 @@ from .raw_data import (
     raw_stations_observations,
     raw_stations_observations_latest,
 )
-from .forecast import DetailedForecast
 
 
 class NwsError(Exception):
