@@ -1,6 +1,8 @@
 """Support for NWS weather service."""
 from __future__ import annotations
 
+from datetime import datetime, timezone
+from statistics import mean
 from typing import (
     Any,
     Dict,
@@ -13,10 +15,8 @@ from typing import (
     Tuple,
     Union,
 )
-from datetime import datetime, timezone
-from statistics import mean
-from aiohttp import ClientSession
 
+from aiohttp import ClientSession
 from metar import Metar
 
 from .const import ALERT_ID, API_WEATHER_CODE

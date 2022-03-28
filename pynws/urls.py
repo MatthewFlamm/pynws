@@ -43,7 +43,7 @@ def gridpoints_forecast_hourly_url(wfo: str, x: int, y: int) -> str:
 
 
 def points_url(lat: float, lon: float) -> str:
-    """ Formats point metadata url."""
+    """Formats point metadata url."""
     return API_URL + API_POINTS.format(lat, lon)
 
 

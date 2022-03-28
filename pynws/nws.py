@@ -1,8 +1,9 @@
 """pynws module."""
 from __future__ import annotations
 
-from typing import Any, Mapping, Optional, Sequence, Tuple, cast
 from datetime import datetime
+from typing import Any, Mapping, Optional, Sequence, Tuple, cast
+
 from aiohttp import ClientSession
 
 from .forecast import DetailedForecast

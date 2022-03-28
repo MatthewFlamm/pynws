@@ -1,9 +1,9 @@
 """Functions to retrieve raw data."""
 import logging
-
-from aiohttp import ClientSession
 from datetime import datetime
 from typing import Any, Mapping, MutableMapping, Optional
+
+from aiohttp import ClientSession
 
 from . import urls
 from .const import API_ACCEPT, API_USER
