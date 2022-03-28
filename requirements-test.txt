@@ -2,6 +2,7 @@ aiohttp
 freezegun
 metar
 black
+click<8.1
 isort<5
 pylint
 pytest
