@@ -1,6 +1,6 @@
 """pynws module."""
 from __future__ import annotations
-from typing import Any, Dict, List, Optional, Tuple, cast
+from typing import Any, Mapping, Optional, Sequence, Tuple, cast
 from datetime import datetime
 from aiohttp import ClientSession
 from .raw_data import (
@@ -54,7 +54,7 @@ class Nws:
         self.county_zone: Optional[str] = None
         self.fire_weather_zone: Optional[str] = None
 
-    async def get_points_stations(self: Nws) -> List[str]:
+    async def get_points_stations(self: Nws) -> Sequence[str]:
         """Returns station list"""
         if self.latlon is None:
             raise NwsError("Need to set latitude and longitude")
@@ -63,7 +63,7 @@ class Nws:
 
     async def get_stations_observations(
         self: Nws, limit: int = 0, start_time: Optional[datetime] = None
-    ) -> List[Dict[str, Any]]:
+    ) -> Sequence[Mapping[str, Any]]:
         """Returns observation list"""
         if self.station is None:
             raise NwsError("Need to set station")
@@ -75,14 +75,14 @@ class Nws:
             observations, key=lambda o: cast(str, o.get("timestamp")), reverse=True
         )
 
-    async def get_stations_observations_latest(self: Nws) -> Dict[str, Any]:
+    async def get_stations_observations_latest(self: Nws) -> Mapping[str, Any]:
         """Returns latest observation"""
         if self.station is None:
             raise NwsError("Need to set station")
         res = await raw_stations_observations_latest(
             self.station, self.session, self.userid
         )
-        return cast(Dict[str, Any], res.get("properties"))
+        return cast(Mapping[str, Any], res.get("properties"))
 
     async def get_points(self: Nws) -> None:
         """Saves griddata from latlon."""
@@ -115,7 +115,7 @@ class Nws:
         )
         return DetailedForecast(raw_forecast["properties"])
 
-    async def get_gridpoints_forecast(self: Nws) -> List[Dict[str, Any]]:
+    async def get_gridpoints_forecast(self: Nws) -> Sequence[Mapping[str, Any]]:
         """Return daily forecast from grid."""
         if self.wfo is None:
             await self.get_points()
@@ -126,7 +126,7 @@ class Nws:
         )
         return raw_forecast["properties"]["periods"]
 
-    async def get_gridpoints_forecast_hourly(self: Nws) -> List[Dict[str, Any]]:
+    async def get_gridpoints_forecast_hourly(self: Nws) -> Sequence[Mapping[str, Any]]:
         """Return hourly forecast from grid."""
         if self.wfo is None:
             await self.get_points()
@@ -137,12 +137,14 @@ class Nws:
         )
         return raw_forecast["properties"]["periods"]
 
-    async def get_alerts_active_zone(self: Nws, zone: str) -> List[Dict[str, Any]]:
+    async def get_alerts_active_zone(
+        self: Nws, zone: str
+    ) -> Sequence[Mapping[str, Any]]:
         """Returns alerts dict for zone."""
         alerts = await raw_alerts_active_zone(zone, self.session, self.userid)
         return [alert["properties"] for alert in alerts["features"]]
 
-    async def get_alerts_forecast_zone(self: Nws) -> List[Dict[str, Any]]:
+    async def get_alerts_forecast_zone(self: Nws) -> Sequence[Mapping[str, Any]]:
         """Returns alerts dict for forecast zone."""
         if self.forecast_zone is None:
             await self.get_points()
@@ -150,7 +152,7 @@ class Nws:
             raise NwsError("Error retrieving points")
         return await self.get_alerts_active_zone(self.forecast_zone)
 
-    async def get_alerts_county_zone(self: Nws) -> List[Dict[str, Any]]:
+    async def get_alerts_county_zone(self: Nws) -> Sequence[Mapping[str, Any]]:
         """Returns alerts dict for county zone."""
         if self.county_zone is None:
             await self.get_points()
@@ -158,7 +160,7 @@ class Nws:
             raise NwsError("Error retrieving points")
         return await self.get_alerts_active_zone(self.county_zone)
 
-    async def get_alerts_fire_weather_zone(self: Nws) -> List[Dict[str, Any]]:
+    async def get_alerts_fire_weather_zone(self: Nws) -> Sequence[Mapping[str, Any]]:
         """Returns alerts dict for fire weather zone."""
         if self.fire_weather_zone is None:
             await self.get_points()

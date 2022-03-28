@@ -1,7 +1,7 @@
 """Functions to retrieve raw data."""
 from datetime import datetime
 import logging
-from typing import Any, Dict, Optional
+from typing import Any, Mapping, MutableMapping, Optional
 from aiohttp import ClientSession
 
 from . import urls
@@ -10,7 +10,7 @@ from .const import API_ACCEPT, API_USER
 _LOGGER = logging.getLogger(__name__)
 
 
-def get_header(userid: str) -> Dict[str, str]:
+def get_header(userid: str) -> Mapping[str, str]:
     """Get header.
 
     NWS recommends including an email in userid.
@@ -21,9 +21,9 @@ def get_header(userid: str) -> Dict[str, str]:
 async def _make_request(
     websession: ClientSession,
     url: str,
-    header: Dict[str, str],
-    params: Optional[Dict[str, Any]] = None,
-) -> Dict[str, Any]:
+    header: Mapping[str, str],
+    params: Optional[Mapping[str, Any]] = None,
+) -> Mapping[str, Any]:
     """Make request."""
     async with websession.get(url, headers=header, params=params) as res:
         _LOGGER.debug("Request for %s returned code: %s", url, res.status)
@@ -40,9 +40,9 @@ async def raw_stations_observations(
     userid: str,
     limit: int = 0,
     start: Optional[datetime] = None,
-) -> Dict[str, Any]:
+) -> Mapping[str, Any]:
     """Get observation response from station"""
-    params: Dict[str, Any] = {}
+    params: MutableMapping[str, Any] = {}
     if limit > 0:
         params["limit"] = limit
 
@@ -58,7 +58,7 @@ async def raw_stations_observations(
 
 async def raw_stations_observations_latest(
     station: str, websession: ClientSession, userid: str
-) -> Dict[str, Any]:
+) -> Mapping[str, Any]:
     """Get observation response from station"""
     url = urls.stations_observations_latest_url(station)
     header = get_header(userid)
@@ -67,7 +67,7 @@ async def raw_stations_observations_latest(
 
 async def raw_points_stations(
     lat: float, lon: float, websession: ClientSession, userid: str
-) -> Dict[str, Any]:
+) -> Mapping[str, Any]:
     """Get list of stations for lat/lon"""
     url = urls.points_stations_url(lat, lon)
     header = get_header(userid)
@@ -76,7 +76,7 @@ async def raw_points_stations(
 
 async def raw_points(
     lat: float, lon: float, websession: ClientSession, userid: str
-) -> Dict[str, Any]:
+) -> Mapping[str, Any]:
     """Return griddata response."""
     url = urls.points_url(lat, lon)
     header = get_header(userid)
@@ -85,7 +85,7 @@ async def raw_points(
 
 async def raw_detailed_forecast(
     wfo: str, x: int, y: int, websession: ClientSession, userid: str
-) -> Dict[str, Any]:
+) -> Mapping[str, Any]:
     """Return griddata response."""
     url = urls.detailed_forecast_url(wfo, x, y)
     header = get_header(userid)
@@ -94,7 +94,7 @@ async def raw_detailed_forecast(
 
 async def raw_gridpoints_forecast(
     wfo: str, x: int, y: int, websession: ClientSession, userid: str
-) -> Dict[str, Any]:
+) -> Mapping[str, Any]:
     """Return griddata response."""
     url = urls.gridpoints_forecast_url(wfo, x, y)
     header = get_header(userid)
@@ -103,7 +103,7 @@ async def raw_gridpoints_forecast(
 
 async def raw_gridpoints_forecast_hourly(
     wfo: str, x: int, y: int, websession: ClientSession, userid: str
-) -> Dict[str, Any]:
+) -> Mapping[str, Any]:
     """Return griddata response."""
     url = urls.gridpoints_forecast_hourly_url(wfo, x, y)
     header = get_header(userid)
@@ -112,7 +112,7 @@ async def raw_gridpoints_forecast_hourly(
 
 async def raw_alerts_active_zone(
     zone: str, websession: ClientSession, userid: str
-) -> Dict[str, Any]:
+) -> Mapping[str, Any]:
     """Return griddata response."""
     url = urls.alerts_active_zone_url(zone)
     header = get_header(userid)
