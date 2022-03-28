@@ -1,14 +1,15 @@
 """Support for NWS weather service."""
 from __future__ import annotations
-from typing import Optional
+
 from datetime import datetime, timezone
 from statistics import mean
+from typing import Optional
 
 from metar import Metar
 
 from .const import ALERT_ID, API_WEATHER_CODE
-from .nws import Nws
 from .forecast import DetailedForecast
+from .nws import Nws
 from .units import convert_unit
 
 WIND_DIRECTIONS = [

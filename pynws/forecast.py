@@ -1,12 +1,12 @@
 """Forecast classes"""
 from __future__ import annotations
 
-import re
 from datetime import datetime, timedelta, timezone
+import re
 from typing import Any, Dict, Generator, Iterable, List, Tuple, Union
+
 from .const import Detail
 from .units import get_converter
-
 
 ISO8601_PERIOD_REGEX = re.compile(
     r"^P"
