@@ -15,10 +15,10 @@ from typing import (
     Union,
 )
 
-from .const import Detail
+from .const import Detail, Final
 from .units import get_converter
 
-ISO8601_PERIOD_REGEX = re.compile(
+ISO8601_PERIOD_REGEX: Final = re.compile(
     r"^P"
     r"((?P<weeks>\d+)W)?"
     r"((?P<days>\d+)D)?"
@@ -29,7 +29,7 @@ ISO8601_PERIOD_REGEX = re.compile(
     r")?$"
 )
 
-ONE_HOUR = timedelta(hours=1)
+ONE_HOUR: Final = timedelta(hours=1)
 
 DetailValue = Union[int, float, list, str, None]
 _TimeValue = Tuple[datetime, datetime, DetailValue]

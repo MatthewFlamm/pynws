@@ -19,12 +19,12 @@ from typing import (
 from aiohttp import ClientSession
 from metar import Metar
 
-from .const import ALERT_ID, API_WEATHER_CODE
+from .const import ALERT_ID, API_WEATHER_CODE, Final
 from .forecast import DetailedForecast
 from .nws import Nws, NwsError
 from .units import convert_unit
 
-WIND_DIRECTIONS = [
+WIND_DIRECTIONS: Final = [
     "N",
     "NNE",
     "NE",
@@ -44,7 +44,7 @@ WIND_DIRECTIONS = [
 ]
 
 
-WIND = {name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)}
+WIND: Final = {name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)}
 
 _ObservationParams = Tuple[str, Optional[str], Optional[float]]
 
