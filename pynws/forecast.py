@@ -32,7 +32,7 @@ ISO8601_PERIOD_REGEX = re.compile(
 ONE_HOUR = timedelta(hours=1)
 
 DetailValue = Union[int, float, list, str, None]
-_TimeValues = Sequence[Tuple[datetime, datetime, DetailValue]]
+_TimeValue = Tuple[datetime, datetime, DetailValue]
 
 
 class DetailedForecast:
@@ -43,7 +43,7 @@ class DetailedForecast:
             raise TypeError(f"{properties!r} is not a dictionary")
 
         self.update_time = datetime.fromisoformat(properties["updateTime"])
-        self.details: Mapping[Detail, _TimeValues] = {}
+        self.details: Mapping[Detail, Sequence[_TimeValue]] = {}
 
         for prop_name, prop_value in properties.items():
             try:
@@ -54,7 +54,7 @@ class DetailedForecast:
             unit_code = prop_value.get("uom")
             converter = get_converter(unit_code) if unit_code else None
 
-            time_values: MutableSequence[Tuple[datetime, datetime, DetailValue]] = []
+            time_values: MutableSequence[_TimeValue] = []
 
             for value in prop_value["values"]:
                 isodatetime, duration_str = value["validTime"].split("/")
@@ -92,7 +92,9 @@ class DetailedForecast:
         return self.update_time
 
     @staticmethod
-    def _get_value_for_time(when: datetime, time_values: _TimeValues) -> DetailValue:
+    def _get_value_for_time(
+        when: datetime, time_values: Sequence[_TimeValue]
+    ) -> DetailValue:
         for start_time, end_time, value in time_values:
             if start_time <= when < end_time:
                 return value
