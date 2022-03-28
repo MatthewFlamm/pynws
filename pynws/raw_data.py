@@ -32,6 +32,8 @@ async def _make_request(
         res.raise_for_status()
         obs = await res.json()
         _LOGGER.debug("Request for %s returned data: %s", url, obs)
+    if not isinstance(obs, dict):
+        raise TypeError(f"JSON response from {url} is not a dict")
     return obs
 
 
