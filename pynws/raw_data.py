@@ -1,6 +1,6 @@
 """Functions to retrieve raw data."""
-from datetime import datetime
 import logging
+from datetime import datetime
 
 from . import urls
 from .const import API_ACCEPT, API_USER

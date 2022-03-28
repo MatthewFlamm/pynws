@@ -1,8 +1,8 @@
 """Forecast classes"""
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
 import re
+from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, Generator, Iterable, List, Tuple, Union
 
 from .const import Detail
