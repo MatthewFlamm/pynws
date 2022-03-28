@@ -3,7 +3,6 @@
 from numbers import Number
 from typing import Callable
 
-
 UNIT_CONVERSION = {
     "degC": lambda x: x,
     "degF": lambda x: (x - 32.0) / 1.8,  # convert to celsius

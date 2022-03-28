@@ -1,13 +1,11 @@
 aiohttp
 freezegun
 metar
-black==20.8b1
-click<8.1
-isort<5
+black==22.3.0
+isort==5.10.1
 pylint
 pytest
 pytest-asyncio
 pytest-cov
 pytest-aiohttp
 mypy
-
