@@ -121,12 +121,12 @@ class SimpleNWS(Nws):
         super().__init__(session, api_key, (lat, lon))
 
         self.filter_forecast = filter_forecast
-        self._observation: Sequence[Mapping[str, Any]] = []
-        self._metar_obs: Sequence[Metar.Metar] = []
+        self._observation: Optional[Sequence[Mapping[str, Any]]] = None
+        self._metar_obs: Optional[Sequence[Metar.Metar]] = None
         self.station: Optional[str] = None
-        self.stations: Sequence[str] = []
-        self._forecast: Sequence[Mapping[str, Any]] = []
-        self._forecast_hourly: Sequence[Mapping[str, Any]] = []
+        self.stations: Optional[Sequence[str]] = None
+        self._forecast: Optional[Sequence[Mapping[str, Any]]] = None
+        self._forecast_hourly: Optional[Sequence[Mapping[str, Any]]] = None
         self._detailed_forecast: Optional[DetailedForecast] = None
         self._alerts_forecast_zone: Sequence[Mapping[str, Any]] = []
         self._alerts_county_zone: Sequence[Mapping[str, Any]] = []
@@ -306,12 +306,12 @@ class SimpleNWS(Nws):
         return data
 
     @property
-    def forecast(self: SimpleNWS) -> Sequence[Mapping[str, Any]]:
+    def forecast(self: SimpleNWS) -> Optional[Sequence[Mapping[str, Any]]]:
         """Return forecast."""
         return self._forecast
 
     @property
-    def forecast_hourly(self: SimpleNWS) -> Sequence[Mapping[str, Any]]:
+    def forecast_hourly(self: SimpleNWS) -> Optional[Sequence[Mapping[str, Any]]]:
         """Return forecast hourly."""
         return self._forecast_hourly
 
