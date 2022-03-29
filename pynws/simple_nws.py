@@ -336,39 +336,39 @@ class SimpleNWS(Nws):
         forecast = []
         now = datetime.now(timezone.utc)
         for forecast_entry in input_forecast:
-            mutable: MutableMapping[str, Any] = dict(forecast_entry)
+            mutable_entry: MutableMapping[str, Any] = dict(forecast_entry)
             # get weather
             if filter_forecast:
-                end_time = mutable.get("endTime")
+                end_time = mutable_entry.get("endTime")
                 if not end_time:
                     continue
                 if now > datetime.fromisoformat(end_time):
                     continue
-            if mutable.get("temperature"):
-                mutable["temperature"] = int(mutable["temperature"])
+            if mutable_entry.get("temperature"):
+                mutable_entry["temperature"] = int(mutable_entry["temperature"])
 
-            if mutable.get("icon"):
-                time, weather = parse_icon(mutable["icon"])
+            if mutable_entry.get("icon"):
+                time, weather = parse_icon(mutable_entry["icon"])
                 weather = convert_weather(weather)
             else:
                 time, weather = (None, None)
-            mutable["iconTime"] = time
-            mutable["iconWeather"] = weather
-            if mutable.get("windDirection"):
-                mutable["windBearing"] = WIND[mutable["windDirection"]]
+            mutable_entry["iconTime"] = time
+            mutable_entry["iconWeather"] = weather
+            if mutable_entry.get("windDirection"):
+                mutable_entry["windBearing"] = WIND[mutable_entry["windDirection"]]
             else:
-                mutable["windBearing"] = None
+                mutable_entry["windBearing"] = None
 
             # wind speed reported as '7 mph' or '7 to 10 mph'
             # if range, take average
-            if mutable.get("windSpeed"):
-                wind_speed = mutable["windSpeed"].split(" ")[0::2]
+            if mutable_entry.get("windSpeed"):
+                wind_speed = mutable_entry["windSpeed"].split(" ")[0::2]
                 wind_speed_avg = mean(int(w) for w in wind_speed)
-                mutable["windSpeedAvg"] = wind_speed_avg
+                mutable_entry["windSpeedAvg"] = wind_speed_avg
             else:
-                mutable["windSpeedAvg"] = None
+                mutable_entry["windSpeedAvg"] = None
 
-            forecast.append(mutable)
+            forecast.append(mutable_entry)
         return forecast
 
     @property
