@@ -24,7 +24,7 @@ from .forecast import DetailedForecast
 from .nws import Nws, NwsError
 from .units import convert_unit
 
-WIND_DIRECTIONS: Final = [
+WIND_DIRECTIONS: Final[Sequence[str]] = [
     "N",
     "NNE",
     "NE",
@@ -44,11 +44,13 @@ WIND_DIRECTIONS: Final = [
 ]
 
 
-WIND: Final = {name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)}
+WIND: Final[Mapping[str, float]] = {
+    name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)
+}
 
 _ObservationParams = Tuple[str, Optional[str], Optional[float]]
 
-OBSERVATIONS: Mapping[str, Optional[_ObservationParams]] = {
+OBSERVATIONS: Final[Mapping[str, Optional[_ObservationParams]]] = {
     "temperature": ("temp", "C", None),
     "barometricPressure": None,
     "seaLevelPressure": ("press", "HPA", 100.0),
