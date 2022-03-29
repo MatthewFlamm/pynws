@@ -13,7 +13,7 @@ from .forecast import DetailedForecast
 from .nws import Nws, NwsError
 from .units import convert_unit
 
-WIND_DIRECTIONS: Final[List[str]] = [
+WIND_DIRECTIONS: Final = [
     "N",
     "NNE",
     "NE",
@@ -33,7 +33,7 @@ WIND_DIRECTIONS: Final[List[str]] = [
 ]
 
 
-WIND: Final[Dict[str, float]] = {
+WIND: Final = {
     name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)
 }
 
