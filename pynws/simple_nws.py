@@ -3,18 +3,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 from statistics import mean
-from typing import (
-    Any,
-    Dict,
-    Iterable,
-    List,
-    Mapping,
-    MutableMapping,
-    Optional,
-    Sequence,
-    Tuple,
-    Union,
-)
+from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
 
 from aiohttp import ClientSession
 from metar import Metar
@@ -24,7 +13,7 @@ from .forecast import DetailedForecast
 from .nws import Nws, NwsError
 from .units import convert_unit
 
-WIND_DIRECTIONS: Final[Sequence[str]] = [
+WIND_DIRECTIONS: Final[List[str]] = [
     "N",
     "NNE",
     "NE",
@@ -44,13 +33,13 @@ WIND_DIRECTIONS: Final[Sequence[str]] = [
 ]
 
 
-WIND: Final[Mapping[str, float]] = {
+WIND: Final[Dict[str, float]] = {
     name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)
 }
 
 _ObservationParams = Tuple[str, Optional[str], Optional[float]]
 
-OBSERVATIONS: Final[Mapping[str, Optional[_ObservationParams]]] = {
+OBSERVATIONS: Final[Dict[str, Optional[_ObservationParams]]] = {
     "temperature": ("temp", "C", None),
     "barometricPressure": None,
     "seaLevelPressure": ("press", "HPA", 100.0),
@@ -74,7 +63,7 @@ OBSERVATIONS: Final[Mapping[str, Optional[_ObservationParams]]] = {
     "heatIndex": None,
 }
 
-_WeatherCodes = Sequence[Tuple[str, Optional[int]]]
+_WeatherCodes = List[Tuple[str, Optional[int]]]
 
 
 def convert_weather(weather: _WeatherCodes) -> _WeatherCodes:
@@ -121,18 +110,18 @@ class SimpleNWS(Nws):
         super().__init__(session, api_key, (lat, lon))
 
         self.filter_forecast = filter_forecast
-        self._observation: Optional[Sequence[Mapping[str, Any]]] = None
-        self._metar_obs: Optional[Sequence[Metar.Metar]] = None
+        self._observation: Optional[List[Dict[str, Any]]] = None
+        self._metar_obs: Optional[List[Metar.Metar]] = None
         self.station: Optional[str] = None
-        self.stations: Optional[Sequence[str]] = None
-        self._forecast: Optional[Sequence[Mapping[str, Any]]] = None
-        self._forecast_hourly: Optional[Sequence[Mapping[str, Any]]] = None
+        self.stations: Optional[List[str]] = None
+        self._forecast: Optional[List[Dict[str, Any]]] = None
+        self._forecast_hourly: Optional[List[Dict[str, Any]]] = None
         self._detailed_forecast: Optional[DetailedForecast] = None
-        self._alerts_forecast_zone: Sequence[Mapping[str, Any]] = []
-        self._alerts_county_zone: Sequence[Mapping[str, Any]] = []
-        self._alerts_fire_weather_zone: Sequence[Mapping[str, Any]] = []
-        self._alerts_all_zones: Sequence[Mapping[str, Any]] = []
-        self._all_zones: Sequence[str] = []
+        self._alerts_forecast_zone: List[Dict[str, Any]] = []
+        self._alerts_county_zone: List[Dict[str, Any]] = []
+        self._alerts_fire_weather_zone: List[Dict[str, Any]] = []
+        self._alerts_all_zones: List[Dict[str, Any]] = []
+        self._all_zones: List[str] = []
 
     async def set_station(self: SimpleNWS, station: Optional[str] = None) -> None:
         """
@@ -148,7 +137,7 @@ class SimpleNWS(Nws):
             self.station = self.stations[0]
 
     @staticmethod
-    def extract_metar(obs: Mapping[str, Any]) -> Optional[Metar.Metar]:
+    def extract_metar(obs: Dict[str, Any]) -> Optional[Metar.Metar]:
         """Return parsed metar if available."""
         metar_msg = obs.get("rawMessage")
         if metar_msg:
@@ -186,29 +175,29 @@ class SimpleNWS(Nws):
         self._detailed_forecast = await self.get_detailed_forecast()
 
     @staticmethod
-    def _unique_alert_ids(alerts: Sequence[Mapping[str, Any]]) -> Iterable[str]:
+    def _unique_alert_ids(alerts: List[Dict[str, Any]]) -> Iterable[str]:
         """Return set of unique alert_ids."""
         return {alert[ALERT_ID] for alert in alerts}
 
     def _new_alerts(
         self: SimpleNWS,
-        alerts: Sequence[Mapping[str, Any]],
-        current_alerts: Sequence[Mapping[str, Any]],
-    ) -> Sequence[Mapping[str, Any]]:
+        alerts: List[Dict[str, Any]],
+        current_alerts: List[Dict[str, Any]],
+    ) -> List[Dict[str, Any]]:
         """Return new alerts."""
         current_alert_ids = self._unique_alert_ids(current_alerts)
         return [alert for alert in alerts if alert[ALERT_ID] not in current_alert_ids]
 
     async def update_alerts_forecast_zone(
         self: SimpleNWS,
-    ) -> Sequence[Mapping[str, Any]]:
+    ) -> List[Dict[str, Any]]:
         """Update alerts zone."""
         alerts = await self.get_alerts_forecast_zone()
         new_alerts = self._new_alerts(alerts, self._alerts_forecast_zone)
         self._alerts_forecast_zone = alerts
         return new_alerts
 
-    async def update_alerts_county_zone(self: SimpleNWS) -> Sequence[Mapping[str, Any]]:
+    async def update_alerts_county_zone(self: SimpleNWS) -> List[Dict[str, Any]]:
         """Update alerts zone."""
         alerts = await self.get_alerts_county_zone()
         new_alerts = self._new_alerts(alerts, self._alerts_county_zone)
@@ -217,14 +206,14 @@ class SimpleNWS(Nws):
 
     async def update_alerts_fire_weather_zone(
         self: SimpleNWS,
-    ) -> Sequence[Mapping[str, Any]]:
+    ) -> List[Dict[str, Any]]:
         """Update alerts zone."""
         alerts = await self.get_alerts_fire_weather_zone()
         new_alerts = self._new_alerts(alerts, self._alerts_fire_weather_zone)
         self._alerts_fire_weather_zone = alerts
         return new_alerts
 
-    async def update_alerts_all_zones(self: SimpleNWS) -> Sequence[Mapping[str, Any]]:
+    async def update_alerts_all_zones(self: SimpleNWS) -> List[Dict[str, Any]]:
         """Update all alerts zones."""
         if not self.forecast_zone:
             await self.get_points()
@@ -238,7 +227,7 @@ class SimpleNWS(Nws):
             await self.get_alerts_active_zone(zone) for zone in self._all_zones
         ]
 
-        alerts: List[Mapping[str, Any]] = []
+        alerts: List[Dict[str, Any]] = []
         for alert_list in alerts_data:
             for alert in alert_list:
                 if alert["id"] not in self._unique_alert_ids(alerts):
@@ -249,13 +238,13 @@ class SimpleNWS(Nws):
         return new_alerts
 
     @property
-    def all_zones(self: SimpleNWS) -> Sequence[str]:
+    def all_zones(self: SimpleNWS) -> List[str]:
         """All alert zones."""
         return self._all_zones
 
     @staticmethod
     def extract_observation_value(
-        observation: Mapping[str, Any], value: str
+        observation: Dict[str, Any], value: str
     ) -> Union[None, Tuple[float, str], str]:
         """Returns observation or observation value."""
         obs_value = observation.get(value)
@@ -269,7 +258,7 @@ class SimpleNWS(Nws):
         return observation[value]
 
     @property
-    def observation(self: SimpleNWS) -> Optional[Mapping[str, Any]]:
+    def observation(self: SimpleNWS) -> Optional[Dict[str, Any]]:
         """Observation dict"""
 
         if self._observation is None or self._observation == []:
@@ -306,12 +295,12 @@ class SimpleNWS(Nws):
         return data
 
     @property
-    def forecast(self: SimpleNWS) -> Optional[Sequence[Mapping[str, Any]]]:
+    def forecast(self: SimpleNWS) -> Optional[List[Dict[str, Any]]]:
         """Return forecast."""
         return self._forecast
 
     @property
-    def forecast_hourly(self: SimpleNWS) -> Optional[Sequence[Mapping[str, Any]]]:
+    def forecast_hourly(self: SimpleNWS) -> Optional[List[Dict[str, Any]]]:
         """Return forecast hourly."""
         return self._forecast_hourly
 
@@ -327,66 +316,65 @@ class SimpleNWS(Nws):
 
     @staticmethod
     def _convert_forecast(
-        input_forecast: Optional[Sequence[Mapping[str, Any]]],
+        input_forecast: Optional[List[Dict[str, Any]]],
         filter_forecast: bool,
-    ) -> Sequence[Mapping[str, Any]]:
+    ) -> List[Dict[str, Any]]:
         """Converts forecast to common dict."""
         if not input_forecast:
             return []
         forecast = []
         now = datetime.now(timezone.utc)
         for forecast_entry in input_forecast:
-            mutable_entry: MutableMapping[str, Any] = dict(forecast_entry)
             # get weather
             if filter_forecast:
-                end_time = mutable_entry.get("endTime")
+                end_time = forecast_entry.get("endTime")
                 if not end_time:
                     continue
                 if now > datetime.fromisoformat(end_time):
                     continue
-            if mutable_entry.get("temperature"):
-                mutable_entry["temperature"] = int(mutable_entry["temperature"])
+            if forecast_entry.get("temperature"):
+                forecast_entry["temperature"] = int(forecast_entry["temperature"])
 
-            if mutable_entry.get("icon"):
-                time, weather = parse_icon(mutable_entry["icon"])
+            if forecast_entry.get("icon"):
+                time, weather = parse_icon(forecast_entry["icon"])
                 weather = convert_weather(weather)
             else:
                 time, weather = (None, None)
-            mutable_entry["iconTime"] = time
-            mutable_entry["iconWeather"] = weather
-            if mutable_entry.get("windDirection"):
-                mutable_entry["windBearing"] = WIND[mutable_entry["windDirection"]]
+            forecast_entry["iconTime"] = time
+            forecast_entry["iconWeather"] = weather
+            if forecast_entry.get("windDirection"):
+                forecast_entry["windBearing"] = WIND[forecast_entry["windDirection"]]
             else:
-                mutable_entry["windBearing"] = None
+                forecast_entry["windBearing"] = None
 
             # wind speed reported as '7 mph' or '7 to 10 mph'
             # if range, take average
-            if mutable_entry.get("windSpeed"):
-                wind_speed = mutable_entry["windSpeed"].split(" ")[0::2]
+            if forecast_entry.get("windSpeed"):
+                wind_speed = forecast_entry["windSpeed"].split(" ")[0::2]
                 wind_speed_avg = mean(int(w) for w in wind_speed)
-                mutable_entry["windSpeedAvg"] = wind_speed_avg
+                forecast_entry["windSpeedAvg"] = wind_speed_avg
             else:
-                mutable_entry["windSpeedAvg"] = None
+                forecast_entry["windSpeedAvg"] = None
 
-            forecast.append(mutable_entry)
+            forecast.append(forecast_entry)
         return forecast
 
     @property
-    def alerts_forecast_zone(self: SimpleNWS) -> Sequence[Mapping[str, Any]]:
+    def alerts_forecast_zone(self: SimpleNWS) -> List[Dict[str, Any]]:
         """Return alerts as a list of dict."""
         return self._alerts_forecast_zone
 
     @property
-    def alerts_county_zone(self: SimpleNWS) -> Sequence[Mapping[str, Any]]:
+    def alerts_county_zone(self: SimpleNWS) -> List[Dict[str, Any]]:
         """Return alerts as a list of dict."""
         return self._alerts_county_zone
 
     @property
-    def alerts_fire_weather_zone(self: SimpleNWS) -> Sequence[Mapping[str, Any]]:
+    def alerts_fire_weather_zone(self: SimpleNWS) -> List[Dict[str, Any]]:
         """Return alerts as a list of dict."""
         return self._alerts_fire_weather_zone
 
     @property
-    def alerts_all_zones(self: SimpleNWS) -> Sequence[Mapping[str, Any]]:
+    def alerts_all_zones(self: SimpleNWS) -> List[Dict[str, Any]]:
         """Return alerts as a list of dict."""
         return self._alerts_all_zones
