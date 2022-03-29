@@ -182,9 +182,7 @@ class SimpleNWS(Nws):
         current_alert_ids = self._unique_alert_ids(current_alerts)
         return [alert for alert in alerts if alert[ALERT_ID] not in current_alert_ids]
 
-    async def update_alerts_forecast_zone(
-        self: SimpleNWS,
-    ) -> List[Dict[str, Any]]:
+    async def update_alerts_forecast_zone(self: SimpleNWS) -> List[Dict[str, Any]]:
         """Update alerts zone."""
         alerts = await self.get_alerts_forecast_zone()
         new_alerts = self._new_alerts(alerts, self._alerts_forecast_zone)
@@ -198,9 +196,7 @@ class SimpleNWS(Nws):
         self._alerts_county_zone = alerts
         return new_alerts
 
-    async def update_alerts_fire_weather_zone(
-        self: SimpleNWS,
-    ) -> List[Dict[str, Any]]:
+    async def update_alerts_fire_weather_zone(self: SimpleNWS) -> List[Dict[str, Any]]:
         """Update alerts zone."""
         alerts = await self.get_alerts_fire_weather_zone()
         new_alerts = self._new_alerts(alerts, self._alerts_fire_weather_zone)
