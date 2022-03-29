@@ -33,9 +33,7 @@ WIND_DIRECTIONS: Final = [
 ]
 
 
-WIND: Final = {
-    name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)
-}
+WIND: Final = {name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)}
 
 _ObservationParams = Tuple[str, Optional[str], Optional[float]]
 
