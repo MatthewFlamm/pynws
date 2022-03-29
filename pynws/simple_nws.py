@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 from statistics import mean
-from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 from aiohttp import ClientSession
 from metar import Metar
@@ -169,7 +169,7 @@ class SimpleNWS(Nws):
         self._detailed_forecast = await self.get_detailed_forecast()
 
     @staticmethod
-    def _unique_alert_ids(alerts: List[Dict[str, Any]]) -> Iterable[str]:
+    def _unique_alert_ids(alerts: List[Dict[str, Any]]) -> Set[str]:
         """Return set of unique alert_ids."""
         return {alert[ALERT_ID] for alert in alerts}
 
