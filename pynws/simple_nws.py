@@ -158,15 +158,11 @@ class SimpleNWS(Nws):
 
     async def update_forecast(self: SimpleNWS) -> None:
         """Update forecast."""
-        forecast = await self.get_gridpoints_forecast()
-        self._forecast = self._convert_forecast(forecast, self.filter_forecast)
+        self._forecast = await self.get_gridpoints_forecast()
 
     async def update_forecast_hourly(self: SimpleNWS) -> None:
         """Update forecast hourly."""
-        forecast_hourly = await self.get_gridpoints_forecast_hourly()
-        self._forecast_hourly = self._convert_forecast(
-            forecast_hourly, self.filter_forecast
-        )
+        self._forecast_hourly = await self.get_gridpoints_forecast_hourly()
 
     async def update_detailed_forecast(self: SimpleNWS) -> None:
         """Update forecast."""
@@ -295,12 +291,12 @@ class SimpleNWS(Nws):
     @property
     def forecast(self: SimpleNWS) -> Optional[List[Dict[str, Any]]]:
         """Return forecast."""
-        return self._forecast
+        return self._convert_forecast(self._forecast, self.filter_forecast)
 
     @property
     def forecast_hourly(self: SimpleNWS) -> Optional[List[Dict[str, Any]]]:
         """Return forecast hourly."""
-        return self._forecast_hourly
+        return self._convert_forecast(self._forecast_hourly, self.filter_forecast)
 
     @property
     def detailed_forecast(self: SimpleNWS) -> Optional[DetailedForecast]:
