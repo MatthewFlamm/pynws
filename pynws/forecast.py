@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import re
 from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, Iterable, Iterator, List, Pattern, Tuple, Union
+from typing import Any, Dict, Iterable, Iterator, List, Tuple, Union
 
 from .const import Detail, Final
 from .units import get_converter
