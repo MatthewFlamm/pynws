@@ -40,18 +40,18 @@ class MetarParam(NamedTuple):
     """METAR conversion parameter"""
 
     attr: str
-    units: Optional[str]
-    multiplier: Optional[float]
+    units: Optional[str] = None
+    multiplier: Optional[float] = None
 
 
 OBSERVATIONS: Final[Dict[str, Optional[MetarParam]]] = {
-    "temperature": MetarParam("temp", "C", None),
+    "temperature": MetarParam("temp", "C"),
     "barometricPressure": None,
     "seaLevelPressure": MetarParam("press", "HPA", 100.0),
     "relativeHumidity": None,
     "windSpeed": MetarParam("wind_speed", "MPS", 3.6),
-    "windDirection": MetarParam("wind_dir", None, None),
-    "visibility": MetarParam("vis", "M", None),
+    "windDirection": MetarParam("wind_dir"),
+    "visibility": MetarParam("vis", "M"),
     "elevation": None,
     "textDescription": None,
     "dewpoint": None,
