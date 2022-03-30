@@ -262,7 +262,7 @@ class SimpleNWS(Nws):
             return None
 
         data: Dict[str, Any] = {}
-        for obs, metar_parm in OBSERVATIONS.items():
+        for obs, metar_param in OBSERVATIONS.items():
             obs_list = [
                 self.extract_observation_value(o, obs) for o in self._observation
             ]
@@ -274,18 +274,18 @@ class SimpleNWS(Nws):
 
             if (
                 data[obs] is None
-                and metar_parm is not None
+                and metar_param is not None
                 and self._metar_obs is not None
                 and self._metar_obs[0] is not None
             ):
-                met_prop = getattr(self._metar_obs[0], metar_parm.attr)
+                met_prop = getattr(self._metar_obs[0], metar_param.attr)
                 if met_prop:
-                    if metar_parm.units:
-                        data[obs] = met_prop.value(units=metar_parm.units)
+                    if metar_param.units:
+                        data[obs] = met_prop.value(units=metar_param.units)
                     else:
                         data[obs] = met_prop.value()
-                    if metar_parm.multiplier is not None:
-                        data[obs] = data[obs] * metar_parm.multiplier
+                    if metar_param.multiplier is not None:
+                        data[obs] = data[obs] * metar_param.multiplier
 
         if data.get("icon"):
             time, weather = parse_icon(data["icon"])
