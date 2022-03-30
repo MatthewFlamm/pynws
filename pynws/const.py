@@ -2,32 +2,39 @@
 Constants for pynws
 """
 import os
+import sys
 from enum import unique
 
 from .backports.enum import StrEnum
 from .version import __version__
 
+if sys.version_info >= (3, 8):
+    from typing import Final
+else:
+    from typing_extensions import Final
+
+
 file_dir = os.path.join(os.path.dirname(__file__), "..")
 
 version = __version__
 
-API_URL = "https://api.weather.gov/"
-API_POINTS_STATIONS = "points/{},{}/stations"
-API_STATIONS_OBSERVATIONS = "stations/{}/observations/"
-API_STATIONS_OBSERVATIONS_LATEST = "stations/{}/observations/latest"
-API_ACCEPT = "application/geo+json"
-API_USER = "pynws {}"
-API_DETAILED_FORECAST = "gridpoints/{}/{},{}"
-API_GRIDPOINTS_FORECAST = "gridpoints/{}/{},{}/forecast"
-API_GRIDPOINTS_FORECAST_HOURLY = "gridpoints/{}/{},{}/forecast/hourly"
-API_POINTS = "points/{},{}"
-API_ALERTS_ACTIVE_ZONE = "alerts/active/zone/{}"
+API_URL: Final = "https://api.weather.gov/"
+API_POINTS_STATIONS: Final = "points/{},{}/stations"
+API_STATIONS_OBSERVATIONS: Final = "stations/{}/observations/"
+API_STATIONS_OBSERVATIONS_LATEST: Final = "stations/{}/observations/latest"
+API_ACCEPT: Final = "application/geo+json"
+API_USER: Final = "pynws {}"
+API_DETAILED_FORECAST: Final = "gridpoints/{}/{},{}"
+API_GRIDPOINTS_FORECAST: Final = "gridpoints/{}/{},{}/forecast"
+API_GRIDPOINTS_FORECAST_HOURLY: Final = "gridpoints/{}/{},{}/forecast/hourly"
+API_POINTS: Final = "points/{},{}"
+API_ALERTS_ACTIVE_ZONE: Final = "alerts/active/zone/{}"
 
-DEFAULT_USERID = "CODEemail@address"
+DEFAULT_USERID: Final = "CODEemail@address"
 
-ALERT_ID = "id"
+ALERT_ID: Final = "id"
 
-API_WEATHER_CODE = {
+API_WEATHER_CODE: Final = {
     "skc": "Fair/clear",
     "few": "A few clouds",
     "sct": "Partly cloudy",

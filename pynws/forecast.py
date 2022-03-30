@@ -3,12 +3,12 @@ from __future__ import annotations
 
 import re
 from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, Generator, Iterable, List, Tuple, Union
+from typing import Any, Dict, Iterable, Iterator, List, Tuple, Union
 
-from .const import Detail
+from .const import Detail, Final
 from .units import get_converter
 
-ISO8601_PERIOD_REGEX = re.compile(
+ISO8601_PERIOD_REGEX: Final = re.compile(
     r"^P"
     r"((?P<weeks>\d+)W)?"
     r"((?P<days>\d+)D)?"
@@ -19,10 +19,10 @@ ISO8601_PERIOD_REGEX = re.compile(
     r")?$"
 )
 
-ONE_HOUR = timedelta(hours=1)
+ONE_HOUR: Final = timedelta(hours=1)
 
 DetailValue = Union[int, float, list, str, None]
-_TimeValues = List[Tuple[datetime, datetime, DetailValue]]
+_TimeValue = Tuple[datetime, datetime, DetailValue]
 
 
 class DetailedForecast:
@@ -33,7 +33,7 @@ class DetailedForecast:
             raise TypeError(f"{properties!r} is not a dictionary")
 
         self.update_time = datetime.fromisoformat(properties["updateTime"])
-        self.details: Dict[Detail, _TimeValues] = {}
+        self.details: Dict[Detail, List[_TimeValue]] = {}
 
         for prop_name, prop_value in properties.items():
             try:
@@ -44,7 +44,7 @@ class DetailedForecast:
             unit_code = prop_value.get("uom")
             converter = get_converter(unit_code) if unit_code else None
 
-            time_values: _TimeValues = []
+            time_values: List[_TimeValue] = []
 
             for value in prop_value["values"]:
                 isodatetime, duration_str = value["validTime"].split("/")
@@ -82,7 +82,9 @@ class DetailedForecast:
         return self.update_time
 
     @staticmethod
-    def _get_value_for_time(when, time_values: _TimeValues) -> DetailValue:
+    def _get_value_for_time(
+        when: datetime, time_values: List[_TimeValue]
+    ) -> DetailValue:
         for start_time, end_time, value in time_values:
             if start_time <= when < end_time:
                 return value
@@ -100,7 +102,7 @@ class DetailedForecast:
             TypeError: If 'when' argument is not a 'datetime'.
 
         Returns:
-            dict[Detail, DetailValue]: All forecast details for the specified time.
+            Dict[Detail, DetailValue]: All forecast details for the specified time.
         """
         if not isinstance(when, datetime):
             raise TypeError(f"{when!r} is not a datetime")
@@ -114,7 +116,7 @@ class DetailedForecast:
 
     def get_details_for_times(
         self: DetailedForecast, iterable_when: Iterable[datetime]
-    ) -> Generator[Dict[Detail, DetailValue], None, None]:
+    ) -> Iterator[Dict[Detail, DetailValue]]:
         """Retrieve all forecast details for a list of times.
 
         Args:
@@ -124,7 +126,7 @@ class DetailedForecast:
             TypeError: If 'iterable_when' argument is not a collection.
 
         Yields:
-            Generator[dict[Detail, DetailValue]]: Sequence of forecast details
+            Iterator[Dict[Detail, DetailValue]]: Sequence of forecast details
             corresponding with the list of times to retrieve.
         """
         if not isinstance(iterable_when, Iterable):
@@ -143,7 +145,7 @@ class DetailedForecast:
             when (datetime): Point in time of requested forecast detail.
 
         Raises:
-            TypeError: If 'detail' argument is not a 'Detail'.
+            TypeError: If 'detail' argument is not a 'Detail' or 'str'.
             TypeError: If 'when' argument is not a 'datetime'.
 
         Returns:
@@ -161,7 +163,7 @@ class DetailedForecast:
 
     def get_details_by_hour(
         self: DetailedForecast, start_time: datetime, hours: int = 24
-    ) -> Generator[Dict[Detail, DetailValue], None, None]:
+    ) -> Iterator[Dict[Detail, DetailValue]]:
         """Retrieve a sequence of hourly forecast details
 
         Args:
@@ -172,7 +174,7 @@ class DetailedForecast:
             TypeError: If 'start_time' argument is not a 'datetime'.
 
         Yields:
-            Generator[dict[Detail, DetailValue]]: Sequence of forecast detail
+            Iterator[Dict[Detail, DetailValue]]: Sequence of forecast detail
             values with one details dictionary per requested hour.
         """
         if not isinstance(start_time, datetime):

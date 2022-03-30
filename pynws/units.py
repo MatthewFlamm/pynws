@@ -1,6 +1,5 @@
 """Unit conversion"""
 
-from numbers import Number
 from typing import Callable
 
 UNIT_CONVERSION = {
@@ -17,7 +16,7 @@ UNIT_CONVERSION = {
 }
 
 
-def get_converter(unit_code: str) -> Callable[[Number], Number]:
+def get_converter(unit_code: str) -> Callable[[float], float]:
     """Get method to convert value with unit code to preferred unit."""
     converter = UNIT_CONVERSION.get(unit_code.split(":")[-1])
     if not converter:
@@ -25,7 +24,7 @@ def get_converter(unit_code: str) -> Callable[[Number], Number]:
     return converter
 
 
-def convert_unit(unit_code: str, value: Number) -> Number:
+def convert_unit(unit_code: str, value: float) -> float:
     """Convert value with unit code to preferred unit."""
     converter = get_converter(unit_code)
     return converter(value)
