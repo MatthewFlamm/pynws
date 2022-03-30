@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 from statistics import mean
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, List, NamedTuple, Optional, Set, Tuple, Union
 
 from aiohttp import ClientSession
 from metar import Metar
@@ -35,16 +35,23 @@ WIND_DIRECTIONS: Final = [
 
 WIND: Final = {name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)}
 
-_ObservationParams = Tuple[str, Optional[str], Optional[float]]
 
-OBSERVATIONS: Final[Dict[str, Optional[_ObservationParams]]] = {
-    "temperature": ("temp", "C", None),
+class MetarParam(NamedTuple):
+    """METAR conversion parameter"""
+
+    attr: str
+    units: Optional[str]
+    multiplier: Optional[float]
+
+
+OBSERVATIONS: Final[Dict[str, Optional[MetarParam]]] = {
+    "temperature": MetarParam("temp", "C", None),
     "barometricPressure": None,
-    "seaLevelPressure": ("press", "HPA", 100.0),
+    "seaLevelPressure": MetarParam("press", "HPA", 100.0),
     "relativeHumidity": None,
-    "windSpeed": ("wind_speed", "MPS", 3.6),
-    "windDirection": ("wind_dir", None, None),
-    "visibility": ("vis", "M", None),
+    "windSpeed": MetarParam("wind_speed", "MPS", 3.6),
+    "windDirection": MetarParam("wind_dir", None, None),
+    "visibility": MetarParam("vis", "M", None),
     "elevation": None,
     "textDescription": None,
     "dewpoint": None,
@@ -255,7 +262,7 @@ class SimpleNWS(Nws):
             return None
 
         data: Dict[str, Any] = {}
-        for obs, met in OBSERVATIONS.items():
+        for obs, metar_parm in OBSERVATIONS.items():
             obs_list = [
                 self.extract_observation_value(o, obs) for o in self._observation
             ]
@@ -267,18 +274,18 @@ class SimpleNWS(Nws):
 
             if (
                 data[obs] is None
-                and met is not None
+                and metar_parm is not None
                 and self._metar_obs is not None
                 and self._metar_obs[0] is not None
             ):
-                met_prop = getattr(self._metar_obs[0], met[0])
+                met_prop = getattr(self._metar_obs[0], metar_parm.attr)
                 if met_prop:
-                    if met[1]:
-                        data[obs] = met_prop.value(units=met[1])
+                    if metar_parm.units:
+                        data[obs] = met_prop.value(units=metar_parm.units)
                     else:
                         data[obs] = met_prop.value()
-                    if met[2] is not None:
-                        data[obs] = data[obs] * met[2]
+                    if metar_parm.multiplier is not None:
+                        data[obs] = data[obs] * metar_parm.multiplier
 
         if data.get("icon"):
             time, weather = parse_icon(data["icon"])
