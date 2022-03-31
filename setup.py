@@ -1,6 +1,6 @@
 import os
 
-from setuptools import setup
+from setuptools import find_packages, setup
 
 exec(open("pynws/version.py").read())
 
@@ -17,7 +17,7 @@ setup(
     author="Matthew Flamm",
     author_email="matthewflamm0@gmail.com",
     description="Python library to retrieve observations and forecasts from NWS/NOAA",
-    packages=["pynws"],
+    packages=find_packages(exclude=["tests", "tests.*"]),
     include_package_data=True,
     install_requires=[
         "aiohttp",
