@@ -78,7 +78,8 @@ def _create_forecast_from_weather(detailed: Dict[Detail, Any]) -> str | None:
     coverage_arr: List[str] = []
 
     for entry in detailed.get(Detail.WEATHER, []):
-        if weather := entry.get("weather"):
+        weather = entry.get("weather")
+        if weather:
             weather_arr.append(weather)
             intensity_arr.append(entry.get("intensity"))
             coverage_arr.append(entry.get("coverage"))
@@ -88,7 +89,8 @@ def _create_forecast_from_weather(detailed: Dict[Detail, Any]) -> str | None:
 
     if len(weather_arr) == 1:
         weather, intensity, coverage = weather_arr[0], intensity_arr[0], coverage_arr[0]
-        if allowed_intensities := WEATHER_INTENSITIES.get(weather):
+        allowed_intensities = WEATHER_INTENSITIES.get(weather)
+        if allowed_intensities:
             if intensity in allowed_intensities:
                 weather = f"{intensity} {weather}"
     else:
@@ -145,7 +147,8 @@ def create_icon_url(detailed: Dict[Detail, Any], *, show_pop: bool):
     weather_arr: List[str] = []
 
     for entry in detailed.get(Detail.WEATHER, []):
-        if weather := entry.get("weather"):
+        weather = entry.get("weather")
+        if weather:
             weather_arr.append(weather)
 
     if len(weather_arr) > 1:
@@ -169,10 +172,10 @@ def create_icon_url(detailed: Dict[Detail, Any], *, show_pop: bool):
         else:
             weather = ICON_WEATHER_REPLACEMENTS.get(weather, weather)
 
-        if show_pop and (
-            pop := round(detailed.get(Detail.PROBABILITY_OF_PRECIPITATION, 0) / 10) * 10
-        ):
-            weather += f",{pop}"
+        if show_pop:
+            pop = round(detailed.get(Detail.PROBABILITY_OF_PRECIPITATION, 0) / 10) * 10
+            if pop:
+                weather += f",{pop}"
     else:
         if sky_cover <= 5:
             weather = "skc"
