@@ -89,7 +89,7 @@ def _create_forecast_from_weather(detailed: Dict[Detail, Any]) -> str | None:
 
     if len(weather_arr) == 1:
         weather, intensity, coverage = weather_arr[0], intensity_arr[0], coverage_arr[0]
-        allowed_intensities = WEATHER_INTENSITIES.get(weather, [])
+        allowed_intensities = WEATHER_INTENSITIES.get(weather, ())
         if intensity in allowed_intensities:
             weather = f"{intensity} {weather}"
     else:
