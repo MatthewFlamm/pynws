@@ -2,10 +2,13 @@
 from __future__ import annotations
 
 import re
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from typing import Any, Dict, Iterable, Iterator, List, Tuple, Union
 
+import pytz
+
 from .const import Detail, Final
+from .summary import create_icon_url, create_short_forecast
 from .units import get_converter
 
 ISO8601_PERIOD_REGEX: Final = re.compile(
@@ -28,11 +31,15 @@ _TimeValue = Tuple[datetime, datetime, DetailValue]
 class DetailedForecast:
     """Class to retrieve forecast values for a point in time."""
 
-    def __init__(self: DetailedForecast, properties: Dict[str, Any]):
+    def __init__(self: DetailedForecast, properties: Dict[str, Any], time_zone: str):
         if not isinstance(properties, dict):
             raise TypeError(f"{properties!r} is not a dictionary")
 
-        self.update_time = datetime.fromisoformat(properties["updateTime"])
+        self.tz = pytz.timezone(time_zone)
+
+        self.update_time = datetime.fromisoformat(properties["updateTime"]).astimezone(
+            self.tz
+        )
         self.details: Dict[Detail, List[_TimeValue]] = {}
 
         for prop_name, prop_value in properties.items():
@@ -48,7 +55,7 @@ class DetailedForecast:
 
             for value in prop_value["values"]:
                 isodatetime, duration_str = value["validTime"].split("/")
-                start_time = datetime.fromisoformat(isodatetime)
+                start_time = datetime.fromisoformat(isodatetime).astimezone(self.tz)
                 end_time = start_time + self._parse_duration(duration_str)
                 value = value["value"]
                 if converter and value:
@@ -107,11 +114,20 @@ class DetailedForecast:
         if not isinstance(when, datetime):
             raise TypeError(f"{when!r} is not a datetime")
 
-        when = when.astimezone(timezone.utc)
+        when = when.astimezone(self.tz)
 
         details: Dict[Detail, DetailValue] = {}
         for detail, time_values in self.details.items():
             details[detail] = self._get_value_for_time(when, time_values)
+
+        now = datetime.now(tz=self.tz).replace(minute=0, second=0, microsecond=0)
+        hours_from_now = (when - now).total_seconds() // 3600
+        show_pop = 0 <= hours_from_now < 12
+
+        details[Detail.IS_DAYTIME] = 6 <= when.hour < 18
+        details[Detail.SHORT_FORECAST] = create_short_forecast(details)
+        details[Detail.ICON] = create_icon_url(details, show_pop=show_pop)
+
         return details
 
     def get_details_for_times(
@@ -156,7 +172,7 @@ class DetailedForecast:
         if not isinstance(when, datetime):
             raise TypeError(f"{when!r} is not a datetime")
 
-        when = when.astimezone(timezone.utc)
+        when = when.astimezone(self.tz)
         detail = detail_arg if isinstance(detail_arg, Detail) else Detail(detail_arg)
         time_values = self.details.get(detail)
         return self._get_value_for_time(when, time_values) if time_values else None

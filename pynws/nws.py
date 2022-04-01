@@ -52,6 +52,7 @@ class Nws:
         self.wfo: Optional[str] = None
         self.x: Optional[int] = None
         self.y: Optional[int] = None
+        self.time_zone: Optional[str] = None
 
         self.forecast_zone: Optional[str] = None
         self.county_zone: Optional[str] = None
@@ -98,6 +99,7 @@ class Nws:
             self.wfo = properties.get("cwa")
             self.x = properties.get("gridX")
             self.y = properties.get("gridY")
+            self.time_zone = properties.get("timeZone")
             self.forecast_zone = properties.get("forecastZone").split("/")[-1]
             self.county_zone = properties.get("county").split("/")[-1]
             self.fire_weather_zone = properties.get("fireWeatherZone").split("/")[-1]
@@ -111,12 +113,17 @@ class Nws:
         """
         if self.wfo is None:
             await self.get_points()
-        if self.wfo is None or self.x is None or self.y is None:
+        if (
+            self.wfo is None
+            or self.x is None
+            or self.y is None
+            or self.time_zone is None
+        ):
             raise NwsError("Error retrieving points")
         raw_forecast = await raw_detailed_forecast(
             self.wfo, self.x, self.y, self.session, self.userid
         )
-        return DetailedForecast(raw_forecast["properties"])
+        return DetailedForecast(raw_forecast["properties"], self.time_zone)
 
     async def get_gridpoints_forecast(self: Nws) -> List[Dict[str, Any]]:
         """Return daily forecast from grid."""

@@ -135,3 +135,8 @@ class Detail(StrEnum):
     LOW_VISIBILITY_OCCURRENCE_RISK_INDEX = "lowVisibilityOccurrenceRiskIndex"
     STABILITY = "stability"
     RED_FLAG_THREAT_INDEX = "redFlagThreatIndex"
+
+    # added by pynws
+    IS_DAYTIME = "isDaytime"
+    SHORT_FORECAST = "shortForecast"
+    ICON = "icon"
