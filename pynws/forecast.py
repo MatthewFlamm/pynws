@@ -2,10 +2,9 @@
 from __future__ import annotations
 
 import re
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, tzinfo
 from typing import Any, Dict, Iterable, Iterator, List, Tuple, Union
-
-import pytz
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from .const import Detail, Final
 from .summary import create_icon_url, create_short_forecast
@@ -35,7 +34,12 @@ class DetailedForecast:
         if not isinstance(properties, dict):
             raise TypeError(f"{properties!r} is not a dictionary")
 
-        self.tz = pytz.timezone(time_zone)
+        try:
+            self.tz: tzinfo = ZoneInfo(time_zone)
+        except ZoneInfoNotFoundError:
+            import pytz  # pylint: disable=import-outside-toplevel
+
+            self.tz = pytz.timezone(time_zone)
 
         self.update_time = datetime.fromisoformat(properties["updateTime"]).astimezone(
             self.tz
