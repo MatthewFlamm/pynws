@@ -49,7 +49,7 @@ ICON_WEATHER_PRIORITY = [
 ICON_WEATHER_REPLACEMENTS: Final = {
     "blowing_snow": "blizzard",
     "freezing_fog": "fog",
-    "freezing_rain": "frza",
+    "freezing_rain": "fzra",
     "snow_showers": "snow",
 }
 
