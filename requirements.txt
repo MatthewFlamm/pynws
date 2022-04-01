@@ -1,3 +1,4 @@
 aiohttp
 metar
 backports.zoneinfo; python_version < '3.9'
+pytz; sys_platform == 'win32'

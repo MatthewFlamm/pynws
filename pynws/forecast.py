@@ -4,7 +4,7 @@ from __future__ import annotations
 import re
 import sys
 from datetime import datetime, timedelta, tzinfo
-from typing import Any, Dict, Iterable, Iterator, List, Tuple, Union
+from typing import TYPE_CHECKING, Any, Dict, Iterable, Iterator, List, Tuple, Union
 
 from .const import Detail, Final
 from .summary import create_icon_url, create_short_forecast
@@ -18,7 +18,7 @@ else:
         ZoneInfoNotFoundError,
     )
 
-if sys.platform == "win32":
+if sys.platform == "win32" or TYPE_CHECKING:
     import pytz
 
 ISO8601_PERIOD_REGEX: Final = re.compile(
