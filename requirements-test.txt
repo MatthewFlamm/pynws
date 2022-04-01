@@ -9,3 +9,4 @@ pytest-asyncio
 pytest-cov
 pytest-aiohttp
 mypy
+backports.zoneinfo; python_version < '3.9'

@@ -2,13 +2,24 @@
 from __future__ import annotations
 
 import re
+import sys
 from datetime import datetime, timedelta, tzinfo
 from typing import Any, Dict, Iterable, Iterator, List, Tuple, Union
-from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from .const import Detail, Final
 from .summary import create_icon_url, create_short_forecast
 from .units import get_converter
+
+if sys.version_info[:2] >= (3, 9):
+    from zoneinfo import ZoneInfo, ZoneInfoNotFoundError  # pylint: disable=import-error
+else:
+    from backports.zoneinfo import (  # pylint: disable=import-error
+        ZoneInfo,
+        ZoneInfoNotFoundError,
+    )
+
+if sys.platform == "win32":
+    import pytz
 
 ISO8601_PERIOD_REGEX: Final = re.compile(
     r"^P"
@@ -34,13 +45,7 @@ class DetailedForecast:
         if not isinstance(properties, dict):
             raise TypeError(f"{properties!r} is not a dictionary")
 
-        try:
-            self.tz: tzinfo = ZoneInfo(time_zone)
-        except ZoneInfoNotFoundError:
-            import pytz  # pylint: disable=import-outside-toplevel
-
-            self.tz = pytz.timezone(time_zone)
-
+        self.tz = self._get_time_zone(time_zone)
         self.update_time = datetime.fromisoformat(properties["updateTime"]).astimezone(
             self.tz
         )
@@ -67,6 +72,15 @@ class DetailedForecast:
                 time_values.append((start_time, end_time, value))
 
             self.details[detail] = time_values
+
+    @staticmethod
+    def _get_time_zone(time_zone) -> tzinfo:
+        try:
+            return ZoneInfo(time_zone)
+        except ZoneInfoNotFoundError:
+            if sys.platform != "win32":
+                raise
+            return pytz.timezone(time_zone)
 
     @staticmethod
     def _parse_duration(duration_str: str) -> timedelta:
