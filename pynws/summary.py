@@ -41,6 +41,7 @@ ICON_WEATHER_PRIORITY = [
     "blowing_snow",
     "snow",
     "snow_showers",
+    "freezing_rain",
     "rain",
     "rain_showers",
 ]
@@ -48,6 +49,7 @@ ICON_WEATHER_PRIORITY = [
 ICON_WEATHER_REPLACEMENTS: Final = {
     "blowing_snow": "blizzard",
     "freezing_fog": "fog",
+    "freezing_rain": "frza",
     "snow_showers": "snow",
 }
 
@@ -93,8 +95,13 @@ def _create_forecast_from_weather(detailed: Dict[Detail, Any]) -> str | None:
         if intensity in allowed_intensities:
             weather = f"{intensity} {weather}"
     else:
-        weather_arr = sorted([w for w in weather_arr if w not in WEATHER_IGNORE_MULTI])
-        weather = "_and_".join(weather_arr)
+        if "snow" in weather_arr and "freezing_rain" in weather_arr:
+            weather = "freezing_rain"
+        else:
+            weather_arr = sorted(
+                [w for w in weather_arr if w not in WEATHER_IGNORE_MULTI]
+            )
+            weather = "_and_".join(weather_arr)
         coverage = coverage_arr[0]
 
     weather = WEATHER_REPLACEMENTS.get(weather, weather)
@@ -150,25 +157,27 @@ def create_icon_url(detailed: Dict[Detail, Any], *, show_pop: bool):
         if weather:
             weather_arr.append(weather)
 
-    if len(weather_arr) > 1:
-        weather_arr = [w for w in weather_arr if w not in WEATHER_IGNORE_MULTI]
-        weather_arr = sorted(
-            weather_arr,
-            key=lambda x: ICON_WEATHER_PRIORITY.index(x)
-            if x in ICON_WEATHER_PRIORITY
-            else 100,
-        )
-
     if weather_arr:
-        weather = weather_arr[0]
-        if weather == "thunderstorms":
+        if len(weather_arr) > 1:
+            weather_arr = [w for w in weather_arr if w not in WEATHER_IGNORE_MULTI]
+
+        if "thunderstorms" in weather_arr:
             if sky_cover < 60:
                 weather = "tsra_hi"
             elif sky_cover < 75:
                 weather = "tsra_sct"
             else:
                 weather = "tsra"
+        elif "snow" in weather_arr and "freezing_rain" in weather_arr:
+            weather = "snow_fzra"
         else:
+            weather_arr = sorted(
+                weather_arr,
+                key=lambda x: ICON_WEATHER_PRIORITY.index(x)
+                if x in ICON_WEATHER_PRIORITY
+                else 100,
+            )
+            weather = weather_arr[0]
             weather = ICON_WEATHER_REPLACEMENTS.get(weather, weather)
 
         if show_pop:
