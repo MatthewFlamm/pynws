@@ -1,39 +1,49 @@
 """NWS forecast summary and icon emulation"""
 from __future__ import annotations
 
+from collections import namedtuple
 from typing import Any, Dict, List, Set, Tuple
 
 from .const import Detail, Final
 
-WEATHER_IGNORE_MULTI: Final = {
-    "fog",
-    "freezing_fog",
-}
+FORECAST_COVERAGE_PRIORITY: Final[List[str]] = [
+    "definite",
+    "likely",
+    "chance",
+    "scattered",
+    "patchy",
+    "areas",
+    "isolated",
+    "slight_chance",
+]
 
-WEATHER_REPLACEMENTS: Final = {
-    "rain_showers_and_snow_showers": "rain_and_snow_showers",
-    "rain_showers_and_thunderstorms": "showers_and_thunderstorms",
-}
-
-COVERAGE_REPLACEMENTS: Final = {
+FORECAST_COVERAGE_REPLACEMENTS: Final = {
     "numerous": "chance",
     "areas": "areas_of",
 }
 
-WEATHER_INTENSITIES: Final = {
+FORECAST_WEATHER_INTENSITIES: Final = {
     "rain": ("light", "heavy"),
     "snow": ("light", "heavy"),
 }
 
-WEATHER_PREFIXES: Final = {
+FORECAST_WEATHER_REPLACEMENTS: Final[List[Tuple[Set[str], str]]] = [
+    ({"rain", "freezing_rain"}, "freezing_rain"),
+    ({"snow", "freezing_rain"}, "freezing_rain"),
+    ({"rain_showers", "snow_showers"}, "rain_and_snow_showers"),
+    ({"rain_showers", "thunderstorms"}, "showers_and_thunderstorms"),
+]
+
+FORECAST_WEATHER_PREFIXES: Final = {
     "areas_of",
     "chance",
     "isolated",
+    "patchy",
     "scattered",
     "slight_chance",
 }
 
-WEATHER_SUFFIXES: Final = {"likely"}
+FORECAST_WEATHER_SUFFIXES: Final = {"likely"}
 
 ICON_WEATHER_REPLACEMENTS: Final[List[Tuple[Set[str], str]]] = [
     # convert
@@ -51,6 +61,11 @@ ICON_WEATHER_REPLACEMENTS: Final[List[Tuple[Set[str], str]]] = [
     ({"rain_showers", "fzra"}, "rain_fzra"),
     ({"rain_showers", "sleet"}, "rain_sleet"),
 ]
+
+ICON_WEATHER_IGNORE_MULTI: Final = {
+    "fog",
+    "freezing_fog",
+}
 
 
 def create_short_forecast(detailed: Dict[Detail, Any]) -> str:
@@ -74,48 +89,53 @@ def create_short_forecast(detailed: Dict[Detail, Any]) -> str:
 
 
 def _create_forecast_from_weather(detailed: Dict[Detail, Any]) -> str | None:
-    weather_arr: List[str] = []
-    intensity_arr: List[str] = []
-    coverage_arr: List[str] = []
+    entry_type = namedtuple("entry_type", "weather intensity coverage")
+    entries: List[entry_type] = []
 
-    for entry in detailed.get(Detail.WEATHER, []):
-        weather = entry.get("weather")
+    for item in detailed.get(Detail.WEATHER, []):
+        weather = item.get("weather")
         if weather:
-            weather_arr.append(weather)
-            intensity_arr.append(entry.get("intensity"))
-            coverage_arr.append(entry.get("coverage"))
+            entries.append(
+                entry_type(weather, item.get("intensity"), item.get("coverage"))
+            )
 
-    if not weather_arr:
+    if not entries:
         return None
 
-    if len(weather_arr) == 1:
-        weather, intensity, coverage = weather_arr[0], intensity_arr[0], coverage_arr[0]
-        allowed_intensities = WEATHER_INTENSITIES.get(weather, ())
+    if len(entries) == 1:
+        weather, intensity, coverage = entries[0]
+        allowed_intensities = FORECAST_WEATHER_INTENSITIES.get(weather, ())
         if intensity in allowed_intensities:
             weather = f"{intensity} {weather}"
     else:
-        if "snow" in weather_arr and "freezing_rain" in weather_arr:
-            weather = "freezing_rain"
-        else:
-            weather_arr = sorted(
-                [w for w in weather_arr if w not in WEATHER_IGNORE_MULTI]
-            )
-            weather = "_and_".join(weather_arr)
-        coverage = coverage_arr[0]
+        entries = sorted(
+            entries,
+            key=lambda x: (FORECAST_COVERAGE_PRIORITY.index(x.coverage), x.weather),
+        )
+        coverage = entries[0].coverage
+        weather_set = {
+            entry.weather
+            for entry in entries
+            if entry.coverage == coverage or entry.weather == "thunderstorms"
+        }
+        for search, replace in FORECAST_WEATHER_REPLACEMENTS:
+            if search.issubset(weather_set):
+                weather_set -= search
+                weather_set.add(replace)
+        weather = "_and_".join(sorted(weather_set))
 
-    weather = WEATHER_REPLACEMENTS.get(weather, weather)
-    coverage = COVERAGE_REPLACEMENTS.get(coverage, coverage)
+    coverage = FORECAST_COVERAGE_REPLACEMENTS.get(coverage, coverage)
 
-    if coverage in WEATHER_PREFIXES:
+    if coverage in FORECAST_WEATHER_PREFIXES:
         weather = f"{coverage} {weather}"
-    elif coverage in WEATHER_SUFFIXES:
+    elif coverage in FORECAST_WEATHER_SUFFIXES:
         weather = f"{weather} {coverage}"
     return weather
 
 
 # pylint: disable=too-many-return-statements
 def _create_forecast_from_sky_cover(detailed: Dict[Detail, Any]) -> str:
-    sky_cover = detailed.get(Detail.SKY_COVER, 0)
+    sky_cover = detailed.get(Detail.SKY_COVER) or 0
 
     if detailed.get(Detail.IS_DAYTIME):
         if sky_cover <= 25:
@@ -147,51 +167,68 @@ def create_icon_url(detailed: Dict[Detail, Any], *, show_pop: bool):
     """
 
     day_night = "day" if detailed.get(Detail.IS_DAYTIME) else "night"
-    sky_cover = detailed.get(Detail.SKY_COVER, 0)
+    weather = _create_icon_from_weather(
+        detailed, show_pop
+    ) or _create_icon_from_sky_cover(detailed)
+
+    return f"https://api.weather.gov/icons/land/{day_night}/{weather}?size=small"
+
+
+def _create_icon_from_weather(detailed, show_pop):
+    sky_cover = detailed.get(Detail.SKY_COVER) or 0
 
     weather_set: Set[str] = set()
-
     for entry in detailed.get(Detail.WEATHER, []):
         weather = entry.get("weather")
         if weather:
             weather_set.add(weather)
 
-    if weather_set:
-        if "thunderstorms" in weather_set:
-            if sky_cover < 60:
-                weather = "tsra_hi"
-            elif sky_cover < 75:
-                weather = "tsra_sct"
-            else:
-                weather = "tsra"
+    if not weather_set:
+        return None
+
+    if "thunderstorms" in weather_set:
+        if sky_cover < 60:
+            weather = "tsra_hi"
+        elif sky_cover < 75:
+            weather = "tsra_sct"
         else:
-            for search, replace in ICON_WEATHER_REPLACEMENTS:
-                if search.issubset(weather_set):
-                    weather_set -= search
-                    weather_set.add(replace)
-
-            if len(weather_set) > 1:
-                weather_set -= WEATHER_IGNORE_MULTI
-
-            weather = weather_set.pop()
-
-        if show_pop:
-            pop = round(detailed.get(Detail.PROBABILITY_OF_PRECIPITATION, 0) / 10) * 10
-            if pop > 10:
-                weather += f",{pop}"
+            weather = "tsra"
     else:
-        if sky_cover <= 5:
-            weather = "skc"
-        elif sky_cover <= 25:
-            weather = "few"
-        elif sky_cover <= 50:
-            weather = "sct"
-        elif sky_cover < 88:
-            weather = "bkn"
-        else:
-            weather = "ovc"
+        for search, replace in ICON_WEATHER_REPLACEMENTS:
+            if search.issubset(weather_set):
+                weather_set -= search
+                weather_set.add(replace)
 
-        if detailed.get(Detail.WIND_SPEED, 0) > 32:  # 32 km/h ≈ 20 mph
-            weather = "wind_" + weather
+        if len(weather_set) > 1:
+            weather_set -= ICON_WEATHER_IGNORE_MULTI
 
-    return f"https://api.weather.gov/icons/land/{day_night}/{weather}?size=small"
+        weather = weather_set.pop()
+
+    if show_pop:
+        pop = detailed.get(Detail.PROBABILITY_OF_PRECIPITATION) or 0
+        pop = round(pop / 10) * 10
+        if pop > 10:
+            weather += f",{pop}"
+
+    return weather
+
+
+def _create_icon_from_sky_cover(detailed) -> str:
+    sky_cover = detailed.get(Detail.SKY_COVER) or 0
+    wind_kmh = detailed.get(Detail.WIND_SPEED) or 0
+
+    if sky_cover <= 5:
+        weather = "skc"
+    elif sky_cover <= 25:
+        weather = "few"
+    elif sky_cover <= 50:
+        weather = "sct"
+    elif sky_cover < 88:
+        weather = "bkn"
+    else:
+        weather = "ovc"
+
+    if wind_kmh > 32:  # 32 km/h ≈ 20 mph
+        weather = "wind_" + weather
+
+    return weather
