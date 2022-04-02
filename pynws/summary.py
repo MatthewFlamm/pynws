@@ -1,7 +1,7 @@
 """NWS forecast summary and icon emulation"""
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Set, Tuple
 
 from .const import Detail, Final
 
@@ -35,23 +35,22 @@ WEATHER_PREFIXES: Final = {
 
 WEATHER_SUFFIXES: Final = {"likely"}
 
-ICON_WEATHER_PRIORITY = [
-    "thunderstorms",
-    "blizzard",
-    "blowing_snow",
-    "snow",
-    "snow_showers",
-    "freezing_rain",
-    "rain",
-    "rain_showers",
+ICON_WEATHER_REPLACEMENTS: Final[List[Tuple[Set[str], str]]] = [
+    # convert
+    ({"blowing_snow"}, "blizzard"),
+    ({"freezing_fog"}, "fog"),
+    ({"freezing_rain"}, "fzra"),
+    ({"snow_showers"}, "snow"),
+    # combine
+    ({"snow", "rain"}, "snow"),
+    ({"snow", "rain_showers"}, "snow"),
+    ({"snow", "fzra"}, "snow_fzra"),
+    ({"snow", "sleet"}, "snow_sleet"),
+    ({"rain", "fzra"}, "rain_fzra"),
+    ({"rain", "sleet"}, "rain_sleet"),
+    ({"rain_showers", "fzra"}, "rain_fzra"),
+    ({"rain_showers", "sleet"}, "rain_sleet"),
 ]
-
-ICON_WEATHER_REPLACEMENTS: Final = {
-    "blowing_snow": "blizzard",
-    "freezing_fog": "fog",
-    "freezing_rain": "fzra",
-    "snow_showers": "snow",
-}
 
 
 def create_short_forecast(detailed: Dict[Detail, Any]) -> str:
@@ -150,39 +149,35 @@ def create_icon_url(detailed: Dict[Detail, Any], *, show_pop: bool):
     day_night = "day" if detailed.get(Detail.IS_DAYTIME) else "night"
     sky_cover = detailed.get(Detail.SKY_COVER, 0)
 
-    weather_arr: List[str] = []
+    weather_set: Set[str] = set()
 
     for entry in detailed.get(Detail.WEATHER, []):
         weather = entry.get("weather")
         if weather:
-            weather_arr.append(weather)
+            weather_set.add(weather)
 
-    if weather_arr:
-        if len(weather_arr) > 1:
-            weather_arr = [w for w in weather_arr if w not in WEATHER_IGNORE_MULTI]
-
-        if "thunderstorms" in weather_arr:
+    if weather_set:
+        if "thunderstorms" in weather_set:
             if sky_cover < 60:
                 weather = "tsra_hi"
             elif sky_cover < 75:
                 weather = "tsra_sct"
             else:
                 weather = "tsra"
-        elif "snow" in weather_arr and "freezing_rain" in weather_arr:
-            weather = "snow_fzra"
         else:
-            weather_arr = sorted(
-                weather_arr,
-                key=lambda x: ICON_WEATHER_PRIORITY.index(x)
-                if x in ICON_WEATHER_PRIORITY
-                else 100,
-            )
-            weather = weather_arr[0]
-            weather = ICON_WEATHER_REPLACEMENTS.get(weather, weather)
+            for search, replace in ICON_WEATHER_REPLACEMENTS:
+                if search.issubset(weather_set):
+                    weather_set -= search
+                    weather_set.add(replace)
+
+            if len(weather_set) > 1:
+                weather_set -= WEATHER_IGNORE_MULTI
+
+            weather = weather_set.pop()
 
         if show_pop:
             pop = round(detailed.get(Detail.PROBABILITY_OF_PRECIPITATION, 0) / 10) * 10
-            if pop:
+            if pop > 10:
                 weather += f",{pop}"
     else:
         if sky_cover <= 5:
