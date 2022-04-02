@@ -1,8 +1,7 @@
 """NWS forecast summary and icon emulation"""
 from __future__ import annotations
 
-from collections import namedtuple
-from typing import Any, Dict, List, Set, Tuple
+from typing import Any, Dict, List, Set, Tuple, cast
 
 from .const import Detail, Final
 
@@ -89,34 +88,34 @@ def create_short_forecast(detailed: Dict[Detail, Any]) -> str:
 
 
 def _create_forecast_from_weather(detailed: Dict[Detail, Any]) -> str | None:
-    entry_type = namedtuple("entry_type", "weather intensity coverage")
-    entries: List[entry_type] = []
 
-    for item in detailed.get(Detail.WEATHER, []):
-        weather = item.get("weather")
-        if weather:
-            entries.append(
-                entry_type(weather, item.get("intensity"), item.get("coverage"))
-            )
-
+    entries = [x for x in detailed.get(Detail.WEATHER, []) if x.get("weather")]
     if not entries:
         return None
 
     if len(entries) == 1:
-        weather, intensity, coverage = entries[0]
+        entry = entries[0]
+        weather, intensity, coverage = (
+            entry.get("weather"),
+            entry.get("intensity"),
+            entry.get("coverage"),
+        )
         allowed_intensities = FORECAST_WEATHER_INTENSITIES.get(weather, ())
         if intensity in allowed_intensities:
             weather = f"{intensity} {weather}"
     else:
         entries = sorted(
             entries,
-            key=lambda x: (FORECAST_COVERAGE_PRIORITY.index(x.coverage), x.weather),
+            key=lambda x: (
+                FORECAST_COVERAGE_PRIORITY.index(x.get("coverage") or ""),
+                x.get("weather"),
+            ),
         )
-        coverage = entries[0].coverage
+        coverage = entries[0].get("coverage")
         weather_set = {
-            entry.weather
-            for entry in entries
-            if entry.coverage == coverage or entry.weather == "thunderstorms"
+            cast(str, x.get("weather"))
+            for x in entries
+            if x.get("coverage") == coverage or x.get("weather") == "thunderstorms"
         }
         for search, replace in FORECAST_WEATHER_REPLACEMENTS:
             if search.issubset(weather_set):
@@ -124,12 +123,13 @@ def _create_forecast_from_weather(detailed: Dict[Detail, Any]) -> str | None:
                 weather_set.add(replace)
         weather = "_and_".join(sorted(weather_set))
 
-    coverage = FORECAST_COVERAGE_REPLACEMENTS.get(coverage, coverage)
+    if coverage:
+        coverage = FORECAST_COVERAGE_REPLACEMENTS.get(coverage, coverage)
+        if coverage in FORECAST_WEATHER_PREFIXES:
+            weather = f"{coverage} {weather}"
+        elif coverage in FORECAST_WEATHER_SUFFIXES:
+            weather = f"{weather} {coverage}"
 
-    if coverage in FORECAST_WEATHER_PREFIXES:
-        weather = f"{coverage} {weather}"
-    elif coverage in FORECAST_WEATHER_SUFFIXES:
-        weather = f"{weather} {coverage}"
     return weather
 
 
