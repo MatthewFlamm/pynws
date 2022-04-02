@@ -1,32 +1,39 @@
 """NWS forecast summary and icon emulation"""
 from __future__ import annotations
 
-from typing import Any, Dict, List, Set, Tuple, cast
+from typing import Any, Dict, List, Optional, Set, Tuple, cast
 
 from .const import Detail, Final
 
-FORECAST_COVERAGE_PRIORITY: Final[List[str]] = [
-    "definite",
-    "likely",
-    "chance",
-    "scattered",
-    "patchy",
-    "areas",
-    "isolated",
-    "slight_chance",
-]
+FORECAST_COVERAGE_PRIORITY: Final[Dict[str, int]] = {
+    "definite": 0,
+    "likely": 10,
+    "chance": 20,
+    "scattered": 30,
+    "patchy": 40,
+    "areas": 50,
+    "isolated": 60,
+    "slight_chance": 70,
+}
 
 FORECAST_COVERAGE_REPLACEMENTS: Final = {
     "numerous": "chance",
     "areas": "areas_of",
 }
 
-FORECAST_WEATHER_INTENSITIES: Final = {
-    "rain": ("light", "heavy"),
-    "snow": ("light", "heavy"),
+FORECAST_INTENSITIES: Final = [
+    "very_light",
+    "light",
+    "heavy",
+    "very_heavy",
+]
+
+FORECAST_WEATHER_INTENSITIES: Final[Dict[str, List[str]]] = {
+    "rain": FORECAST_INTENSITIES,
+    "snow": FORECAST_INTENSITIES,
 }
 
-FORECAST_WEATHER_REPLACEMENTS: Final[List[Tuple[Set[str], str]]] = [
+FORECAST_WEATHER_COMBINATIONS: Final[List[Tuple[Set[str], str]]] = [
     ({"rain", "freezing_rain"}, "freezing_rain"),
     ({"snow", "freezing_rain"}, "freezing_rain"),
     ({"rain_showers", "snow_showers"}, "rain_and_snow_showers"),
@@ -77,51 +84,23 @@ def create_short_forecast(detailed: Dict[Detail, Any]) -> str:
         str: Short forecast that emulates NWS hourly short forecast.
     """
 
-    return (
-        (
-            _create_forecast_from_weather(detailed)
-            or _create_forecast_from_sky_cover(detailed)
-        )
-        .replace("_", " ")
-        .title()
-    )
+    forecast = _forecast_from_weather(detailed) or _forecast_from_sky_cover(detailed)
+    return forecast.replace("_", " ").title()
 
 
-def _create_forecast_from_weather(detailed: Dict[Detail, Any]) -> str | None:
-
-    entries = [x for x in detailed.get(Detail.WEATHER, []) if x.get("weather")]
+def _forecast_from_weather(detailed: Dict[Detail, Any]) -> Optional[str]:
+    # remove empty entries
+    entries: List[Dict[str, Any]] = [
+        x for x in detailed.get(Detail.WEATHER, []) if x.get("weather")
+    ]
     if not entries:
         return None
 
-    if len(entries) == 1:
-        entry = entries[0]
-        weather, intensity, coverage = (
-            entry.get("weather"),
-            entry.get("intensity"),
-            entry.get("coverage"),
-        )
-        allowed_intensities = FORECAST_WEATHER_INTENSITIES.get(weather, ())
-        if intensity in allowed_intensities:
-            weather = f"{intensity} {weather}"
-    else:
-        entries = sorted(
-            entries,
-            key=lambda x: (
-                FORECAST_COVERAGE_PRIORITY.index(x.get("coverage") or ""),
-                x.get("weather"),
-            ),
-        )
-        coverage = entries[0].get("coverage")
-        weather_set = {
-            cast(str, x.get("weather"))
-            for x in entries
-            if x.get("coverage") == coverage or x.get("weather") == "thunderstorms"
-        }
-        for search, replace in FORECAST_WEATHER_REPLACEMENTS:
-            if search.issubset(weather_set):
-                weather_set -= search
-                weather_set.add(replace)
-        weather = "_and_".join(sorted(weather_set))
+    weather, coverage = (
+        _forecast_from_single(entries[0])
+        if len(entries) == 1
+        else _forecast_from_multiple(entries)
+    )
 
     if coverage:
         coverage = FORECAST_COVERAGE_REPLACEMENTS.get(coverage, coverage)
@@ -133,8 +112,50 @@ def _create_forecast_from_weather(detailed: Dict[Detail, Any]) -> str | None:
     return weather
 
 
+def _forecast_from_single(entry: Dict[str, Any]) -> Tuple[str, Optional[str]]:
+    weather = cast(str, entry.get("weather"))
+    intensity: Optional[str] = entry.get("intensity")
+    coverage: Optional[str] = entry.get("coverage")
+
+    if intensity:
+        allowed_intensities = FORECAST_WEATHER_INTENSITIES.get(weather, [])
+        if intensity in allowed_intensities:
+            weather = f"{intensity} {weather}"
+    return weather, coverage
+
+
+def _forecast_from_multiple(entries: List[Dict[str, Any]]) -> Tuple[str, Optional[str]]:
+    index = {cast(str, x.get("weather")): x for x in entries}
+    weather_set = set(index.keys())
+
+    def coverage_key(coverage: str) -> int:
+        return FORECAST_COVERAGE_PRIORITY.get(coverage, 999)
+
+    for search, replace in FORECAST_WEATHER_COMBINATIONS:
+        if not search.issubset(weather_set):
+            continue
+
+        weather_set.difference_update(search)
+        weather_set.add(replace)
+
+        if replace not in search:
+            # When everything in search is replaced, find the highest priority
+            # coverage from the replaced entries for the new entry.
+            coverages = [cast(str, index[x].get("coverage")) for x in search]
+            coverages = sorted(coverages, key=coverage_key)
+            index[replace] = {"weather": replace, "coverage": coverages[0]}
+
+        for key in search.difference([replace]):
+            del index[key]
+
+    weather = "_and_".join(sorted(weather_set))
+    coverages = [cast(str, x.get("coverage")) for x in index.values()]
+    coverages = sorted(coverages, key=coverage_key)
+    return weather, coverages[0]
+
+
 # pylint: disable=too-many-return-statements
-def _create_forecast_from_sky_cover(detailed: Dict[Detail, Any]) -> str:
+def _forecast_from_sky_cover(detailed: Dict[Detail, Any]) -> str:
     sky_cover = detailed.get(Detail.SKY_COVER) or 0
 
     if detailed.get(Detail.IS_DAYTIME):
@@ -205,7 +226,7 @@ def _create_icon_from_weather(detailed, show_pop):
 
     if show_pop:
         pop = detailed.get(Detail.PROBABILITY_OF_PRECIPITATION) or 0
-        pop = round(pop / 10) * 10
+        pop = round(pop / 10 + 0.01) * 10
         if pop > 10:
             weather += f",{pop}"
 
