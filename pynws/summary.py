@@ -175,8 +175,6 @@ def create_icon_url(detailed: Dict[Detail, Any], *, show_pop: bool):
 
 
 def _create_icon_from_weather(detailed, show_pop):
-    sky_cover = detailed.get(Detail.SKY_COVER) or 0
-
     weather_set: Set[str] = set()
     for entry in detailed.get(Detail.WEATHER, []):
         weather = entry.get("weather")
@@ -187,6 +185,7 @@ def _create_icon_from_weather(detailed, show_pop):
         return None
 
     if "thunderstorms" in weather_set:
+        sky_cover = detailed.get(Detail.SKY_COVER) or 0
         if sky_cover < 60:
             weather = "tsra_hi"
         elif sky_cover < 75:
@@ -223,7 +222,7 @@ def _create_icon_from_sky_cover(detailed) -> str:
         weather = "few"
     elif sky_cover <= 50:
         weather = "sct"
-    elif sky_cover < 88:
+    elif sky_cover <= 87:
         weather = "bkn"
     else:
         weather = "ovc"
