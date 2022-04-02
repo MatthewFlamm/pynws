@@ -11,12 +11,9 @@ from .summary import create_icon_url, create_short_forecast
 from .units import get_converter
 
 if sys.version_info[:2] >= (3, 9):
-    from zoneinfo import ZoneInfo, ZoneInfoNotFoundError  # pylint: disable=import-error
+    from zoneinfo import ZoneInfo  # pylint: disable=import-error
 else:
-    from backports.zoneinfo import (  # pylint: disable=import-error
-        ZoneInfo,
-        ZoneInfoNotFoundError,
-    )
+    from backports.zoneinfo import ZoneInfo  # pylint: disable=import-error
 
 if sys.platform == "win32" or TYPE_CHECKING:
     import pytz
@@ -75,12 +72,9 @@ class DetailedForecast:
 
     @staticmethod
     def _get_time_zone(time_zone) -> tzinfo:
-        try:
-            return ZoneInfo(time_zone)
-        except ZoneInfoNotFoundError:
-            if sys.platform != "win32":
-                raise
-            return pytz.timezone(time_zone)
+        return (
+            ZoneInfo(time_zone) if sys.platform != "win32" else pytz.timezone(time_zone)
+        )
 
     @staticmethod
     def _parse_duration(duration_str: str) -> timedelta:
