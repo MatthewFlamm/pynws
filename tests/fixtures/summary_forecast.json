@@ -1,0 +1,2722 @@
+[
+  {
+    "input": {
+      "skyCover": 0,
+      "windSpeed": 7.408,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Clear"
+  },
+  {
+    "input": {
+      "skyCover": 1,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 2,
+      "windSpeed": 18.52,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Clear"
+  },
+  {
+    "input": {
+      "skyCover": 3,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Clear"
+  },
+  {
+    "input": {
+      "skyCover": 4,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Clear"
+  },
+  {
+    "input": {
+      "skyCover": 5,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 6,
+      "windSpeed": 18.52,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Mostly Clear"
+  },
+  {
+    "input": {
+      "skyCover": 7,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Mostly Clear"
+  },
+  {
+    "input": {
+      "skyCover": 8,
+      "windSpeed": 18.52,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Mostly Clear"
+  },
+  {
+    "input": {
+      "skyCover": 9,
+      "windSpeed": 20.372,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Mostly Clear"
+  },
+  {
+    "input": {
+      "skyCover": 10,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 11,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 12,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Mostly Clear"
+  },
+  {
+    "input": {
+      "skyCover": 13,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Mostly Clear"
+  },
+  {
+    "input": {
+      "skyCover": 14,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 15,
+      "windSpeed": 18.52,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 16,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 17,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 18,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 19,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Mostly Clear"
+  },
+  {
+    "input": {
+      "skyCover": 20,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 21,
+      "windSpeed": 20.372,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Mostly Clear"
+  },
+  {
+    "input": {
+      "skyCover": 22,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 23,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 24,
+      "windSpeed": 20.372,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 25,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 26,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Mostly Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 27,
+      "windSpeed": 35.188,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Mostly Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 28,
+      "windSpeed": 3.704,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Mostly Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 29,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Mostly Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 30,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Mostly Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 31,
+      "windSpeed": 22.224,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Mostly Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 32,
+      "windSpeed": 7.408,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Partly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 33,
+      "windSpeed": 7.408,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Partly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 34,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Partly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 35,
+      "windSpeed": 9.26,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Partly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 36,
+      "windSpeed": 7.408,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Partly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 37,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Partly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 38,
+      "windSpeed": 18.52,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Partly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 39,
+      "windSpeed": 7.408,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Partly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 40,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Partly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 41,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Partly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 42,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Partly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 43,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Partly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 44,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Partly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 45,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Partly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 46,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Mostly Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 47,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Partly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 48,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Mostly Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 49,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Partly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 50,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Mostly Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 51,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Partly Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 52,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Partly Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 53,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Partly Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 54,
+      "windSpeed": 18.52,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 55,
+      "windSpeed": 9.26,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Partly Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 56,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Partly Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 57,
+      "windSpeed": 3.704,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 58,
+      "windSpeed": 20.372,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 59,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Partly Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 60,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Partly Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 61,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Partly Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 62,
+      "windSpeed": 3.704,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 63,
+      "windSpeed": 22.224,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 64,
+      "windSpeed": 3.704,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 65,
+      "windSpeed": 24.076,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 66,
+      "windSpeed": 5.556,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 67,
+      "windSpeed": 24.076,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Partly Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 68,
+      "windSpeed": 7.408,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Partly Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 69,
+      "windSpeed": 3.704,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Partly Sunny"
+  },
+  {
+    "input": {
+      "skyCover": 70,
+      "windSpeed": 5.556,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 71,
+      "windSpeed": 9.26,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 72,
+      "windSpeed": 5.556,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 73,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 74,
+      "windSpeed": 7.408,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 75,
+      "windSpeed": 9.26,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 76,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 77,
+      "windSpeed": 25.928,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 78,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 79,
+      "windSpeed": 9.26,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 80,
+      "windSpeed": 18.52,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 81,
+      "windSpeed": 3.704,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 82,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 83,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 84,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 85,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 86,
+      "windSpeed": 3.704,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 87,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Mostly Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 88,
+      "windSpeed": 9.26,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 89,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 90,
+      "windSpeed": 1.852,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 91,
+      "windSpeed": 3.704,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 92,
+      "windSpeed": 1.852,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 93,
+      "windSpeed": 1.852,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 94,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 95,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 96,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 97,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 98,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 99,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 100,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Cloudy"
+  },
+  {
+    "input": {
+      "skyCover": 42,
+      "windSpeed": 40.744,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "areas",
+          "weather": "blowing_snow",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Areas Of Blowing Snow"
+  },
+  {
+    "input": {
+      "skyCover": 93,
+      "windSpeed": 35.188,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "areas",
+          "weather": "blowing_snow",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Light Snow And Areas Of Blowing Snow"
+  },
+  {
+    "input": {
+      "skyCover": 54,
+      "windSpeed": 37.04,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "areas",
+          "weather": "blowing_snow",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Light Snow Likely And Areas Of Blowing Snow"
+  },
+  {
+    "input": {
+      "skyCover": 10,
+      "windSpeed": 3.704,
+      "weather": [
+        {
+          "coverage": "patchy",
+          "weather": "fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Patchy Fog"
+  },
+  {
+    "input": {
+      "skyCover": 100,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "likely",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "patchy",
+          "weather": "fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Patchy Fog"
+  },
+  {
+    "input": {
+      "skyCover": 100,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "patchy",
+          "weather": "fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Patchy Fog"
+  },
+  {
+    "input": {
+      "skyCover": 100,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "patchy",
+          "weather": "fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Patchy Fog"
+  },
+  {
+    "input": {
+      "skyCover": 100,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "rain",
+          "intensity": "moderate"
+        },
+        {
+          "coverage": "definite",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "patchy",
+          "weather": "fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Patchy Fog"
+  },
+  {
+    "input": {
+      "skyCover": 100,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "patchy",
+          "weather": "fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Chance Light Snow"
+  },
+  {
+    "input": {
+      "skyCover": 100,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "patchy",
+          "weather": "fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Light Snow Likely"
+  },
+  {
+    "input": {
+      "skyCover": 100,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "snow",
+          "intensity": "moderate"
+        },
+        {
+          "coverage": "patchy",
+          "weather": "fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Snow"
+  },
+  {
+    "input": {
+      "skyCover": 100,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "snow",
+          "intensity": "moderate"
+        },
+        {
+          "coverage": "patchy",
+          "weather": "fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Snow Likely"
+  },
+  {
+    "input": {
+      "skyCover": 40,
+      "windSpeed": 27.78,
+      "weather": [
+        {
+          "coverage": "areas",
+          "weather": "freezing_fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Areas Of Freezing Fog"
+  },
+  {
+    "input": {
+      "skyCover": 72,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "areas",
+          "weather": "freezing_fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Areas Of Freezing Fog"
+  },
+  {
+    "input": {
+      "skyCover": 74,
+      "windSpeed": 9.26,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "areas",
+          "weather": "freezing_fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Areas Of Freezing Fog"
+  },
+  {
+    "input": {
+      "skyCover": 55,
+      "windSpeed": 22.224,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "snow_showers",
+          "intensity": "very_light"
+        },
+        {
+          "coverage": "areas",
+          "weather": "freezing_fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Snow Showers"
+  },
+  {
+    "input": {
+      "skyCover": 72,
+      "windSpeed": 9.26,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "freezing_rain",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Chance Freezing Rain"
+  },
+  {
+    "input": {
+      "skyCover": 78,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "chance",
+          "weather": "freezing_rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "chance",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Chance Freezing Rain"
+  },
+  {
+    "input": {
+      "skyCover": 74,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "freezing_rain",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Slight Chance Freezing Rain"
+  },
+  {
+    "input": {
+      "skyCover": 31,
+      "windSpeed": 5.556,
+      "weather": [
+        {
+          "coverage": "areas",
+          "weather": "frost",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Areas Of Frost"
+  },
+  {
+    "input": {
+      "skyCover": 68,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "rain",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Chance Light Rain"
+  },
+  {
+    "input": {
+      "skyCover": 95,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "chance",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Chance Rain And Snow"
+  },
+  {
+    "input": {
+      "skyCover": 99,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Chance Rain And Snow"
+  },
+  {
+    "input": {
+      "skyCover": 93,
+      "windSpeed": 22.224,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "isolated",
+          "weather": "thunderstorms",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Chance Light Rain"
+  },
+  {
+    "input": {
+      "skyCover": 97,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "rain",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Light Rain"
+  },
+  {
+    "input": {
+      "skyCover": 91,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Light Rain Likely"
+  },
+  {
+    "input": {
+      "skyCover": 95,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "likely",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Rain And Snow Likely"
+  },
+  {
+    "input": {
+      "skyCover": 84,
+      "windSpeed": 18.52,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Rain And Snow Likely"
+  },
+  {
+    "input": {
+      "skyCover": 59,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        },
+        {
+          "coverage": "likely",
+          "weather": "rain",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Light Rain Likely"
+  },
+  {
+    "input": {
+      "skyCover": 92,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "rain",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Slight Chance Light Rain"
+  },
+  {
+    "input": {
+      "skyCover": 94,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Slight Chance Rain And Snow"
+  },
+  {
+    "input": {
+      "skyCover": 62,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "rain",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Chance Rain"
+  },
+  {
+    "input": {
+      "skyCover": 88,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "rain",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Rain"
+  },
+  {
+    "input": {
+      "skyCover": 95,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "rain",
+          "intensity": "moderate"
+        },
+        {
+          "coverage": "definite",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Rain And Snow"
+  },
+  {
+    "input": {
+      "skyCover": 97,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain",
+          "intensity": "moderate"
+        },
+        {
+          "coverage": "likely",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Rain And Snow Likely"
+  },
+  {
+    "input": {
+      "skyCover": 60,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "rain_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Chance Rain Showers"
+  },
+  {
+    "input": {
+      "skyCover": 62,
+      "windSpeed": 20.372,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        },
+        {
+          "coverage": "chance",
+          "weather": "rain_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Chance Showers And Thunderstorms"
+  },
+  {
+    "input": {
+      "skyCover": 68,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "rain_showers",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Chance Showers And Thunderstorms"
+  },
+  {
+    "input": {
+      "skyCover": 80,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "rain_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Rain Showers"
+  },
+  {
+    "input": {
+      "skyCover": 65,
+      "windSpeed": 29.632,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "rain_showers",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Showers And Thunderstorms"
+  },
+  {
+    "input": {
+      "skyCover": 30,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "isolated",
+          "weather": "rain_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Isolated Rain Showers"
+  },
+  {
+    "input": {
+      "skyCover": 86,
+      "windSpeed": 20.372,
+      "weather": [
+        {
+          "coverage": "isolated",
+          "weather": "rain_showers",
+          "intensity": "light"
+        },
+        {
+          "coverage": "isolated",
+          "weather": "snow_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Isolated Rain And Snow Showers"
+  },
+  {
+    "input": {
+      "skyCover": 88,
+      "windSpeed": 20.372,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Rain Showers Likely"
+  },
+  {
+    "input": {
+      "skyCover": 85,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain_showers",
+          "intensity": "light"
+        },
+        {
+          "coverage": "chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Showers And Thunderstorms Likely"
+  },
+  {
+    "input": {
+      "skyCover": 90,
+      "windSpeed": 22.224,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain_showers",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Showers And Thunderstorms Likely"
+  },
+  {
+    "input": {
+      "skyCover": 84,
+      "windSpeed": 20.372,
+      "weather": [
+        {
+          "coverage": "scattered",
+          "weather": "rain_showers",
+          "intensity": "light"
+        },
+        {
+          "coverage": "scattered",
+          "weather": "snow_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Scattered Rain And Snow Showers"
+  },
+  {
+    "input": {
+      "skyCover": 87,
+      "windSpeed": 20.372,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "rain_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Slight Chance Rain Showers"
+  },
+  {
+    "input": {
+      "skyCover": 72,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "rain_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Slight Chance Showers And Thunderstorms"
+  },
+  {
+    "input": {
+      "skyCover": 68,
+      "windSpeed": 24.076,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        },
+        {
+          "coverage": "chance",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Chance Showers And Thunderstorms"
+  },
+  {
+    "input": {
+      "skyCover": 90,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Rain Showers"
+  },
+  {
+    "input": {
+      "skyCover": 93,
+      "windSpeed": 24.076,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        },
+        {
+          "coverage": "chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Showers And Thunderstorms"
+  },
+  {
+    "input": {
+      "skyCover": 27,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "isolated",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Isolated Rain Showers"
+  },
+  {
+    "input": {
+      "skyCover": 91,
+      "windSpeed": 9.26,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Rain Showers Likely"
+  },
+  {
+    "input": {
+      "skyCover": 84,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        },
+        {
+          "coverage": "chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Showers And Thunderstorms Likely"
+  },
+  {
+    "input": {
+      "skyCover": 78,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Showers And Thunderstorms Likely"
+  },
+  {
+    "input": {
+      "skyCover": 85,
+      "windSpeed": 1.852,
+      "weather": [
+        {
+          "coverage": "scattered",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Scattered Rain Showers"
+  },
+  {
+    "input": {
+      "skyCover": 86,
+      "windSpeed": 9.26,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Slight Chance Rain Showers"
+  },
+  {
+    "input": {
+      "skyCover": 80,
+      "windSpeed": 18.52,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Slight Chance Showers And Thunderstorms"
+  },
+  {
+    "input": {
+      "skyCover": 98,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Chance Light Snow"
+  },
+  {
+    "input": {
+      "skyCover": 59,
+      "windSpeed": 27.78,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Light Snow"
+  },
+  {
+    "input": {
+      "skyCover": 99,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Light Snow Likely"
+  },
+  {
+    "input": {
+      "skyCover": 81,
+      "windSpeed": 22.224,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Slight Chance Light Snow"
+  },
+  {
+    "input": {
+      "skyCover": 98,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "snow",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Snow"
+  },
+  {
+    "input": {
+      "skyCover": 98,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "snow",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "Snow Likely"
+  },
+  {
+    "input": {
+      "skyCover": 90,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "isolated",
+          "weather": "snow_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Isolated Snow Showers"
+  },
+  {
+    "input": {
+      "skyCover": 70,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "snow_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "Slight Chance Snow Showers"
+  }
+]

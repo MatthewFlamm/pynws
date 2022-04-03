@@ -1,0 +1,2782 @@
+[
+  {
+    "input": {
+      "skyCover": 4,
+      "windSpeed": 22.224,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/skc?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 9,
+      "windSpeed": 24.076,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/few?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 14,
+      "windSpeed": 31.484,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/few?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 19,
+      "windSpeed": 27.78,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/few?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 19,
+      "windSpeed": 38.892,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/wind_few?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 24,
+      "windSpeed": 20.372,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/few?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 24,
+      "windSpeed": 33.336,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/wind_few?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 29,
+      "windSpeed": 22.224,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 28,
+      "windSpeed": 37.04,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/wind_sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 34,
+      "windSpeed": 20.372,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 34,
+      "windSpeed": 38.892,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/wind_sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 39,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 38,
+      "windSpeed": 40.744,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/wind_sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 44,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 43,
+      "windSpeed": 35.188,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/wind_sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 49,
+      "windSpeed": 29.632,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 47,
+      "windSpeed": 38.892,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/wind_sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 54,
+      "windSpeed": 29.632,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/bkn?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 54,
+      "windSpeed": 38.892,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/wind_bkn?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 59,
+      "windSpeed": 29.632,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/bkn?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 56,
+      "windSpeed": 38.892,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/wind_bkn?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 64,
+      "windSpeed": 24.076,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/bkn?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 61,
+      "windSpeed": 38.892,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/wind_bkn?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 69,
+      "windSpeed": 9.26,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/bkn?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 65,
+      "windSpeed": 38.892,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/wind_bkn?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 74,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/bkn?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 79,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/bkn?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 84,
+      "windSpeed": 27.78,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/bkn?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 89,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/ovc?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 94,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/ovc?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 97,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/ovc?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 42,
+      "windSpeed": 40.744,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "areas",
+          "weather": "blowing_snow",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/blizzard?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 11,
+      "windSpeed": 3.704,
+      "weather": [
+        {
+          "coverage": "patchy",
+          "weather": "fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/fog?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 100,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "patchy",
+          "weather": "fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/rain?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 100,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "patchy",
+          "weather": "fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 100,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "patchy",
+          "weather": "fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 100,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "patchy",
+          "weather": "fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 100,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "snow",
+          "intensity": "moderate"
+        },
+        {
+          "coverage": "patchy",
+          "weather": "fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 100,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "snow",
+          "intensity": "moderate"
+        },
+        {
+          "coverage": "patchy",
+          "weather": "fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 40,
+      "windSpeed": 27.78,
+      "weather": [
+        {
+          "coverage": "areas",
+          "weather": "freezing_fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/fog?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 72,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "areas",
+          "weather": "freezing_fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 74,
+      "windSpeed": 9.26,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "areas",
+          "weather": "freezing_fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 65,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "snow_showers",
+          "intensity": "very_light"
+        },
+        {
+          "coverage": "areas",
+          "weather": "freezing_fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 77,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "chance",
+          "weather": "freezing_rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "chance",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/snow_fzra?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 74,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "freezing_rain",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/snow_fzra?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 31,
+      "windSpeed": 5.556,
+      "weather": [
+        {
+          "coverage": "areas",
+          "weather": "frost",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 81,
+      "windSpeed": 7.408,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "rain",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/rain?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 77,
+      "windSpeed": 20.372,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "chance",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 99,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 93,
+      "windSpeed": 22.224,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "isolated",
+          "weather": "thunderstorms",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/tsra?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 95,
+      "windSpeed": 20.372,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "rain",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/rain?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 84,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/rain?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 77,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "likely",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 59,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        },
+        {
+          "coverage": "likely",
+          "weather": "rain",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/tsra_hi?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 92,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "rain",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/rain?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 94,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 86,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "rain",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/rain?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 60,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "rain_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/rain_showers?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 62,
+      "windSpeed": 20.372,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        },
+        {
+          "coverage": "chance",
+          "weather": "rain_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/tsra_sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 82,
+      "windSpeed": 9.26,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "rain_showers",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/tsra?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 80,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "rain_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/rain_showers?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 65,
+      "windSpeed": 29.632,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "rain_showers",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/tsra_sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 30,
+      "windSpeed": 20.372,
+      "weather": [
+        {
+          "coverage": "isolated",
+          "weather": "rain_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/rain_showers?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 88,
+      "windSpeed": 20.372,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/rain_showers?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 77,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain_showers",
+          "intensity": "light"
+        },
+        {
+          "coverage": "chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/tsra?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 90,
+      "windSpeed": 22.224,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain_showers",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/tsra?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 84,
+      "windSpeed": 20.372,
+      "weather": [
+        {
+          "coverage": "scattered",
+          "weather": "rain_showers",
+          "intensity": "light"
+        },
+        {
+          "coverage": "scattered",
+          "weather": "snow_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 87,
+      "windSpeed": 20.372,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "rain_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/rain_showers?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 72,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "rain_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/tsra_sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 68,
+      "windSpeed": 24.076,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        },
+        {
+          "coverage": "chance",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/tsra_sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 88,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/rain_showers?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 27,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "isolated",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/rain_showers?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 90,
+      "windSpeed": 9.26,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/rain_showers?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 84,
+      "windSpeed": 9.26,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        },
+        {
+          "coverage": "chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/tsra?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 81,
+      "windSpeed": 9.26,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/tsra?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 95,
+      "windSpeed": 3.704,
+      "weather": [
+        {
+          "coverage": "scattered",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/rain_showers?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 86,
+      "windSpeed": 9.26,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/rain_showers?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 80,
+      "windSpeed": 18.52,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/tsra?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 98,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 99,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 81,
+      "windSpeed": 22.224,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 98,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "snow",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 98,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "snow",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": true
+    },
+    "expected": "https://api.weather.gov/icons/land/day/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 4,
+      "windSpeed": 18.52,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/skc?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 9,
+      "windSpeed": 22.224,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/few?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 14,
+      "windSpeed": 27.78,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/few?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 19,
+      "windSpeed": 31.484,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/few?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 24,
+      "windSpeed": 20.372,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/few?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 24,
+      "windSpeed": 38.892,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/wind_few?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 29,
+      "windSpeed": 25.928,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 28,
+      "windSpeed": 44.448,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/wind_sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 34,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 34,
+      "windSpeed": 37.04,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/wind_sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 39,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 44,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 49,
+      "windSpeed": 20.372,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 48,
+      "windSpeed": 33.336,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/wind_sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 54,
+      "windSpeed": 27.78,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/bkn?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 59,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/bkn?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 64,
+      "windSpeed": 18.52,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/bkn?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 69,
+      "windSpeed": 29.632,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/bkn?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 69,
+      "windSpeed": 37.04,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/wind_bkn?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 74,
+      "windSpeed": 22.224,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/bkn?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 72,
+      "windSpeed": 35.188,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/wind_bkn?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 79,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/bkn?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 84,
+      "windSpeed": 7.408,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/bkn?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 89,
+      "windSpeed": 18.52,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/ovc?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 93,
+      "windSpeed": 1.852,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/ovc?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 99,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/ovc?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 100,
+      "windSpeed": 14.816,
+      "weather": [
+        {
+          "coverage": null,
+          "weather": null,
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/ovc?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 93,
+      "windSpeed": 35.188,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "areas",
+          "weather": "blowing_snow",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/blizzard?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 54,
+      "windSpeed": 37.04,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "areas",
+          "weather": "blowing_snow",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/blizzard?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 10,
+      "windSpeed": 3.704,
+      "weather": [
+        {
+          "coverage": "patchy",
+          "weather": "fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/fog?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 100,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "likely",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "patchy",
+          "weather": "fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 100,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "rain",
+          "intensity": "moderate"
+        },
+        {
+          "coverage": "definite",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "patchy",
+          "weather": "fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 100,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "snow",
+          "intensity": "moderate"
+        },
+        {
+          "coverage": "patchy",
+          "weather": "fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 63,
+      "windSpeed": 27.78,
+      "weather": [
+        {
+          "coverage": "areas",
+          "weather": "freezing_fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/fog?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 72,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "areas",
+          "weather": "freezing_fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 71,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "areas",
+          "weather": "freezing_fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 55,
+      "windSpeed": 22.224,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "snow_showers",
+          "intensity": "very_light"
+        },
+        {
+          "coverage": "areas",
+          "weather": "freezing_fog",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 72,
+      "windSpeed": 9.26,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "freezing_rain",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/fzra?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 78,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "chance",
+          "weather": "freezing_rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "chance",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/snow_fzra?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 81,
+      "windSpeed": 22.224,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "snow",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "freezing_rain",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/snow_fzra?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 14,
+      "windSpeed": 3.704,
+      "weather": [
+        {
+          "coverage": "areas",
+          "weather": "frost",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/few?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 68,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "rain",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/rain?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 95,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "chance",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 97,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "rain",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/rain?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 91,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/rain?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 95,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "likely",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 84,
+      "windSpeed": 18.52,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 63,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        },
+        {
+          "coverage": "likely",
+          "weather": "rain",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/tsra_sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 92,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "rain",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/rain?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 79,
+      "windSpeed": 22.224,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "rain",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 62,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "rain",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/rain?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 88,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "rain",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/rain?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 95,
+      "windSpeed": 12.964,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "rain",
+          "intensity": "moderate"
+        },
+        {
+          "coverage": "definite",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 97,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain",
+          "intensity": "moderate"
+        },
+        {
+          "coverage": "likely",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 86,
+      "windSpeed": 9.26,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "rain_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/rain_showers?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 48,
+      "windSpeed": 18.52,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        },
+        {
+          "coverage": "chance",
+          "weather": "rain_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/tsra_hi?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 68,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "rain_showers",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/tsra_sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 96,
+      "windSpeed": 25.928,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "rain_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/rain_showers?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 47,
+      "windSpeed": 22.224,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "rain_showers",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/tsra_hi?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 30,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "isolated",
+          "weather": "rain_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/rain_showers?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 86,
+      "windSpeed": 20.372,
+      "weather": [
+        {
+          "coverage": "isolated",
+          "weather": "rain_showers",
+          "intensity": "light"
+        },
+        {
+          "coverage": "isolated",
+          "weather": "snow_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 76,
+      "windSpeed": 5.556,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/rain_showers?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 85,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain_showers",
+          "intensity": "light"
+        },
+        {
+          "coverage": "chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/tsra?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 86,
+      "windSpeed": 18.52,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain_showers",
+          "intensity": "light"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/tsra?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 84,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "rain_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/rain_showers?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 26,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "rain_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/tsra_hi?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 68,
+      "windSpeed": 24.076,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        },
+        {
+          "coverage": "chance",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/tsra_sct?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 90,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/rain_showers?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 93,
+      "windSpeed": 24.076,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        },
+        {
+          "coverage": "chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/tsra?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 56,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "isolated",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/rain_showers?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 91,
+      "windSpeed": 9.26,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/rain_showers?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 84,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        },
+        {
+          "coverage": "chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/tsra?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 78,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        },
+        {
+          "coverage": "slight_chance",
+          "weather": "thunderstorms",
+          "intensity": null
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/tsra?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 85,
+      "windSpeed": 1.852,
+      "weather": [
+        {
+          "coverage": "scattered",
+          "weather": "rain_showers",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/rain_showers?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 84,
+      "windSpeed": 22.224,
+      "weather": [
+        {
+          "coverage": "chance",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 59,
+      "windSpeed": 27.78,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 66,
+      "windSpeed": 35.188,
+      "weather": [
+        {
+          "coverage": "likely",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 81,
+      "windSpeed": 22.224,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "snow",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 98,
+      "windSpeed": 11.112,
+      "weather": [
+        {
+          "coverage": "definite",
+          "weather": "snow",
+          "intensity": "moderate"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 90,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "isolated",
+          "weather": "snow_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/snow?size=small"
+  },
+  {
+    "input": {
+      "skyCover": 70,
+      "windSpeed": 16.668,
+      "weather": [
+        {
+          "coverage": "slight_chance",
+          "weather": "snow_showers",
+          "intensity": "light"
+        }
+      ],
+      "isDaytime": false
+    },
+    "expected": "https://api.weather.gov/icons/land/night/snow?size=small"
+  }
+]

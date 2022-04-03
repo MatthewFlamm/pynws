@@ -5,15 +5,15 @@ from typing import Any, Dict, List, Optional, Set, Tuple, cast
 
 from .const import Detail, Final
 
-FORECAST_COVERAGE_PRIORITY: Final[Dict[str, int]] = {
+FORECAST_COVERAGE_PRIORITY: Final = {
     "definite": 0,
-    "likely": 10,
-    "chance": 20,
-    "scattered": 30,
-    "patchy": 40,
-    "areas": 50,
-    "isolated": 60,
-    "slight_chance": 70,
+    "likely": 1,
+    "scattered": 2,
+    "patchy": 3,
+    "areas": 4,
+    "isolated": 5,
+    "chance": 6,
+    "slight_chance": 7,
 }
 
 FORECAST_COVERAGE_REPLACEMENTS: Final = {
@@ -28,19 +28,33 @@ FORECAST_INTENSITIES: Final = [
     "very_heavy",
 ]
 
-FORECAST_WEATHER_INTENSITIES: Final[Dict[str, List[str]]] = {
+FORECAST_WEATHER_INTENSITIES: Final = {
     "rain": FORECAST_INTENSITIES,
     "snow": FORECAST_INTENSITIES,
 }
 
-FORECAST_WEATHER_COMBINATIONS: Final[List[Tuple[Set[str], str]]] = [
-    ({"rain", "freezing_rain"}, "freezing_rain"),
-    ({"snow", "freezing_rain"}, "freezing_rain"),
-    ({"rain_showers", "snow_showers"}, "rain_and_snow_showers"),
-    ({"rain_showers", "thunderstorms"}, "showers_and_thunderstorms"),
-]
+FORECAST_WEATHER_REPLACEMENTS: Final = {
+    # values within keys must be alphabetical
+    "blowing_snow|snow": "blowing_snow",
+    "fog|rain": "fog",
+    "fog|rain|snow": "fog",
+    "fog|snow": "snow",
+    "freezing_fog|snow": "freezing_fog",
+    "freezing_fog|snow_showers": "snow_showers",
+    "freezing_rain|rain|snow": "freezing_rain",
+    "rain_showers|snow_showers": "rain_and_snow_showers",
+    "rain_showers|thunderstorms": "showers_and_thunderstorms",
+}
 
-FORECAST_WEATHER_PREFIXES: Final = {
+# canned results when rules can't be found
+FORECAST_CANNED_RESULTS: Final = {
+    "blowing_snow--areas|snow-light-definite": "Light Snow And Areas Of Blowing Snow",
+    "blowing_snow--areas|snow-light-likely": "Light Snow Likely And Areas Of Blowing Snow",
+    "rain-light-chance|thunderstorms--isolated": "Chance Light Rain",
+    "rain-light-likely|thunderstorms--slight_chance": "Light Rain Likely",
+}
+
+FORECAST_COVERAGE_PREFIXES: Final = {
     "areas_of",
     "chance",
     "isolated",
@@ -49,29 +63,62 @@ FORECAST_WEATHER_PREFIXES: Final = {
     "slight_chance",
 }
 
-FORECAST_WEATHER_SUFFIXES: Final = {"likely"}
+FORECAST_COVERAGE_SUFFIXES: Final = {"likely"}
 
-ICON_WEATHER_REPLACEMENTS: Final[List[Tuple[Set[str], str]]] = [
-    # convert
-    ({"blowing_snow"}, "blizzard"),
-    ({"freezing_fog"}, "fog"),
-    ({"freezing_rain"}, "fzra"),
-    ({"snow_showers"}, "snow"),
-    # combine
-    ({"snow", "rain"}, "snow"),
-    ({"snow", "rain_showers"}, "snow"),
-    ({"snow", "fzra"}, "snow_fzra"),
-    ({"snow", "sleet"}, "snow_sleet"),
-    ({"rain", "fzra"}, "rain_fzra"),
-    ({"rain", "sleet"}, "rain_sleet"),
-    ({"rain_showers", "fzra"}, "rain_fzra"),
-    ({"rain_showers", "sleet"}, "rain_sleet"),
-]
-
-ICON_WEATHER_IGNORE_MULTI: Final = {
-    "fog",
-    "freezing_fog",
+ICON_WEATHER_REPLACEMENTS: Final = {
+    # values within keys must be alphabetical
+    "blowing_snow|snow": "blizzard",
+    "fog|rain": "rain",
+    "fog|rain|snow": "snow",
+    "fog|snow": "snow",
+    "freezing_fog": "fog",
+    "freezing_fog|snow_showers": "snow",
+    "freezing_rain": "fzra",
+    "freezing_rain|rain": "rain_fzra",
+    "freezing_rain|rain|snow": "snow_fzra",
+    "rain_showers|snow_showers": "snow",
+    "rain|snow": "snow",
+    "snow_showers": "snow",
 }
+
+ICON_VALID_WEATHER_ICONS: Final = {
+    "blizzard",
+    "cold",
+    "dust",
+    "fog",
+    "fzra",
+    "haze",
+    "hot",
+    "hurricane",
+    "rain",
+    "rain_fzra",
+    "rain_showers",
+    "rain_showers_hi",
+    "rain_sleet",
+    "rain_snow",
+    "sleet",
+    "smoke",
+    "snow",
+    "snow_fzra",
+    "snow_sleet",
+    "tornado",
+    "tropical_storm",
+    "tsra",
+    "tsra_hi",
+    "tsra_sct",
+}
+
+
+def conditions_key(entries: List[Dict[str, Any]]) -> Optional[str]:
+    """Create key from array of weather conditions"""
+    results = []
+    for entry in entries:
+        if condition := entry.get("weather"):
+            intensity = entry.get("intensity") or ""
+            coverage = entry.get("coverage") or ""
+            results.append(f"{condition}-{intensity}-{coverage}")
+
+    return "|".join(sorted(results)) if results else None
 
 
 def create_short_forecast(detailed: Dict[Detail, Any]) -> str:
@@ -91,7 +138,7 @@ def create_short_forecast(detailed: Dict[Detail, Any]) -> str:
 def _forecast_from_weather(detailed: Dict[Detail, Any]) -> Optional[str]:
     # remove empty entries
     entries: List[Dict[str, Any]] = [
-        x for x in detailed.get(Detail.WEATHER, []) if x.get("weather")
+        x for x in detailed.get(Detail.WEATHER) or [] if x.get("weather")
     ]
     if not entries:
         return None
@@ -104,9 +151,9 @@ def _forecast_from_weather(detailed: Dict[Detail, Any]) -> Optional[str]:
 
     if coverage:
         coverage = FORECAST_COVERAGE_REPLACEMENTS.get(coverage, coverage)
-        if coverage in FORECAST_WEATHER_PREFIXES:
+        if coverage in FORECAST_COVERAGE_PREFIXES:
             weather = f"{coverage} {weather}"
-        elif coverage in FORECAST_WEATHER_SUFFIXES:
+        elif coverage in FORECAST_COVERAGE_SUFFIXES:
             weather = f"{weather} {coverage}"
 
     return weather
@@ -125,32 +172,36 @@ def _forecast_from_single(entry: Dict[str, Any]) -> Tuple[str, Optional[str]]:
 
 
 def _forecast_from_multiple(entries: List[Dict[str, Any]]) -> Tuple[str, Optional[str]]:
+    key = conditions_key(entries)
+    if key:
+        weather = FORECAST_CANNED_RESULTS.get(key)
+        if weather:
+            return weather, None
+
     index = {cast(str, x.get("weather")): x for x in entries}
     weather_set = set(index.keys())
 
-    def coverage_key(coverage: str) -> int:
+    def coverage_sort_key(coverage: str) -> int:
         return FORECAST_COVERAGE_PRIORITY.get(coverage, 999)
 
-    for search, replace in FORECAST_WEATHER_COMBINATIONS:
-        if not search.issubset(weather_set):
-            continue
+    replace = FORECAST_WEATHER_REPLACEMENTS.get("|".join(sorted(weather_set)))
+    if replace:
+        if replace in weather_set:
+            return _forecast_from_single(index[replace])
 
-        weather_set.difference_update(search)
-        weather_set.add(replace)
+        # result requires merging list entries
+        coverages = [cast(str, index[x].get("coverage")) for x in weather_set]
+        coverages = sorted(coverages, key=coverage_sort_key)
+        index[replace] = {"weather": replace, "coverage": coverages[0]}
 
-        if replace not in search:
-            # When everything in search is replaced, find the highest priority
-            # coverage from the replaced entries for the new entry.
-            coverages = [cast(str, index[x].get("coverage")) for x in search]
-            coverages = sorted(coverages, key=coverage_key)
-            index[replace] = {"weather": replace, "coverage": coverages[0]}
-
-        for key in search.difference([replace]):
+        for key in weather_set.difference([replace]):
             del index[key]
+
+        weather_set = {replace}
 
     weather = "_and_".join(sorted(weather_set))
     coverages = [cast(str, x.get("coverage")) for x in index.values()]
-    coverages = sorted(coverages, key=coverage_key)
+    coverages = sorted(coverages, key=coverage_sort_key)
     return weather, coverages[0]
 
 
@@ -197,7 +248,7 @@ def create_icon_url(detailed: Dict[Detail, Any], *, show_pop: bool):
 
 def _create_icon_from_weather(detailed, show_pop):
     weather_set: Set[str] = set()
-    for entry in detailed.get(Detail.WEATHER, []):
+    for entry in detailed.get(Detail.WEATHER) or []:
         weather = entry.get("weather")
         if weather:
             weather_set.add(weather)
@@ -214,17 +265,14 @@ def _create_icon_from_weather(detailed, show_pop):
         else:
             weather = "tsra"
     else:
-        for search, replace in ICON_WEATHER_REPLACEMENTS:
-            if search.issubset(weather_set):
-                weather_set -= search
-                weather_set.add(replace)
+        replace = ICON_WEATHER_REPLACEMENTS.get("|".join(sorted(weather_set)))
+        if replace:
+            weather_set = {replace}
 
-        if len(weather_set) > 1:
-            weather_set -= ICON_WEATHER_IGNORE_MULTI
+        weather_set.intersection_update(ICON_VALID_WEATHER_ICONS)
+        weather = weather_set.pop() if len(weather_set) == 1 else None
 
-        weather = weather_set.pop()
-
-    if show_pop:
+    if weather and show_pop:
         pop = detailed.get(Detail.PROBABILITY_OF_PRECIPITATION) or 0
         pop = round(pop / 10 + 0.01) * 10
         if pop > 10:
