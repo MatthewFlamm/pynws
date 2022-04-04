@@ -111,7 +111,9 @@ class DetailedForecast:
 
         details: Dict[Detail, DetailValue] = {}
         for detail, time_values in self.details.items():
-            details[detail] = self._get_value_for_time(when, time_values)
+            value = self._get_value_for_time(when, time_values)
+            if value is not None:
+                details[detail] = value
         return details
 
     def get_details_for_times(
