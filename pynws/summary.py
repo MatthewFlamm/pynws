@@ -113,7 +113,8 @@ def conditions_key(entries: List[Dict[str, Any]]) -> Optional[str]:
     """Create key from array of weather conditions"""
     results = []
     for entry in entries:
-        if condition := entry.get("weather"):
+        condition = entry.get("weather")
+        if condition:
             intensity = entry.get("intensity") or ""
             coverage = entry.get("coverage") or ""
             results.append(f"{condition}-{intensity}-{coverage}")
