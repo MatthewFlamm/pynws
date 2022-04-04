@@ -28,6 +28,7 @@ def forecast_key(details: Dict[Detail, Any]) -> str:
     key = conditions_key(details.get(Detail.WEATHER) or [])
     if not key:
         sky_cover = details.get(Detail.SKY_COVER) or 0
+        sky_cover = (sky_cover // 5) * 5
         key = f"{sky_cover:03}"
     return key
 
