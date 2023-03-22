@@ -1,7 +1,7 @@
 aiohttp
 freezegun
 metar
-black==22.3.0
+black==23.1.0
 isort==5.10.1
 pylint
 pytest
