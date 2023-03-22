@@ -41,8 +41,11 @@ async def test_stations_observations_start_datetime(
 ):
     app = setup_app()
     client = await aiohttp_client(app)
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="start parameter needs to be datetime, but got"):
         await raw_data.raw_stations_observations(STATION, client, USERID, start="1PM")
+    with pytest.raises(ValueError, match="start parameter must be timezone aware"):
+        # utcnow is confusingly returns naive
+        await raw_data.raw_stations_observations(STATION, client, USERID, start=datetime.utcnow())
 
 
 async def test_detailed_forecast(aiohttp_client, event_loop, mock_urls):

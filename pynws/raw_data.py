@@ -51,7 +51,9 @@ async def raw_stations_observations(
 
     if start:
         if not isinstance(start, datetime):
-            raise ValueError
+            raise ValueError(f"start parameter needs to be datetime, but got {type(start)}")
+        if start.tzinfo is None:
+            raise ValueError("start parameter must be timezone aware")
         params["start"] = start.isoformat(timespec="seconds")
 
     url = urls.stations_observations_url(station)
