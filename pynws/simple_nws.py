@@ -240,19 +240,19 @@ class SimpleNWS(Nws):
         return self._all_zones
 
     @staticmethod
-    def extract_observation_value(
-        observation: Dict[str, Any], value: str
+    def extract_value(
+        values: Dict[str, Any], key: str
     ) -> Union[None, Tuple[float, str], str]:
         """Returns observation or observation value."""
-        obs_value = observation.get(value)
-        if obs_value is None:
+        value = values.get(key)
+        if value is None:
             return None
-        if isinstance(observation[value], dict):
-            obs_sub_value = observation[value].get("value")
-            if obs_sub_value is None:
+        if isinstance(value, dict):
+            sub_value = value.get("value")
+            if sub_value is None:
                 return None
-            return float(obs_sub_value), observation[value].get("unitCode")
-        return observation[value]
+            return float(sub_value), value.get("unitCode")
+        return value
 
     @property
     def observation(self: SimpleNWS) -> Optional[Dict[str, Any]]:
@@ -264,7 +264,7 @@ class SimpleNWS(Nws):
         data: Dict[str, Any] = {}
         for obs, metar_param in OBSERVATIONS.items():
             obs_list = [
-                self.extract_observation_value(o, obs) for o in self._observation
+                self.extract_value(o, obs) for o in self._observation
             ]
             obs_item = next(iter([o for o in obs_list if o]), None)
             if isinstance(obs_item, tuple):
@@ -336,6 +336,10 @@ class SimpleNWS(Nws):
                     continue
             if forecast_entry.get("temperature"):
                 forecast_entry["temperature"] = int(forecast_entry["temperature"])
+
+            rel_hum = SimpleNWS.extract_value(forecast_entry, "relativeHumidity")
+            if rel_hum is tuple:
+                forecast_entry["relativeHumidity"] = int(rel_hum[0])
 
             if forecast_entry.get("icon"):
                 time, weather = parse_icon(forecast_entry["icon"])
