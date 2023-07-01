@@ -69,6 +69,18 @@
                 "temperature": null,
                 "temperatureUnit": null,
                 "temperatureTrend": null,
+                "probabilityOfPrecipitation": {
+                    "unitCode": null,
+                    "value": null
+                },
+                "dewpoint": {
+                    "unitCode": null,
+                    "value": null
+                },
+                "relativeHumidity": {
+                    "unitCode": null,
+                    "value": null
+                },
                 "windSpeed": null,
                 "windDirection": null,
                 "icon": null,
