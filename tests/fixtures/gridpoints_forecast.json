@@ -69,6 +69,18 @@
                 "temperature": 41,
                 "temperatureUnit": "F",
                 "temperatureTrend": null,
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 20
+                },
+                "dewpoint": {
+                    "unitCode": "wmoUnit:degC",
+                    "value": 5
+                },
+                "relativeHumidity": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 63
+                },
                 "windSpeed": "10 mph",
                 "windDirection": "S",
                 "icon": "https://api.weather.gov/icons/land/day/tsra,40/ovc?size=medium",
@@ -84,6 +96,18 @@
                 "temperature": 68,
                 "temperatureUnit": "F",
                 "temperatureTrend": null,
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 20
+                },
+                "dewpoint": {
+                    "unitCode": "wmoUnit:degC",
+                    "value": 5
+                },
+                "relativeHumidity": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 63
+                },
                 "windSpeed": "0 to 5 mph",
                 "windDirection": "S",
                 "icon": "https://api.weather.gov/icons/land/night/few?size=medium",
@@ -99,6 +123,18 @@
                 "temperature": 88,
                 "temperatureUnit": "F",
                 "temperatureTrend": "falling",
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 20
+                },
+                "dewpoint": {
+                    "unitCode": "wmoUnit:degC",
+                    "value": 5
+                },
+                "relativeHumidity": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 63
+                },
                 "windSpeed": "0 mph",
                 "windDirection": "S",
                 "icon": "https://api.weather.gov/icons/land/day/sct/tsra_hi,30?size=medium",
@@ -114,6 +150,18 @@
                 "temperature": 70,
                 "temperatureUnit": "F",
                 "temperatureTrend": null,
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 20
+                },
+                "dewpoint": {
+                    "unitCode": "wmoUnit:degC",
+                    "value": 5
+                },
+                "relativeHumidity": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 63
+                },
                 "windSpeed": "0 mph",
                 "windDirection": "E",
                 "icon": "https://api.weather.gov/icons/land/night/tsra_hi,30/sct?size=medium",
@@ -129,6 +177,18 @@
                 "temperature": 87,
                 "temperatureUnit": "F",
                 "temperatureTrend": null,
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 20
+                },
+                "dewpoint": {
+                    "unitCode": "wmoUnit:degC",
+                    "value": 5
+                },
+                "relativeHumidity": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 63
+                },
                 "windSpeed": "0 to 5 mph",
                 "windDirection": "SSE",
                 "icon": "https://api.weather.gov/icons/land/day/tsra_hi,20/tsra_hi,30?size=medium",
@@ -144,6 +204,18 @@
                 "temperature": 71,
                 "temperatureUnit": "F",
                 "temperatureTrend": null,
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 20
+                },
+                "dewpoint": {
+                    "unitCode": "wmoUnit:degC",
+                    "value": 5
+                },
+                "relativeHumidity": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 63
+                },
                 "windSpeed": "0 to 5 mph",
                 "windDirection": "SW",
                 "icon": "https://api.weather.gov/icons/land/night/tsra_sct,50/tsra_sct,60?size=medium",
@@ -159,6 +231,18 @@
                 "temperature": 86,
                 "temperatureUnit": "F",
                 "temperatureTrend": null,
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 20
+                },
+                "dewpoint": {
+                    "unitCode": "wmoUnit:degC",
+                    "value": 5
+                },
+                "relativeHumidity": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 63
+                },
                 "windSpeed": "5 mph",
                 "windDirection": "W",
                 "icon": "https://api.weather.gov/icons/land/day/tsra_hi,60?size=medium",
@@ -174,6 +258,18 @@
                 "temperature": 58,
                 "temperatureUnit": "F",
                 "temperatureTrend": null,
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 20
+                },
+                "dewpoint": {
+                    "unitCode": "wmoUnit:degC",
+                    "value": 5
+                },
+                "relativeHumidity": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 63
+                },
                 "windSpeed": "0 to 5 mph",
                 "windDirection": "NNW",
                 "icon": "https://api.weather.gov/icons/land/night/tsra_hi,30/bkn?size=medium",
@@ -189,6 +285,18 @@
                 "temperature": 80,
                 "temperatureUnit": "F",
                 "temperatureTrend": null,
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 20
+                },
+                "dewpoint": {
+                    "unitCode": "wmoUnit:degC",
+                    "value": 5
+                },
+                "relativeHumidity": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 63
+                },
                 "windSpeed": "0 to 5 mph",
                 "windDirection": "N",
                 "icon": "https://api.weather.gov/icons/land/day/sct?size=medium",
@@ -204,6 +312,18 @@
                 "temperature": 56,
                 "temperatureUnit": "F",
                 "temperatureTrend": null,
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 20
+                },
+                "dewpoint": {
+                    "unitCode": "wmoUnit:degC",
+                    "value": 5
+                },
+                "relativeHumidity": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 63
+                },
                 "windSpeed": "0 mph",
                 "windDirection": "NNE",
                 "icon": "https://api.weather.gov/icons/land/night/bkn?size=medium",
@@ -219,6 +339,18 @@
                 "temperature": 82,
                 "temperatureUnit": "F",
                 "temperatureTrend": null,
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 20
+                },
+                "dewpoint": {
+                    "unitCode": "wmoUnit:degC",
+                    "value": 5
+                },
+                "relativeHumidity": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 63
+                },
                 "windSpeed": "0 to 5 mph",
                 "windDirection": "E",
                 "icon": "https://api.weather.gov/icons/land/day/sct/tsra_hi,20?size=medium",
@@ -234,6 +366,18 @@
                 "temperature": 61,
                 "temperatureUnit": "F",
                 "temperatureTrend": null,
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 20
+                },
+                "dewpoint": {
+                    "unitCode": "wmoUnit:degC",
+                    "value": 5
+                },
+                "relativeHumidity": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 63
+                },
                 "windSpeed": "0 mph",
                 "windDirection": "E",
                 "icon": "https://api.weather.gov/icons/land/night/tsra_hi,20?size=medium",
@@ -249,6 +393,18 @@
                 "temperature": 85,
                 "temperatureUnit": "F",
                 "temperatureTrend": null,
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 20
+                },
+                "dewpoint": {
+                    "unitCode": "wmoUnit:degC",
+                    "value": 5
+                },
+                "relativeHumidity": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 63
+                },
                 "windSpeed": "0 to 5 mph",
                 "windDirection": "ESE",
                 "icon": "https://api.weather.gov/icons/land/day/tsra_hi,20?size=medium",
@@ -264,6 +420,18 @@
                 "temperature": 67,
                 "temperatureUnit": "F",
                 "temperatureTrend": null,
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 20
+                },
+                "dewpoint": {
+                    "unitCode": "wmoUnit:degC",
+                    "value": 5
+                },
+                "relativeHumidity": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 63
+                },
                 "windSpeed": "0 to 5 mph",
                 "windDirection": "ESE",
                 "icon": "https://api.weather.gov/icons/land/night/tsra_hi,20?size=medium",
