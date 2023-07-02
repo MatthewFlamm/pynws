@@ -240,19 +240,19 @@ class SimpleNWS(Nws):
         return self._all_zones
 
     @staticmethod
-    def extract_observation_value(
-        observation: Dict[str, Any], value: str
-    ) -> Union[None, Tuple[float, str], str]:
+    def extract_value(
+        values: Dict[str, Any], key: str
+    ) -> Union[None, Tuple[float, Any], str]:
         """Returns observation or observation value."""
-        obs_value = observation.get(value)
-        if obs_value is None:
+        value = values.get(key)
+        if value is None:
             return None
-        if isinstance(observation[value], dict):
-            obs_sub_value = observation[value].get("value")
-            if obs_sub_value is None:
+        if isinstance(value, dict):
+            sub_value = value.get("value")
+            if sub_value is None:
                 return None
-            return float(obs_sub_value), observation[value].get("unitCode")
-        return observation[value]
+            return float(sub_value), value.get("unitCode")
+        return value
 
     @property
     def observation(self: SimpleNWS) -> Optional[Dict[str, Any]]:
@@ -263,9 +263,7 @@ class SimpleNWS(Nws):
 
         data: Dict[str, Any] = {}
         for obs, metar_param in OBSERVATIONS.items():
-            obs_list = [
-                self.extract_observation_value(o, obs) for o in self._observation
-            ]
+            obs_list = [self.extract_value(o, obs) for o in self._observation]
             obs_item = next(iter([o for o in obs_list if o]), None)
             if isinstance(obs_item, tuple):
                 data[obs] = convert_unit(obs_item[1], obs_item[0])
@@ -334,8 +332,13 @@ class SimpleNWS(Nws):
                     continue
                 if now > datetime.fromisoformat(end_time):
                     continue
-            if forecast_entry.get("temperature"):
-                forecast_entry["temperature"] = int(forecast_entry["temperature"])
+
+            if (value := forecast_entry.get("temperature")) is not None:
+                forecast_entry["temperature"] = int(value)
+
+            for key in ("probabilityOfPrecipitation", "dewpoint", "relativeHumidity"):
+                if (value := SimpleNWS.extract_value(forecast_entry, key)) is not None:
+                    forecast_entry[key] = int(value[0])
 
             if forecast_entry.get("icon"):
                 time, weather = parse_icon(forecast_entry["icon"])

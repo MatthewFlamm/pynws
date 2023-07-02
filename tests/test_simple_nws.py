@@ -161,6 +161,11 @@ async def test_nws_forecast(aiohttp_client, event_loop, mock_urls):
     await nws.update_forecast()
     forecast = nws.forecast
 
+    assert forecast[0]["temperature"] == 41
+    assert forecast[0]["probabilityOfPrecipitation"] == 20
+    assert forecast[0]["dewpoint"] == 5
+    assert forecast[0]["relativeHumidity"] == 63
+
     assert forecast[0]["iconWeather"][0][0] == "Thunderstorm (high cloud cover)"
     assert forecast[0]["iconWeather"][0][1] == 40
     assert forecast[0]["iconWeather"][1][0] == "Overcast"
@@ -194,6 +199,9 @@ async def test_nws_forecast_hourly(aiohttp_client, event_loop, mock_urls):
     forecast = nws.forecast_hourly
 
     assert forecast[0]["temperature"] == 78
+    assert forecast[0]["probabilityOfPrecipitation"] == 20
+    assert forecast[0]["dewpoint"] == 5
+    assert forecast[0]["relativeHumidity"] == 63
 
 
 @freeze_time("2019-10-13T14:30:00-04:00")
