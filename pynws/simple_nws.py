@@ -333,12 +333,22 @@ class SimpleNWS(Nws):
                 if now > datetime.fromisoformat(end_time):
                     continue
 
+            temp_unit = forecast_entry.get("temperatureUnit")
+
             if (value := forecast_entry.get("temperature")) is not None:
                 forecast_entry["temperature"] = int(value)
 
             for key in ("probabilityOfPrecipitation", "dewpoint", "relativeHumidity"):
-                if (value := SimpleNWS.extract_value(forecast_entry, key)) is not None:
-                    forecast_entry[key] = int(value[0])
+                if (
+                    value_and_unit := SimpleNWS.extract_value(forecast_entry, key)
+                ) is not None:
+                    value, unit = value_and_unit
+                    value = float(value)
+                    if unit.endswith("degC") and temp_unit == "F":
+                        value = round(value * 1.8 + 32.0, 0)
+                    elif unit.endswith("degF") and temp_unit == "C":
+                        value = round((value - 32.0) / 1.8, 0)
+                    forecast_entry[key] = int(value)
 
             if forecast_entry.get("icon"):
                 time, weather = parse_icon(forecast_entry["icon"])
