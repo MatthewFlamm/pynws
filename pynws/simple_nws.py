@@ -263,9 +263,7 @@ class SimpleNWS(Nws):
 
         data: Dict[str, Any] = {}
         for obs, metar_param in OBSERVATIONS.items():
-            obs_list = [
-                self.extract_value(o, obs) for o in self._observation
-            ]
+            obs_list = [self.extract_value(o, obs) for o in self._observation]
             obs_item = next(iter([o for o in obs_list if o]), None)
             if isinstance(obs_item, tuple):
                 data[obs] = convert_unit(obs_item[1], obs_item[0])
