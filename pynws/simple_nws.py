@@ -333,10 +333,10 @@ class SimpleNWS(Nws):
                 if now > datetime.fromisoformat(end_time):
                     continue
 
-            temp_unit = forecast_entry.get("temperatureUnit")
-
             if (value := forecast_entry.get("temperature")) is not None:
                 forecast_entry["temperature"] = int(value)
+
+            temp_unit = forecast_entry.get("temperatureUnit")
 
             for key in ("probabilityOfPrecipitation", "dewpoint", "relativeHumidity"):
                 if (
