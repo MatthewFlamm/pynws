@@ -334,12 +334,13 @@ class SimpleNWS(Nws):
                     continue
                 if now > datetime.fromisoformat(end_time):
                     continue
-            if forecast_entry.get("temperature"):
-                forecast_entry["temperature"] = int(forecast_entry["temperature"])
 
-            rel_hum = SimpleNWS.extract_value(forecast_entry, "relativeHumidity")
-            if rel_hum is tuple:
-                forecast_entry["relativeHumidity"] = int(rel_hum[0])
+            if (value := forecast_entry.get("temperature")) is not None:
+                forecast_entry["temperature"] = int(value)
+
+            for key in ("probabilityOfPrecipitation", "dewpoint", "relativeHumidity"):
+                if (value := SimpleNWS.extract_value(forecast_entry, key)) is not None:
+                    forecast_entry[key] = int(value[0])
 
             if forecast_entry.get("icon"):
                 time, weather = parse_icon(forecast_entry["icon"])
