@@ -340,9 +340,11 @@ class SimpleNWS(Nws):
 
             for key in ("probabilityOfPrecipitation", "dewpoint", "relativeHumidity"):
                 if (
-                    value_and_unit := SimpleNWS.extract_value(forecast_entry, key)
+                    extracted := SimpleNWS.extract_value(forecast_entry, key)
                 ) is not None:
-                    value, unit = value_and_unit
+                    if not isinstance(extracted, tuple):
+                        continue
+                    value, unit = extracted
                     value = float(value)
                     if unit.endswith("degC") and temp_unit == "F":
                         value = round(value * 1.8 + 32.0, 0)
