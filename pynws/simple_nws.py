@@ -341,12 +341,11 @@ class SimpleNWS(Nws):
             for key in ("probabilityOfPrecipitation", "dewpoint", "relativeHumidity"):
                 extracted = SimpleNWS.extract_value(forecast_entry, key)
                 if isinstance(extracted, tuple):
-                    value, unit = extracted
-                    value = float(value)
-                    if unit.endswith("degC") and temp_unit == "F":
-                        value = round(value * 1.8 + 32, 0)
-                    elif unit.endswith("degF") and temp_unit == "C":
-                        value = round((value - 32) / 1.8, 0)
+                    value, value_unit = extracted
+                    if value_unit.endswith("degC") and temp_unit == "F":
+                        value = round(float(value) * 1.8 + 32, 0)
+                    elif value_unit.endswith("degF") and temp_unit == "C":
+                        value = round((float(value) - 32) / 1.8, 0)
                     forecast_entry[key] = int(value)
 
             if forecast_entry.get("icon"):
