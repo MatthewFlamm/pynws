@@ -242,7 +242,7 @@ class SimpleNWS(Nws):
     @staticmethod
     def extract_value(
         values: Dict[str, Any], key: str
-    ) -> Union[None, Tuple[float, str], str]:
+    ) -> Union[None, Tuple[float, Any], str]:
         """Returns observation or observation value."""
         value = values.get(key)
         if value is None:
