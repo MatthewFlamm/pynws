@@ -163,7 +163,7 @@ async def test_nws_forecast(aiohttp_client, event_loop, mock_urls):
 
     assert forecast[0]["temperature"] == 41
     assert forecast[0]["probabilityOfPrecipitation"] == 20
-    assert forecast[0]["dewpoint"] == 5
+    assert forecast[0]["dewpoint"] == 41
     assert forecast[0]["relativeHumidity"] == 63
 
     assert forecast[0]["iconWeather"][0][0] == "Thunderstorm (high cloud cover)"
@@ -200,7 +200,7 @@ async def test_nws_forecast_hourly(aiohttp_client, event_loop, mock_urls):
 
     assert forecast[0]["temperature"] == 78
     assert forecast[0]["probabilityOfPrecipitation"] == 20
-    assert forecast[0]["dewpoint"] == 5
+    assert forecast[0]["dewpoint"] == 41
     assert forecast[0]["relativeHumidity"] == 63
 
 
