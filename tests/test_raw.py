@@ -1,8 +1,8 @@
 from datetime import datetime, timezone
 
-from pynws import raw_data
 import pytest
 
+from pynws import raw_data
 from tests.helpers import setup_app
 
 LATLON = (0, 0)

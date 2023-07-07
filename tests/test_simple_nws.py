@@ -1,5 +1,5 @@
-from freezegun import freeze_time
 import pytest
+from freezegun import freeze_time
 
 from pynws import NwsError, SimpleNWS
 from tests.helpers import data_return_function, setup_app
