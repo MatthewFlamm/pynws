@@ -1,10 +1,11 @@
-from pynws import Nws, NwsError, DetailedForecast
-from pynws.forecast import ONE_HOUR
-from pynws.const import Detail
 from datetime import datetime
 from types import GeneratorType
+
 import pytest
 
+from pynws import DetailedForecast, Nws, NwsError
+from pynws.const import Detail
+from pynws.forecast import ONE_HOUR
 from tests.helpers import setup_app
 
 LATLON = (0, 0)
