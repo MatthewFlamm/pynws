@@ -1,6 +1,6 @@
 aiohttp==3.8.4
 freezegun==1.2.2
-metar==1.9.0
+metar==1.11.0
 pylint==2.17.4
 pytest==7.4.0
 pytest-asyncio==0.21.1
