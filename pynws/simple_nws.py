@@ -116,7 +116,7 @@ class SimpleNWS(Nws):
 
         self.filter_forecast = filter_forecast
         self._observation: Optional[List[Dict[str, Any]]] = None
-        self._metar_obs: Optional[List[Metar.Metar]] = None
+        self._metar_obs: Optional[List[Optional[Metar.Metar]]] = None
         self.station: Optional[str] = None
         self.stations: Optional[List[str]] = None
         self._forecast: Optional[List[Dict[str, Any]]] = None
