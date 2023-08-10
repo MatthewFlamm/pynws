@@ -347,6 +347,11 @@ class SimpleNWS(Nws):
                     elif value_unit.endswith("degF") and temp_unit == "C":
                         value = round((float(value) - 32) / 1.8, 0)
                     forecast_entry[key] = int(value)
+                else:
+                    forecast_entry[key] = extracted
+
+            if forecast_entry["probabilityOfPrecipitation"] is None:
+                forecast_entry["probabilityOfPrecipitation"] = 0
 
             if forecast_entry.get("icon"):
                 time, weather = parse_icon(forecast_entry["icon"])

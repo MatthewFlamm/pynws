@@ -98,7 +98,7 @@
                 "temperatureTrend": null,
                 "probabilityOfPrecipitation": {
                     "unitCode": "wmoUnit:percent",
-                    "value": 20
+                    "value": null
                 },
                 "dewpoint": {
                     "unitCode": "wmoUnit:degC",
