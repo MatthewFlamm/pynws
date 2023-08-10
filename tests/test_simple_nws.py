@@ -173,6 +173,9 @@ async def test_nws_forecast(aiohttp_client, event_loop, mock_urls):
     assert forecast[0]["windSpeedAvg"] == 10
     assert forecast[0]["windBearing"] == 180
 
+    # tests null value in quatitative value
+    assert forecast[1]["probabilityOfPrecipitation"] == 0
+
 
 @freeze_time("2019-10-14T21:30:00-04:00")
 async def test_nws_forecast_discard_stale(aiohttp_client, event_loop, mock_urls):
