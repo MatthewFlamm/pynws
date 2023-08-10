@@ -350,6 +350,9 @@ class SimpleNWS(Nws):
                 else:
                     forecast_entry[key] = extracted
 
+            if forecast_entry["probabilityOfPrecipitation"] is None:
+                forecast_entry["probabilityOfPrecipitation"] = 0
+
             if forecast_entry.get("icon"):
                 time, weather = parse_icon(forecast_entry["icon"])
                 weather = convert_weather(weather)
