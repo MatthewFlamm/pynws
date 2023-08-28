@@ -1,5 +1,5 @@
-from freezegun import freeze_time
 import pytest
+from freezegun import freeze_time
 
 from pynws import NwsError, SimpleNWS
 from tests.helpers import data_return_function, setup_app
@@ -172,6 +172,9 @@ async def test_nws_forecast(aiohttp_client, event_loop, mock_urls):
     assert forecast[0]["iconWeather"][1][1] is None
     assert forecast[0]["windSpeedAvg"] == 10
     assert forecast[0]["windBearing"] == 180
+
+    # tests null value in quatitative value
+    assert forecast[1]["probabilityOfPrecipitation"] == 0
 
 
 @freeze_time("2019-10-14T21:30:00-04:00")

@@ -1,11 +1,9 @@
-aiohttp==3.8.4
+aiohttp==3.8.5
 freezegun==1.2.2
-metar==1.9.0
-black==23.3.0
-isort==5.12.0
-pylint==2.17.4
+metar==1.11.0
+pylint==2.17.5
 pytest==7.4.0
-pytest-asyncio==0.21.0
+pytest-asyncio==0.21.1
 pytest-cov==4.1.0
 pytest-aiohttp==1.0.4
-mypy==1.4.1
+mypy==1.5.1
