@@ -72,11 +72,11 @@ async def raw_stations_observations_latest(
     return await _make_request(websession, url, header)
 
 
-async def raw_points_stations(
-    lat: float, lon: float, websession: ClientSession, userid: str
+async def raw_gridpoints_stations(
+    wfo: str, x: int, y: int, websession: ClientSession, userid: str
 ) -> Dict[str, Any]:
     """Get list of stations for lat/lon"""
-    url = urls.points_stations_url(lat, lon)
+    url = urls.gridpoints_stations_url(wfo, x, y)
     header = get_header(userid)
     return await _make_request(websession, url, header)
 

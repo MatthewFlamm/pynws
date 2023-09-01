@@ -13,7 +13,7 @@ from .raw_data import (
     raw_gridpoints_forecast,
     raw_gridpoints_forecast_hourly,
     raw_points,
-    raw_points_stations,
+    raw_gridpoints_stations,
     raw_stations_observations,
     raw_stations_observations_latest,
 )
@@ -59,9 +59,9 @@ class Nws:
 
     async def get_points_stations(self: Nws) -> List[str]:
         """Returns station list"""
-        if self.latlon is None:
-            raise NwsError("Need to set latitude and longitude")
-        res = await raw_points_stations(*self.latlon, self.session, self.userid)
+        if not (self.wfo and self.x and self.y):
+            await self.get_points()
+        res = await raw_gridpoints_stations(self.wfo, self.x, self.y, self.session, self.userid)
         return [s["properties"]["stationIdentifier"] for s in res["features"]]
 
     async def get_stations_observations(

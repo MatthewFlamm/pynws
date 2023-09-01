@@ -14,10 +14,10 @@ Y = 0
 ZONE = "test"
 
 
-async def test_points_stations(aiohttp_client, event_loop, mock_urls):
+async def test_gridpoints_stations(aiohttp_client, event_loop, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
-    await raw_data.raw_points_stations(*LATLON, client, USERID)
+    await raw_data.raw_gridpoints_stations(WFO, X, Y, client, USERID)
 
 
 async def test_points(aiohttp_client, event_loop, mock_urls):

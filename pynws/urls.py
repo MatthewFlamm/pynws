@@ -5,7 +5,7 @@ from .const import (
     API_GRIDPOINTS_FORECAST,
     API_GRIDPOINTS_FORECAST_HOURLY,
     API_POINTS,
-    API_POINTS_STATIONS,
+    API_GRIDPOINTS_STATIONS,
     API_STATIONS_OBSERVATIONS,
     API_STATIONS_OBSERVATIONS_LATEST,
     API_URL,
@@ -22,9 +22,9 @@ def stations_observations_latest_url(station: str) -> str:
     return API_URL + API_STATIONS_OBSERVATIONS_LATEST.format(station)
 
 
-def points_stations_url(lat: float, lon: float) -> str:
+def gridpoints_stations_url(wfo: str, x: int, y: int) -> str:
     """formats station url"""
-    return API_URL + API_POINTS_STATIONS.format(str(lat), str(lon))
+    return API_URL + API_GRIDPOINTS_STATIONS.format(wfo, x, y)
 
 
 def detailed_forecast_url(wfo: str, x: int, y: int) -> str:

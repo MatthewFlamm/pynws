@@ -138,6 +138,8 @@ class SimpleNWS(Nws):
             if not self.stations:
                 self.stations = [self.station]
         else:
+            if not (self.wfo and self.x and self.y):
+                await self.get_points()
             self.stations = await self.get_points_stations()
             self.station = self.stations[0]
 

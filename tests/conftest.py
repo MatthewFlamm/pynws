@@ -18,8 +18,8 @@ def mock_urls():
     ) as mock_gridpoints_forecast_url, patch(
         "pynws.urls.gridpoints_forecast_hourly_url"
     ) as mock_gridpoints_forecast_hourly_url, patch(
-        "pynws.urls.points_stations_url"
-    ) as mock_points_stations_url, patch(
+        "pynws.urls.gridpoints_stations_url"
+    ) as mock_gridpoints_stations_url, patch(
         "pynws.urls.alerts_active_zone_url"
     ) as mock_alerts_active_zone_url:
         mock_stations_observations_url.return_value = "/stations_observations"
@@ -30,7 +30,7 @@ def mock_urls():
         mock_detailed_forecast_url.return_value = "/gridpoints"
         mock_gridpoints_forecast_url.return_value = "/gridpoints_forecast"
         mock_gridpoints_forecast_hourly_url.return_value = "/gridpoints_forecast_hourly"
-        mock_points_stations_url.return_value = "/points_stations"
+        mock_gridpoints_stations_url.return_value = "/gridpoints_stations"
         mock_alerts_active_zone_url.return_value = "/alerts_active_zone"
 
-        yield mock_stations_observations_url, mock_stations_observations_latest_url, mock_points_url, mock_detailed_forecast_url, mock_gridpoints_forecast_url, mock_gridpoints_forecast_hourly_url, mock_points_stations_url, mock_alerts_active_zone_url
+        yield mock_stations_observations_url, mock_stations_observations_latest_url, mock_points_url, mock_detailed_forecast_url, mock_gridpoints_forecast_url, mock_gridpoints_forecast_hourly_url, mock_gridpoints_stations_url, mock_alerts_active_zone_url
