@@ -61,6 +61,8 @@ class Nws:
         """Returns station list"""
         if not (self.wfo and self.x and self.y):
             await self.get_points()
+        if not (self.wfo and self.x and self.y):
+            raise NwsError(f"Error fetching gridpoint identifiers")
         res = await raw_gridpoints_stations(self.wfo, self.x, self.y, self.session, self.userid)
         return [s["properties"]["stationIdentifier"] for s in res["features"]]
 
