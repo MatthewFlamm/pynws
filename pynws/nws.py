@@ -12,8 +12,8 @@ from .raw_data import (
     raw_detailed_forecast,
     raw_gridpoints_forecast,
     raw_gridpoints_forecast_hourly,
-    raw_points,
     raw_gridpoints_stations,
+    raw_points,
     raw_stations_observations,
     raw_stations_observations_latest,
 )
@@ -63,7 +63,9 @@ class Nws:
             await self.get_points()
         if not (self.wfo and self.x and self.y):
             raise NwsError(f"Error fetching gridpoint identifiers for {self.latlon!r}")
-        res = await raw_gridpoints_stations(self.wfo, self.x, self.y, self.session, self.userid)
+        res = await raw_gridpoints_stations(
+            self.wfo, self.x, self.y, self.session, self.userid
+        )
         return [s["properties"]["stationIdentifier"] for s in res["features"]]
 
     async def get_stations_observations(
