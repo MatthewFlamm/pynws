@@ -19,7 +19,7 @@ def data_return_function(file_name):
 
 
 def setup_app(
-    points_stations="points_stations.json",
+    gridpoints_stations="gridpoints_stations.json",
     points="points.json",
     stations_observations="stations_observations.json",
     stations_observations_latest="stations_observations_latest.json",
@@ -29,7 +29,9 @@ def setup_app(
     alerts_active_zone="alerts_active_zone.json",
 ):
     app = aiohttp.web.Application()
-    app.router.add_get("/points_stations", data_return_function(points_stations))
+    app.router.add_get(
+        "/gridpoints_stations", data_return_function(gridpoints_stations)
+    )
     app.router.add_get("/points", data_return_function(points))
     app.router.add_get(
         "/stations_observations", data_return_function(stations_observations)

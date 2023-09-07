@@ -19,7 +19,7 @@ file_dir = os.path.join(os.path.dirname(__file__), "..")
 version = __version__
 
 API_URL: Final = "https://api.weather.gov/"
-API_POINTS_STATIONS: Final = "points/{},{}/stations"
+API_GRIDPOINTS_STATIONS: Final = "gridpoints/{}/{},{}/stations"
 API_STATIONS_OBSERVATIONS: Final = "stations/{}/observations/"
 API_STATIONS_OBSERVATIONS_LATEST: Final = "stations/{}/observations/latest"
 API_ACCEPT: Final = "application/geo+json"

@@ -14,7 +14,7 @@ USERID = "test_user"
 ZONE = "test_zone"
 
 
-async def test_nws_points_stations(aiohttp_client, event_loop, mock_urls):
+async def test_nws_gridpoints_stations(aiohttp_client, event_loop, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = Nws(client, USERID, LATLON)

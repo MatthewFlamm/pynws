@@ -1,7 +1,8 @@
 {
     "@context": [
-        "https://raw.githubusercontent.com/geojson/geojson-ld/master/contexts/geojson-base.jsonld",
+        "https://geojson.org/geojson-ld/geojson-context.jsonld",
         {
+            "@version": "1.1",
             "wx": "https://api.weather.gov/ontology#",
             "s": "https://schema.org/",
             "geo": "http://www.opengis.net/ont/geosparql#",
@@ -55,12 +56,13 @@
         "@type": "wx:Point",
         "cwa": "TAE",
         "forecastOffice": "https://api.weather.gov/offices/TAE",
-        "gridX": 59,
-        "gridY": 64,
-        "forecast": "https://api.weather.gov/gridpoints/TAE/59,64/forecast",
-        "forecastHourly": "https://api.weather.gov/gridpoints/TAE/59,64/forecast/hourly",
-        "forecastGridData": "https://api.weather.gov/gridpoints/TAE/59,64",
-        "observationStations": "https://api.weather.gov/gridpoints/TAE/59,64/stations",
+        "gridId": "TAE",
+        "gridX": 58,
+        "gridY": 65,
+        "forecast": "https://api.weather.gov/gridpoints/TAE/58,65/forecast",
+        "forecastHourly": "https://api.weather.gov/gridpoints/TAE/58,65/forecast/hourly",
+        "forecastGridData": "https://api.weather.gov/gridpoints/TAE/58,65",
+        "observationStations": "https://api.weather.gov/gridpoints/TAE/58,65/stations",
         "relativeLocation": {
             "type": "Feature",
             "geometry": {
@@ -74,12 +76,12 @@
                 "city": "Sumatra",
                 "state": "FL",
                 "distance": {
-                    "value": 3059.7779645194155,
-                    "unitCode": "unit:m"
+                    "unitCode": "wmoUnit:m",
+                    "value": 3059.7779645194
                 },
                 "bearing": {
-                    "value": 213,
-                    "unitCode": "unit:degrees_true"
+                    "unitCode": "wmoUnit:degree_(angle)",
+                    "value": 213
                 }
             }
         },
