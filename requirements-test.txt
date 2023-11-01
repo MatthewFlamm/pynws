@@ -1,7 +1,7 @@
 aiohttp==3.8.5
 freezegun==1.2.2
 metar==1.11.0
-pylint==2.17.7
+pylint==3.0.2
 pytest==7.4.2
 pytest-asyncio==0.21.1
 pytest-cov==4.1.0
