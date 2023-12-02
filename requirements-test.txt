@@ -1,4 +1,4 @@
-aiohttp==3.8.5
+aiohttp==3.9.1
 freezegun==1.2.2
 metar==1.11.0
 pylint==3.0.2
