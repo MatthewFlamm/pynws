@@ -1,5 +1,5 @@
 aiohttp==3.9.1
-freezegun==1.2.2
+freezegun==1.4.0
 metar==1.11.0
 pylint==3.0.2
 pytest==7.4.4
