@@ -1,4 +1,5 @@
 """url formatter."""
+
 from .const import (
     API_ALERTS_ACTIVE_ZONE,
     API_DETAILED_FORECAST,

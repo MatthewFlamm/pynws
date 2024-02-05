@@ -1,6 +1,7 @@
 """
 Constants for pynws
 """
+
 import os
 import sys
 from enum import unique

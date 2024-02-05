@@ -1,4 +1,5 @@
 """Support for NWS weather service."""
+
 from __future__ import annotations
 
 from datetime import datetime, timezone
