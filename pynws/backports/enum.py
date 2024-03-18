@@ -1,4 +1,5 @@
 """Python 3.11 Enum backports from https://github.com/home-assistant/core/tree/dev/homeassistant/backports"""
+
 from __future__ import annotations
 
 from enum import Enum
