@@ -5,15 +5,14 @@ Constants for pynws
 import os
 import sys
 from enum import unique
+from typing import Final
 
-from .backports.enum import StrEnum
 from .version import __version__
 
-if sys.version_info >= (3, 8):
-    from typing import Final
+if sys.version_info >= (3, 11):
+    from enum import StrEnum
 else:
-    from typing_extensions import Final
-
+    from .backports.enum import StrEnum
 
 file_dir = os.path.join(os.path.dirname(__file__), "..")
 
