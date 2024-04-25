@@ -7,12 +7,12 @@ import sys
 from enum import unique
 from typing import Final
 
+from .version import __version__
+
 if sys.version_info >= (3, 11):
     from enum import StrEnum
 else:
     from .backports.enum import StrEnum
-
-from .version import __version__
 
 file_dir = os.path.join(os.path.dirname(__file__), "..")
 
