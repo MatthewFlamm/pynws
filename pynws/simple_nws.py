@@ -22,6 +22,7 @@ if TYPE_CHECKING:
     from datetime import timedelta
 
 from aiohttp import ClientSession
+from aiohttp.web import HTTPServerError
 from metar import Metar
 
 from .const import ALERT_ID, API_WEATHER_CODE, Final
@@ -186,10 +187,18 @@ class SimpleNWS(Nws):
         interval: Union[int, float, timedelta],
         stop: Union[int, float, timedelta],
     ) -> Callable[[Any, Any], Awaitable[Any]]:
-        from tenacity import retry, stop_after_delay, wait_fixed
+        from tenacity import (
+            retry,
+            retry_if_exception_type,
+            stop_after_delay,
+            wait_fixed,
+        )
 
         return retry(
-            reraise=True, wait=wait_fixed(interval), stop=stop_after_delay(stop)
+            reraise=True,
+            wait=wait_fixed(interval),
+            stop=stop_after_delay(stop),
+            retry=retry_if_exception_type(HTTPServerError),
         )(func)
 
     async def call_with_retry(

@@ -16,7 +16,7 @@ def data_return_function(input):
             if isinstance(input0, str):
                 with open(os.path.join(DIR, input0), "r") as f:
                     return aiohttp.web.json_response(data=json.load(f))
-            if issubclass(input0, aiohttp.web.HTTPBadGateway):
+            if issubclass(input0, Exception):
                 raise input0
 
     return function
