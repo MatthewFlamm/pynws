@@ -2,7 +2,6 @@ from unittest.mock import AsyncMock
 
 import aiohttp
 import pytest
-import tenacity
 from freezegun import freeze_time
 
 from pynws import NwsError, SimpleNWS
