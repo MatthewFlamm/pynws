@@ -23,6 +23,7 @@ setup(
         "aiohttp",
         "metar",
     ],
+    extras_require={"retry": ["tenacity"]},
     python_requires=">=3.7",
     classifiers=[
         "License :: OSI Approved :: MIT License",

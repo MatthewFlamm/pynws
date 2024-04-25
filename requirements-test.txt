@@ -7,3 +7,4 @@ pytest-asyncio==0.23.6
 pytest-cov==5.0.0
 pytest-aiohttp==1.0.5
 mypy==1.9.0
+tenacity==8.2.3

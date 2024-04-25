@@ -2,12 +2,20 @@
 
 from __future__ import annotations
 
+import functools
 from datetime import datetime, timezone
 from statistics import mean
 from typing import Any, Dict, List, NamedTuple, Optional, Set, Tuple, Union
 
 from aiohttp import ClientSession
 from metar import Metar
+
+try:
+    from tenacity import retry, stop_after_delay, wait_fixed
+except ImportError:
+    use_retry = False
+else:
+    use_retry = True
 
 from .const import ALERT_ID, API_WEATHER_CODE, Final
 from .forecast import DetailedForecast
@@ -164,6 +172,27 @@ class SimpleNWS(Nws):
         if obs:
             self._observation = obs
             self._metar_obs = [self.extract_metar(iobs) for iobs in self._observation]
+
+    @staticmethod
+    def _setup_retry_func(interval, stop, func):
+        return retry(
+            reraise=True, wait=wait_fixed(interval), stop=stop_after_delay(stop)
+        )(func)
+
+    async def call_with_retry(self, func, interval, stop, /, *args, **kwargs):
+        """Call an update function but do retries.
+
+        Parameters
+        ----------
+        func : Callable
+            An awaitable coroutine to retry.
+        interval : int, float, datetime.datetime.timedelta
+            Time interval for retry.
+        stop : int, float, datetime.datetime.timedelta
+            Time interval to stop retrying.
+        """
+        retried_func = self._setup_retry_func(interval, stop, func)
+        return await retried_func(*args, **kwargs)
 
     async def update_forecast(self: SimpleNWS) -> None:
         """Update forecast."""

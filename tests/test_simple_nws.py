@@ -1,4 +1,8 @@
+from unittest.mock import AsyncMock
+
+import aiohttp
 import pytest
+import tenacity
 from freezegun import freeze_time
 
 from pynws import NwsError, SimpleNWS
@@ -46,6 +50,39 @@ async def test_nws_observation(aiohttp_client, event_loop, mock_urls, observatio
         await nws.update_observation()
     await nws.set_station(STATION)
     await nws.update_observation()
+    observation = nws.observation
+    assert observation
+    assert observation["temperature"] == 10
+    assert observation["dewpoint"] == 10
+    assert observation["relativeHumidity"] == 10
+    assert observation["windDirection"] == 10
+    assert observation["visibility"] == 10000
+    assert observation["seaLevelPressure"] == 100000
+    assert observation["windSpeed"] == 36  # converted to km_gr
+    assert observation["iconTime"] == "day"
+    assert observation["windGust"] == 36  # same
+    assert observation["iconWeather"][0][0] == "A few clouds"
+    assert observation["iconWeather"][0][1] is None
+
+
+async def test_nws_observation_with_retries(aiohttp_client, event_loop, mock_urls):
+    app = setup_app(
+        stations_observations=[aiohttp.web.HTTPBadGateway, "stations_observations.json"]
+    )
+    client = await aiohttp_client(app)
+    nws = SimpleNWS(*LATLON, USERID, client)
+    await nws.set_station(STATION)
+    with pytest.raises(aiohttp.ClientError):
+        await nws.update_observation()
+
+    app = setup_app(
+        stations_observations=[aiohttp.web.HTTPBadGateway, "stations_observations.json"]
+    )
+    client = await aiohttp_client(app)
+    nws = SimpleNWS(*LATLON, USERID, client)
+    await nws.set_station(STATION)
+    await nws.call_with_retry(nws.update_observation, 0, 5)
+
     observation = nws.observation
     assert observation
     assert observation["temperature"] == 10
@@ -315,3 +352,31 @@ async def test_nws_alerts_all_zones_second_alert(aiohttp_client, event_loop, moc
     assert alerts
     assert new_alerts == alerts
     assert len(alerts) == 2
+
+
+async def test_retries(aiohttp_client, event_loop, mock_urls, monkeypatch):
+    app = setup_app()
+    client = await aiohttp_client(app)
+    nws = SimpleNWS(*LATLON, USERID, client)
+    await nws.set_station(STATION)
+
+    mock_update = AsyncMock()
+    mock_update.side_effect = [aiohttp.web.HTTPBadGateway, None]
+
+    monkeypatch.setattr(nws, "update_observation", mock_update)
+
+    await nws.call_with_retry(nws.update_observation, 0, 5)
+
+    assert mock_update.call_count == 2
+
+    mock_update = AsyncMock()
+
+    monkeypatch.setattr(nws, "update_observation", mock_update)
+
+    await nws.call_with_retry(nws.update_observation, 0, 5, "", test=None)
+
+    mock_update.assert_called_once_with("", test=None)
+
+    # positional only args
+    with pytest.raises(TypeError):
+        await nws.call_with_retry(nws.update_observation, interval=0, stop=5)
