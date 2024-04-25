@@ -53,7 +53,7 @@ WIND_DIRECTIONS: Final = [
 WIND: Final = {name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)}
 
 
-def is_500_error(error: Exception) -> bool:
+def is_500_error(error: BaseException) -> bool:
 
     if isinstance(error, ClientResponseError):
         if error.status >= 500:
