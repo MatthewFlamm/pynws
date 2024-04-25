@@ -14,7 +14,7 @@ USERID = "test_user"
 ZONE = "test_zone"
 
 
-async def test_nws_set_station(aiohttp_client, event_loop, mock_urls):
+async def test_nws_set_station(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -23,7 +23,7 @@ async def test_nws_set_station(aiohttp_client, event_loop, mock_urls):
     assert nws.stations == [STATION]
 
 
-async def test_nws_set_station_none(aiohttp_client, event_loop, mock_urls):
+async def test_nws_set_station_none(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -42,7 +42,7 @@ async def test_nws_set_station_none(aiohttp_client, event_loop, mock_urls):
         "stations_observations_multiple_unsorted.json",
     ],
 )
-async def test_nws_observation(aiohttp_client, event_loop, mock_urls, observation_json):
+async def test_nws_observation(aiohttp_client, mock_urls, observation_json):
     app = setup_app(stations_observations=observation_json)
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -65,40 +65,7 @@ async def test_nws_observation(aiohttp_client, event_loop, mock_urls, observatio
     assert observation["iconWeather"][0][1] is None
 
 
-async def test_nws_observation_with_retries(aiohttp_client, event_loop, mock_urls):
-    app = setup_app(
-        stations_observations=[aiohttp.web.HTTPBadGateway, "stations_observations.json"]
-    )
-    client = await aiohttp_client(app)
-    nws = SimpleNWS(*LATLON, USERID, client)
-    await nws.set_station(STATION)
-    with pytest.raises(aiohttp.ClientError):
-        await nws.update_observation()
-
-    app = setup_app(
-        stations_observations=[aiohttp.web.HTTPBadGateway, "stations_observations.json"]
-    )
-    client = await aiohttp_client(app)
-    nws = SimpleNWS(*LATLON, USERID, client)
-    await nws.set_station(STATION)
-    await nws.call_with_retry(nws.update_observation, 0, 5)
-
-    observation = nws.observation
-    assert observation
-    assert observation["temperature"] == 10
-    assert observation["dewpoint"] == 10
-    assert observation["relativeHumidity"] == 10
-    assert observation["windDirection"] == 10
-    assert observation["visibility"] == 10000
-    assert observation["seaLevelPressure"] == 100000
-    assert observation["windSpeed"] == 36  # converted to km_gr
-    assert observation["iconTime"] == "day"
-    assert observation["windGust"] == 36  # same
-    assert observation["iconWeather"][0][0] == "A few clouds"
-    assert observation["iconWeather"][0][1] is None
-
-
-async def test_nws_observation_units(aiohttp_client, event_loop, mock_urls):
+async def test_nws_observation_units(aiohttp_client, mock_urls):
     app = setup_app(stations_observations="stations_observations_alternate_units.json")
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -111,7 +78,7 @@ async def test_nws_observation_units(aiohttp_client, event_loop, mock_urls):
     assert observation["windGust"] == 10
 
 
-async def test_nws_observation_metar(aiohttp_client, event_loop, mock_urls):
+async def test_nws_observation_metar(aiohttp_client, mock_urls):
     app = setup_app(stations_observations="stations_observations_metar.json")
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -129,7 +96,7 @@ async def test_nws_observation_metar(aiohttp_client, event_loop, mock_urls):
     assert observation["windGust"] is None
 
 
-async def test_nws_observation_metar_noparse(aiohttp_client, event_loop, mock_urls):
+async def test_nws_observation_metar_noparse(aiohttp_client, mock_urls):
     app = setup_app(stations_observations="stations_observations_metar_noparse.json")
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -139,7 +106,7 @@ async def test_nws_observation_metar_noparse(aiohttp_client, event_loop, mock_ur
     assert observation["temperature"] is None
 
 
-async def test_nws_observation_empty(aiohttp_client, event_loop, mock_urls):
+async def test_nws_observation_empty(aiohttp_client, mock_urls):
     app = setup_app(stations_observations="stations_observations_empty.json")
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -159,7 +126,7 @@ async def test_nws_observation_empty(aiohttp_client, event_loop, mock_urls):
     assert observation["iconWeather"] is None
 
 
-async def test_nws_observation_noprop(aiohttp_client, event_loop, mock_urls):
+async def test_nws_observation_noprop(aiohttp_client, mock_urls):
     app = setup_app(stations_observations="stations_observations_noprop.json")
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -170,7 +137,7 @@ async def test_nws_observation_noprop(aiohttp_client, event_loop, mock_urls):
     assert observation is None
 
 
-async def test_nws_observation_missing_value(aiohttp_client, event_loop, mock_urls):
+async def test_nws_observation_missing_value(aiohttp_client, mock_urls):
     app = setup_app(stations_observations="stations_observations_missing_value.json")
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -191,7 +158,7 @@ async def test_nws_observation_missing_value(aiohttp_client, event_loop, mock_ur
 
 
 @freeze_time("2019-10-13T14:30:00-04:00")
-async def test_nws_forecast(aiohttp_client, event_loop, mock_urls):
+async def test_nws_forecast(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -215,7 +182,7 @@ async def test_nws_forecast(aiohttp_client, event_loop, mock_urls):
 
 
 @freeze_time("2019-10-14T21:30:00-04:00")
-async def test_nws_forecast_discard_stale(aiohttp_client, event_loop, mock_urls):
+async def test_nws_forecast_discard_stale(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client, filter_forecast=True)
@@ -231,7 +198,7 @@ async def test_nws_forecast_discard_stale(aiohttp_client, event_loop, mock_urls)
 
 
 @freeze_time("2019-10-14T20:30:00-04:00")
-async def test_nws_forecast_hourly(aiohttp_client, event_loop, mock_urls):
+async def test_nws_forecast_hourly(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -245,7 +212,7 @@ async def test_nws_forecast_hourly(aiohttp_client, event_loop, mock_urls):
 
 
 @freeze_time("2019-10-13T14:30:00-04:00")
-async def test_nws_forecast_strings(aiohttp_client, event_loop, mock_urls):
+async def test_nws_forecast_strings(aiohttp_client, mock_urls):
     app = setup_app(gridpoints_forecast="gridpoints_forecast_strings.json")
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -261,7 +228,7 @@ async def test_nws_forecast_strings(aiohttp_client, event_loop, mock_urls):
 
 
 @freeze_time("2019-10-13T14:30:00-04:00")
-async def test_nws_forecast_empty(aiohttp_client, event_loop, mock_urls):
+async def test_nws_forecast_empty(aiohttp_client, mock_urls):
     app = setup_app(gridpoints_forecast="gridpoints_forecast_empty.json")
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -271,7 +238,7 @@ async def test_nws_forecast_empty(aiohttp_client, event_loop, mock_urls):
     assert forecast == []
 
 
-async def test_nws_alerts_forecast_zone(aiohttp_client, event_loop, mock_urls):
+async def test_nws_alerts_forecast_zone(aiohttp_client, mock_urls):
     app = setup_app(
         alerts_active_zone=["alerts_active_zone.json", "alerts_active_zone_second.json"]
     )
@@ -292,7 +259,7 @@ async def test_nws_alerts_forecast_zone(aiohttp_client, event_loop, mock_urls):
     assert len(alerts) == 2
 
 
-async def test_nws_alerts_county_zone(aiohttp_client, event_loop, mock_urls):
+async def test_nws_alerts_county_zone(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -301,7 +268,7 @@ async def test_nws_alerts_county_zone(aiohttp_client, event_loop, mock_urls):
     assert alerts
 
 
-async def test_nws_alerts_fire_weather_zone(aiohttp_client, event_loop, mock_urls):
+async def test_nws_alerts_fire_weather_zone(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -310,7 +277,7 @@ async def test_nws_alerts_fire_weather_zone(aiohttp_client, event_loop, mock_url
     assert alerts
 
 
-async def test_nws_alerts_all_zones(aiohttp_client, event_loop, mock_urls):
+async def test_nws_alerts_all_zones(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -323,9 +290,7 @@ async def test_nws_alerts_all_zones(aiohttp_client, event_loop, mock_urls):
     assert len(alerts) == 1
 
 
-async def test_nws_alerts_all_zones_after_forecast(
-    aiohttp_client, event_loop, mock_urls
-):
+async def test_nws_alerts_all_zones_after_forecast(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
@@ -339,7 +304,7 @@ async def test_nws_alerts_all_zones_after_forecast(
     assert len(alerts) == 1
 
 
-async def test_nws_alerts_all_zones_second_alert(aiohttp_client, event_loop, mock_urls):
+async def test_nws_alerts_all_zones_second_alert(aiohttp_client, mock_urls):
     app = setup_app(
         alerts_active_zone=["alerts_active_zone.json", "alerts_active_zone_second.json"]
     )

@@ -14,7 +14,7 @@ USERID = "test_user"
 ZONE = "test_zone"
 
 
-async def test_nws_gridpoints_stations(aiohttp_client, event_loop, mock_urls):
+async def test_nws_gridpoints_stations(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = Nws(client, USERID, LATLON)
@@ -24,7 +24,7 @@ async def test_nws_gridpoints_stations(aiohttp_client, event_loop, mock_urls):
     assert isinstance(stations, list)
 
 
-async def test_nws_points(aiohttp_client, event_loop, mock_urls):
+async def test_nws_points(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = Nws(client, USERID, LATLON)
@@ -39,7 +39,7 @@ async def test_nws_points(aiohttp_client, event_loop, mock_urls):
     assert nws.fire_weather_zone
 
 
-async def test_nws_stations_observations(aiohttp_client, event_loop, mock_urls):
+async def test_nws_stations_observations(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = Nws(client, USERID, LATLON)
@@ -52,7 +52,7 @@ async def test_nws_stations_observations(aiohttp_client, event_loop, mock_urls):
     assert isinstance(observations, list)
 
 
-async def test_nws_stations_observations_latest(aiohttp_client, event_loop, mock_urls):
+async def test_nws_stations_observations_latest(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = Nws(client, USERID, LATLON)
@@ -65,7 +65,7 @@ async def test_nws_stations_observations_latest(aiohttp_client, event_loop, mock
     assert isinstance(observation, dict)
 
 
-async def test_nws_detailed_forecast(aiohttp_client, event_loop, mock_urls):
+async def test_nws_detailed_forecast(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = Nws(client, USERID, LATLON)
@@ -106,7 +106,7 @@ async def test_nws_detailed_forecast(aiohttp_client, event_loop, mock_urls):
         assert Detail.TEMPERATURE in details
 
 
-async def test_nws_gridpoints_forecast(aiohttp_client, event_loop, mock_urls):
+async def test_nws_gridpoints_forecast(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = Nws(client, USERID, LATLON)
@@ -124,7 +124,7 @@ async def test_nws_gridpoints_forecast(aiohttp_client, event_loop, mock_urls):
     assert values["windSpeed"] == "10 mph"
 
 
-async def test_nws_gridpoints_forecast_hourly(aiohttp_client, event_loop, mock_urls):
+async def test_nws_gridpoints_forecast_hourly(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = Nws(client, USERID, LATLON)
@@ -142,7 +142,7 @@ async def test_nws_gridpoints_forecast_hourly(aiohttp_client, event_loop, mock_u
     assert values["windSpeed"] == "0 mph"
 
 
-async def test_nws_alerts_active_zone(aiohttp_client, event_loop, mock_urls):
+async def test_nws_alerts_active_zone(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = Nws(client, USERID, LATLON)
@@ -152,7 +152,7 @@ async def test_nws_alerts_active_zone(aiohttp_client, event_loop, mock_urls):
     assert isinstance(alerts, list)
 
 
-async def test_nws_alerts_forecast_zone(aiohttp_client, event_loop, mock_urls):
+async def test_nws_alerts_forecast_zone(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = Nws(client, USERID, LATLON)
@@ -162,7 +162,7 @@ async def test_nws_alerts_forecast_zone(aiohttp_client, event_loop, mock_urls):
     assert isinstance(alerts, list)
 
 
-async def test_nws_alerts_county_zone(aiohttp_client, event_loop, mock_urls):
+async def test_nws_alerts_county_zone(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = Nws(client, USERID, LATLON)
@@ -172,7 +172,7 @@ async def test_nws_alerts_county_zone(aiohttp_client, event_loop, mock_urls):
     assert isinstance(alerts, list)
 
 
-async def test_nws_alerts_fire_weather_zone(aiohttp_client, event_loop, mock_urls):
+async def test_nws_alerts_fire_weather_zone(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = Nws(client, USERID, LATLON)
