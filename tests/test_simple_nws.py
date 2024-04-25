@@ -319,7 +319,7 @@ async def test_nws_alerts_all_zones_second_alert(aiohttp_client, mock_urls):
     assert len(alerts) == 2
 
 
-async def test_retries(aiohttp_client, event_loop, mock_urls, monkeypatch):
+async def test_retries(aiohttp_client, mock_urls, monkeypatch):
     app = setup_app()
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
