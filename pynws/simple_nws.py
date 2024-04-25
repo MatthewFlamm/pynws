@@ -187,7 +187,7 @@ class SimpleNWS(Nws):
         interval: Union[int, float, timedelta],
         stop: Union[int, float, timedelta],
     ) -> Callable[[Any, Any], Awaitable[Any]]:
-        from tenacity import (
+        from tenacity import (  # pylint: disable=import-outside-toplevel
             retry,
             retry_if_exception_type,
             stop_after_delay,

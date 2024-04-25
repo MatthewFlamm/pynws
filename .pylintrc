@@ -7,4 +7,6 @@ disable=invalid-name,
 	too-many-arguments,
 	too-many-branches,
 	duplicate-code,
-	format
+	format,
+	too-many-public-methods,
+	wrong-import-position
