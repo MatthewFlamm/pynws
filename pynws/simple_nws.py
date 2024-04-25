@@ -2,20 +2,27 @@
 
 from __future__ import annotations
 
-import functools
 from datetime import datetime, timezone
 from statistics import mean
-from typing import Any, Dict, List, NamedTuple, Optional, Set, Tuple, Union
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Awaitable,
+    Callable,
+    Dict,
+    List,
+    NamedTuple,
+    Optional,
+    Set,
+    Tuple,
+    Union,
+)
+
+if TYPE_CHECKING:
+    from datetime import timedelta
 
 from aiohttp import ClientSession
 from metar import Metar
-
-try:
-    from tenacity import retry, stop_after_delay, wait_fixed
-except ImportError:
-    use_retry = False
-else:
-    use_retry = True
 
 from .const import ALERT_ID, API_WEATHER_CODE, Final
 from .forecast import DetailedForecast
@@ -174,12 +181,26 @@ class SimpleNWS(Nws):
             self._metar_obs = [self.extract_metar(iobs) for iobs in self._observation]
 
     @staticmethod
-    def _setup_retry_func(interval, stop, func):
+    def _setup_retry_func(
+        func: Callable[[Any, Any], Awaitable[Any]],
+        interval: Union[int, float, timedelta],
+        stop: Union[int, float, timedelta],
+    ) -> Callable[[Any, Any], Awaitable[Any]]:
+        from tenacity import retry, stop_after_delay, wait_fixed
+
         return retry(
             reraise=True, wait=wait_fixed(interval), stop=stop_after_delay(stop)
         )(func)
 
-    async def call_with_retry(self, func, interval, stop, /, *args, **kwargs):
+    async def call_with_retry(
+        self,
+        func: Callable[[Any, Any], Awaitable[Any]],
+        interval: Union[int, float, timedelta],
+        stop: Union[int, float, timedelta],
+        /,
+        *args,
+        **kwargs,
+    ) -> Callable[[Any, Any], Awaitable[Any]]:
         """Call an update function but do retries.
 
         Parameters
@@ -191,7 +212,7 @@ class SimpleNWS(Nws):
         stop : int, float, datetime.datetime.timedelta
             Time interval to stop retrying.
         """
-        retried_func = self._setup_retry_func(interval, stop, func)
+        retried_func = self._setup_retry_func(func, interval, stop)
         return await retried_func(*args, **kwargs)
 
     async def update_forecast(self: SimpleNWS) -> None:
