@@ -201,7 +201,7 @@ class SimpleNWS(Nws):
         *args,
         **kwargs,
     ) -> Callable[[Any, Any], Awaitable[Any]]:
-        """Call an update function but do retries.
+        """Call an update function with retries.
 
         Parameters
         ----------
@@ -211,6 +211,10 @@ class SimpleNWS(Nws):
             Time interval for retry.
         stop : int, float, datetime.datetime.timedelta
             Time interval to stop retrying.
+        args : Any
+            Positional args to pass to func.
+        kwargs : Any
+            Keyword args to pass to func.
         """
         retried_func = self._setup_retry_func(func, interval, stop)
         return await retried_func(*args, **kwargs)
