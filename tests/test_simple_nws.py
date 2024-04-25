@@ -72,7 +72,7 @@ async def test_nws_observation_with_retry(aiohttp_client, mock_urls):
     nws = SimpleNWS(*LATLON, USERID, client)
 
     await nws.set_station(STATION)
-    with pytest.raises(aiohttp.web.HTTPBadGateway):
+    with pytest.raises(aiohttp.ClientResponseError):
         await nws.update_observation()
 
     await nws.call_with_retry(nws.update_observation, 0, 5)
@@ -342,7 +342,7 @@ async def test_retries(aiohttp_client, mock_urls, monkeypatch):
     await nws.set_station(STATION)
 
     mock_update = AsyncMock()
-    mock_update.side_effect = [aiohttp.web.HTTPBadGateway, None]
+    mock_update.side_effect = [aiohttp.ClientResponseError, None]
 
     monkeypatch.setattr(nws, "update_observation", mock_update)
 

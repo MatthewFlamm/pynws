@@ -21,7 +21,7 @@ from typing import (
 if TYPE_CHECKING:
     from datetime import timedelta
 
-from aiohttp import ClientSession
+from aiohttp import ClientResponseError, ClientSession
 from aiohttp.web import HTTPServerError
 from metar import Metar
 
@@ -51,6 +51,17 @@ WIND_DIRECTIONS: Final = [
 
 
 WIND: Final = {name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)}
+
+
+def is_500_error(error: Exception) -> bool:
+
+    if isinstance(error, ClientResponseError):
+        if error.status >= 500:
+            return True
+        else:
+            return False
+    else:
+        return False
 
 
 class MetarParam(NamedTuple):
@@ -189,7 +200,7 @@ class SimpleNWS(Nws):
     ) -> Callable[[Any, Any], Awaitable[Any]]:
         from tenacity import (  # pylint: disable=import-outside-toplevel
             retry,
-            retry_if_exception_type,
+            retry_if_exception,
             stop_after_delay,
             wait_fixed,
         )
@@ -198,7 +209,7 @@ class SimpleNWS(Nws):
             reraise=True,
             wait=wait_fixed(interval),
             stop=stop_after_delay(stop),
-            retry=retry_if_exception_type(HTTPServerError),
+            retry=retry_if_exception(is_500_error),
         )(func)
 
     async def call_with_retry(
