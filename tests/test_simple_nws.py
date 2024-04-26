@@ -377,7 +377,7 @@ async def test_retries(aiohttp_client, mock_urls, monkeypatch):
 
     mock_update = AsyncMock()
 
-    monkeypatch.setattr(nws, "update_observation", mock_update)
+    nws.update_observation = mock_update
 
     await nws.call_with_retry(nws.update_observation, 0, 5, "", test=None)
 
@@ -389,6 +389,6 @@ async def test_retries(aiohttp_client, mock_urls, monkeypatch):
 
     mock_update = AsyncMock()
     mock_update.side_effect = [RuntimeError, None]
-    monkeypatch.setattr(nws, "update_observation", mock_update)
+    nws.update_observation = mock_update
     with pytest.raises(RuntimeError):
         await nws.call_with_retry(nws.update_observation, 0, 5)
