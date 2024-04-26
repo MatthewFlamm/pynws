@@ -355,7 +355,7 @@ async def test_nws_alerts_all_zones_second_alert(aiohttp_client, mock_urls):
     assert len(alerts) == 2
 
 
-async def test_retries(aiohttp_client, mock_urls, monkeypatch):
+async def test_retries(aiohttp_client, mock_urls):
     with patch("pynws.simple_nws.is_500_error") as err_mock:
 
         # retry all exceptions
