@@ -65,20 +65,40 @@ async def test_nws_observation(aiohttp_client, mock_urls, observation_json):
 
 
 async def test_nws_observation_with_retry(aiohttp_client, mock_urls):
+    # update fails without retry
     app = setup_app(
         stations_observations=[aiohttp.web.HTTPBadGateway, "stations_observations.json"]
+    )
+    client = await aiohttp_client(app)
+    nws = SimpleNWS(*LATLON, USERID, client)
+    await nws.set_station(STATION)
+
+    with pytest.raises(aiohttp.ClientResponseError):
+        await nws.update_observation()
+
+    # update succeeds with retry
+    app = setup_app(
+        stations_observations=[aiohttp.web.HTTPBadGateway, "stations_observations.json"]
+    )
+    client = await aiohttp_client(app)
+    nws = SimpleNWS(*LATLON, USERID, client)
+    await nws.set_station(STATION)
+
+    await nws.call_with_retry(nws.update_observation, 0, 5)
+    observation = nws.observation
+    assert observation
+    assert observation["temperature"] == 10
+
+    # no retry for 4xx error
+    app = setup_app(
+        stations_observations=[aiohttp.web.HTTPBadRequest, "stations_observations.json"]
     )
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
 
     await nws.set_station(STATION)
     with pytest.raises(aiohttp.ClientResponseError):
-        await nws.update_observation()
-
-    await nws.call_with_retry(nws.update_observation, 0, 5)
-    observation = nws.observation
-    assert observation
-    assert observation["temperature"] == 10
+        await nws.call_with_retry(nws.update_observation, 0, 5)
 
 
 async def test_nws_observation_units(aiohttp_client, mock_urls):
