@@ -22,7 +22,6 @@ if TYPE_CHECKING:
     from datetime import timedelta
 
 from aiohttp import ClientResponseError, ClientSession
-from aiohttp.web import HTTPServerError
 from metar import Metar
 
 from .const import ALERT_ID, API_WEATHER_CODE, Final
@@ -54,7 +53,7 @@ WIND: Final = {name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)}
 
 
 def is_500_error(error: BaseException) -> bool:
-
+    """Return True if error is ClientResponseError and has a 5xx status."""
     return isinstance(error, ClientResponseError) and error.status >= 500
 
 
