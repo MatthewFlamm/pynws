@@ -1,4 +1,4 @@
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, patch
 
 import aiohttp
 import pytest
@@ -336,19 +336,24 @@ async def test_nws_alerts_all_zones_second_alert(aiohttp_client, mock_urls):
 
 
 async def test_retries(aiohttp_client, mock_urls, monkeypatch):
-    app = setup_app()
-    client = await aiohttp_client(app)
-    nws = SimpleNWS(*LATLON, USERID, client)
-    await nws.set_station(STATION)
+    with patch("pynws.simple_nws.is_500_error") as err_mock:
 
-    mock_update = AsyncMock()
-    mock_update.side_effect = [aiohttp.ClientResponseError, None]
+        # retry all exceptions
+        err_mock.return_value = True
 
-    monkeypatch.setattr(nws, "update_observation", mock_update)
+        app = setup_app()
+        client = await aiohttp_client(app)
+        nws = SimpleNWS(*LATLON, USERID, client)
+        await nws.set_station(STATION)
 
-    await nws.call_with_retry(nws.update_observation, 0, 5)
+        mock_update = AsyncMock()
+        mock_update.side_effect = [ValueError, None]
 
-    assert mock_update.call_count == 2
+        monkeypatch.setattr(nws, "update_observation", mock_update)
+
+        await nws.call_with_retry(nws.update_observation, 0, 5)
+
+        assert mock_update.call_count == 2
 
     mock_update = AsyncMock()
 
