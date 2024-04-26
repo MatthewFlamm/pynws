@@ -1,0 +1,5 @@
+{
+    "name": "Python 3.9",
+    "image": "mcr.microsoft.com/vscode/devcontainers/python:3.9-bullseye",
+    "postCreateCommand": "./.devcontainer/postcreatecommand.sh"
+}
