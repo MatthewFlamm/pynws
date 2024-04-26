@@ -356,6 +356,7 @@ async def test_nws_alerts_all_zones_second_alert(aiohttp_client, mock_urls):
 
 
 async def test_retries(aiohttp_client, mock_urls):
+
     with patch("pynws.simple_nws.is_500_error") as err_mock:
 
         # retry all exceptions
@@ -369,26 +370,31 @@ async def test_retries(aiohttp_client, mock_urls):
         mock_update = AsyncMock()
         mock_update.side_effect = [ValueError, None]
 
-        nws.update_observation = mock_update
+        async def mock_wrap(*args, **kwargs):
+            return await mock_update(*args, **kwargs)
 
-        await nws.call_with_retry(nws.update_observation, 0, 5)
+        await nws.call_with_retry(mock_wrap, 0, 5)
 
         assert mock_update.call_count == 2
 
     mock_update = AsyncMock()
 
-    nws.update_observation = mock_update
+    async def mock_wrap(*args, **kwargs):
+        return await mock_update(*args, **kwargs)
 
-    await nws.call_with_retry(nws.update_observation, 0, 5, "", test=None)
+    await nws.call_with_retry(mock_wrap, 0, 5, "", test=None)
 
     mock_update.assert_called_once_with("", test=None)
 
     # positional only args
     with pytest.raises(TypeError):
-        await nws.call_with_retry(nws.update_observation, interval=0, stop=5)
+        await nws.call_with_retry(mock_wrap, interval=0, stop=5)
 
     mock_update = AsyncMock()
     mock_update.side_effect = [RuntimeError, None]
-    nws.update_observation = mock_update
+
+    async def mock_wrap(*args, **kwargs):
+        return await mock_update(*args, **kwargs)
+
     with pytest.raises(RuntimeError):
-        await nws.call_with_retry(nws.update_observation, 0, 5)
+        await nws.call_with_retry(mock_wrap, 0, 5)
