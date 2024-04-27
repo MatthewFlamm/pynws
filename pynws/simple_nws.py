@@ -52,9 +52,56 @@ WIND_DIRECTIONS: Final = [
 WIND: Final = {name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)}
 
 
-def is_500_error(error: BaseException) -> bool:
+def _is_500_error(error: BaseException) -> bool:
     """Return True if error is ClientResponseError and has a 5xx status."""
     return isinstance(error, ClientResponseError) and error.status >= 500
+
+
+def _setup_retry_func(
+    func: Callable[[Any, Any], Awaitable[Any]],
+    interval: Union[int, float, timedelta],
+    stop: Union[int, float, timedelta],
+) -> Callable[[Any, Any], Awaitable[Any]]:
+    from tenacity import (  # pylint: disable=import-outside-toplevel
+        retry,
+        retry_if_exception,
+        stop_after_delay,
+        wait_fixed,
+    )
+
+    return retry(
+        reraise=True,
+        wait=wait_fixed(interval),
+        stop=stop_after_delay(stop),
+        retry=retry_if_exception(_is_500_error),
+    )(func)
+
+
+async def call_with_retry(
+    func: Callable[[Any, Any], Awaitable[Any]],
+    interval: Union[int, float, timedelta],
+    stop: Union[int, float, timedelta],
+    /,
+    *args,
+    **kwargs,
+) -> Callable[[Any, Any], Awaitable[Any]]:
+    """Call an update function with retries.
+
+    Parameters
+    ----------
+    func : Callable
+        An awaitable coroutine to retry.
+    interval : int, float, datetime.datetime.timedelta
+        Time interval for retry.
+    stop : int, float, datetime.datetime.timedelta
+        Time interval to stop retrying.
+    args : Any
+        Positional args to pass to func.
+    kwargs : Any
+        Keyword args to pass to func.
+    """
+    retried_func = _setup_retry_func(func, interval, stop)
+    return await retried_func(*args, **kwargs)
 
 
 class MetarParam(NamedTuple):
@@ -184,53 +231,6 @@ class SimpleNWS(Nws):
         if obs:
             self._observation = obs
             self._metar_obs = [self.extract_metar(iobs) for iobs in self._observation]
-
-    @staticmethod
-    def _setup_retry_func(
-        func: Callable[[Any, Any], Awaitable[Any]],
-        interval: Union[int, float, timedelta],
-        stop: Union[int, float, timedelta],
-    ) -> Callable[[Any, Any], Awaitable[Any]]:
-        from tenacity import (  # pylint: disable=import-outside-toplevel
-            retry,
-            retry_if_exception,
-            stop_after_delay,
-            wait_fixed,
-        )
-
-        return retry(
-            reraise=True,
-            wait=wait_fixed(interval),
-            stop=stop_after_delay(stop),
-            retry=retry_if_exception(is_500_error),
-        )(func)
-
-    async def call_with_retry(
-        self,
-        func: Callable[[Any, Any], Awaitable[Any]],
-        interval: Union[int, float, timedelta],
-        stop: Union[int, float, timedelta],
-        /,
-        *args,
-        **kwargs,
-    ) -> Callable[[Any, Any], Awaitable[Any]]:
-        """Call an update function with retries.
-
-        Parameters
-        ----------
-        func : Callable
-            An awaitable coroutine to retry.
-        interval : int, float, datetime.datetime.timedelta
-            Time interval for retry.
-        stop : int, float, datetime.datetime.timedelta
-            Time interval to stop retrying.
-        args : Any
-            Positional args to pass to func.
-        kwargs : Any
-            Keyword args to pass to func.
-        """
-        retried_func = self._setup_retry_func(func, interval, stop)
-        return await retried_func(*args, **kwargs)
 
     async def update_forecast(self: SimpleNWS) -> None:
         """Update forecast."""

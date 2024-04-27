@@ -4,7 +4,7 @@ import aiohttp
 import pytest
 from freezegun import freeze_time
 
-from pynws import NwsError, SimpleNWS
+from pynws import NwsError, SimpleNWS, call_with_retry
 from tests.helpers import data_return_function, setup_app
 
 LATLON = (0, 0)
@@ -84,7 +84,7 @@ async def test_nws_observation_with_retry(aiohttp_client, mock_urls):
     nws = SimpleNWS(*LATLON, USERID, client)
     await nws.set_station(STATION)
 
-    await nws.call_with_retry(nws.update_observation, 0, 5)
+    await call_with_retry(nws.update_observation, 0, 5)
     observation = nws.observation
     assert observation
     assert observation["temperature"] == 10
@@ -98,7 +98,7 @@ async def test_nws_observation_with_retry(aiohttp_client, mock_urls):
 
     await nws.set_station(STATION)
     with pytest.raises(aiohttp.ClientResponseError):
-        await nws.call_with_retry(nws.update_observation, 0, 5)
+        await call_with_retry(nws.update_observation, 0, 5)
 
 
 async def test_nws_observation_units(aiohttp_client, mock_urls):
@@ -357,7 +357,7 @@ async def test_nws_alerts_all_zones_second_alert(aiohttp_client, mock_urls):
 
 async def test_retries(aiohttp_client, mock_urls):
 
-    with patch("pynws.simple_nws.is_500_error") as err_mock:
+    with patch("pynws.simple_nws._is_500_error") as err_mock:
 
         # retry all exceptions
         err_mock.return_value = True
@@ -373,7 +373,7 @@ async def test_retries(aiohttp_client, mock_urls):
         async def mock_wrap(*args, **kwargs):
             return await mock_update(*args, **kwargs)
 
-        await nws.call_with_retry(mock_wrap, 0, 5)
+        await call_with_retry(mock_wrap, 0, 5)
 
         assert mock_update.call_count == 2
 
@@ -382,13 +382,13 @@ async def test_retries(aiohttp_client, mock_urls):
     async def mock_wrap(*args, **kwargs):
         return await mock_update(*args, **kwargs)
 
-    await nws.call_with_retry(mock_wrap, 0, 5, "", test=None)
+    await call_with_retry(mock_wrap, 0, 5, "", test=None)
 
     mock_update.assert_called_once_with("", test=None)
 
     # positional only args
     with pytest.raises(TypeError):
-        await nws.call_with_retry(mock_wrap, interval=0, stop=5)
+        call_with_retry(mock_wrap, interval=0, stop=5)
 
     mock_update = AsyncMock()
     mock_update.side_effect = [RuntimeError, None]
@@ -397,4 +397,4 @@ async def test_retries(aiohttp_client, mock_urls):
         return await mock_update(*args, **kwargs)
 
     with pytest.raises(RuntimeError):
-        await nws.call_with_retry(mock_wrap, 0, 5)
+        await call_with_retry(mock_wrap, 0, 5)
