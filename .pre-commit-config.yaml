@@ -3,12 +3,11 @@ ci:
     autoupdate_schedule: monthly
 
 repos:
-  - repo: https://github.com/psf/black
-    rev: 24.3.0
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.3.7
     hooks:
-      - id: black
-  - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
-    hooks:
-      - id: isort
-        name: isort (python)
+      - id: ruff
+        args:
+          - --fix
+      - id: ruff-format
+        files: ^((pynws|tests)/.+)?[^/]+\.(py|pyi)$

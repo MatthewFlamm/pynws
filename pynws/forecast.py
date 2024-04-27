@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-import re
 from datetime import datetime, timedelta, timezone
+import re
 from typing import Any, Dict, Iterable, Iterator, List, Tuple, Union
 
 from .const import Detail, Final

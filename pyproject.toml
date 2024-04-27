@@ -1,0 +1,95 @@
+[tool.ruff]
+required-version = ">=0.3.7"
+target-version = "py38"
+
+[tool.ruff.lint]
+select = [
+    "B002", # Python does not support the unary prefix increment
+    "B005", # Using .strip() with multi-character strings is misleading
+    "B007", # Loop control variable {name} not used within loop body
+    "B014", # Exception handler with duplicate exception
+    "B015", # Pointless comparison. Did you mean to assign a value? Otherwise, prepend assert or remove it.
+    "B017", # pytest.raises(BaseException) should be considered evil
+    "B018", # Found useless attribute access. Either assign it to a variable or remove it.
+    "B023", # Function definition does not bind loop variable {name}
+    "B026", # Star-arg unpacking after a keyword argument is strongly discouraged
+    "B032", # Possible unintentional type annotation (using :). Did you mean to assign (using =)?
+    "B904", # Use raise from to specify exception cause
+    "B905", # zip() without an explicit strict= parameter
+    "C", # complexity
+    "COM818", # Trailing comma on bare tuple prohibited
+    #"D", # docstrings
+    "DTZ003", # Use datetime.now(tz=) instead of datetime.utcnow()
+    "DTZ004", # Use datetime.fromtimestamp(ts, tz=) instead of datetime.utcfromtimestamp(ts)
+    "E", # pycodestyle
+    "F", # pyflakes/autoflake
+    "FLY", # flynt
+    "G", # flake8-logging-format
+    "I", # isort
+    "INP", # flake8-no-pep420
+    "ISC", # flake8-implicit-str-concat
+    "ICN001", # import concentions; {name} should be imported as {asname}
+    "LOG", # flake8-logging
+    "N804", # First argument of a class method should be named cls
+    "N805", # First argument of a method should be named self
+    "N815", # Variable {name} in class scope should not be mixedCase
+    "PERF", # Perflint
+    "PGH", # pygrep-hooks
+    "PIE", # flake8-pie
+    "PL", # pylint
+    "PT", # flake8-pytest-style
+    "PYI", # flake8-pyi
+    "RET", # flake8-return
+    "RSE", # flake8-raise
+    "RUF005", # Consider iterable unpacking instead of concatenation
+    "RUF006", # Store a reference to the return value of asyncio.create_task
+    "RUF013", # PEP 484 prohibits implicit Optional
+    "RUF018", # Avoid assignment expressions in assert statements
+    "RUF100", # Unused `noqa` directive; temporarily every now and then to clean them up
+    "S102", # Use of exec detected
+    "S103", # bad-file-permissions
+    "S108", # hardcoded-temp-file
+    "S306", # suspicious-mktemp-usage
+    "S307", # suspicious-eval-usage
+    "S313", # suspicious-xmlc-element-tree-usage
+    "S314", # suspicious-xml-element-tree-usage
+    "S315", # suspicious-xml-expat-reader-usage
+    "S316", # suspicious-xml-expat-builder-usage
+    "S317", # suspicious-xml-sax-usage
+    "S318", # suspicious-xml-mini-dom-usage
+    "S319", # suspicious-xml-pull-dom-usage
+    "S320", # suspicious-xmle-tree-usage
+    "S601", # paramiko-call
+    "S602", # subprocess-popen-with-shell-equals-true
+    "S604", # call-with-shell-equals-true
+    "S608", # hardcoded-sql-expression
+    "S609", # unix-command-wildcard-injection
+    "SIM", # flake8-simplify
+    "SLOT", # flake8-slots
+    "T100", # Trace found: {name} used
+    "T20", # flake8-print
+    "TID251", # Banned imports
+    "TRY", # tryceratops
+    "UP", # pyupgrade
+    "W", # pycodestyle
+]
+
+ignore = [
+    "PLR0912", # Too many branches ({branches} > {max_branches})
+    "PLR0913", # Too many arguments to function call ({c_args} > {max_args})
+    "PLR2004", # Magic value used in comparison, consider replacing {value} with a constant variable
+    "PLW2901", # Outer {outer_kind} variable {name} overwritten by inner {inner_kind} target
+    "PYI019", # Methods like `__new__` should return `typing.Self` instead of a custom `TypeVar`
+    "TRY003", # Avoid specifying long messages outside the exception class
+    "UP006", # Use `X` instead of `Y` for type annotation
+    "UP007", # Use `X | Y` for type annotations
+]
+
+[tool.ruff.lint.isort]
+force-sort-within-sections = true
+known-first-party = ["pynws"]
+combine-as-imports = true
+split-on-trailing-comma = false
+
+[tool.ruff.lint.mccabe]
+max-complexity = 25
