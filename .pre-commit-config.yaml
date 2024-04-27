@@ -10,4 +10,3 @@ repos:
         args:
           - --fix
       - id: ruff-format
-        files: ^((pynws|tests)/.+)?[^/]+\.(py|pyi)$
