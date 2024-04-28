@@ -75,6 +75,7 @@ select = [
 ]
 
 ignore = [
+    "ISC001",
     "PLR0912", # Too many branches ({branches} > {max_branches})
     "PLR0913", # Too many arguments to function call ({c_args} > {max_args})
     "PLR2004", # Magic value used in comparison, consider replacing {value} with a constant variable
