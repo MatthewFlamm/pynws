@@ -9,4 +9,6 @@ repos:
       - id: ruff
         args:
           - --fix
+        files: '^(pynws|tests)/'
       - id: ruff-format
+        files: '^(pynws|tests)/'
