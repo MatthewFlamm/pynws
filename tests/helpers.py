@@ -14,6 +14,7 @@ def data_return_function(file_name):
         elif isinstance(file_name, list):
             with open(os.path.join(DIR, file_name.pop(0))) as f:
                 return aiohttp.web.json_response(data=json.load(f))
+        return None
 
     return function
 

@@ -45,7 +45,7 @@ async def test_nws_stations_observations(aiohttp_client, mock_urls):
     nws = Nws(client, USERID, LATLON)
     assert nws
     with pytest.raises(NwsError):
-        stations = await nws.get_stations_observations()
+        await nws.get_stations_observations()
     nws.station = STATION
     observations = await nws.get_stations_observations()
     assert observations

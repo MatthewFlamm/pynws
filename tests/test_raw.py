@@ -46,7 +46,7 @@ async def test_stations_observations_start_datetime(aiohttp_client, mock_urls):
     with pytest.raises(ValueError, match="start parameter must be timezone aware"):
         # utcnow is confusingly returns naive
         await raw_data.raw_stations_observations(
-            STATION, client, USERID, start=datetime.utcnow()
+            STATION, client, USERID, start=datetime.now(tz=timezone.utc)
         )
 
 
