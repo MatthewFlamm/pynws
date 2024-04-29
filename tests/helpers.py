@@ -9,12 +9,12 @@ DIR = "tests/fixtures"
 def data_return_function(input):
     async def function(request):
         if isinstance(input, str):
-            with open(os.path.join(DIR, input), "r") as f:
+            with open(os.path.join(DIR, input)) as f:
                 return aiohttp.web.json_response(data=json.load(f))
         elif isinstance(input, list):
             input0 = input.pop(0)
             if isinstance(input0, str):
-                with open(os.path.join(DIR, input0), "r") as f:
+                with open(os.path.join(DIR, input0)) as f:
                     return aiohttp.web.json_response(data=json.load(f))
             if issubclass(input0, Exception):
                 raise input0

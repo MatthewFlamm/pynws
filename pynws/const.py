@@ -2,9 +2,9 @@
 Constants for pynws
 """
 
+from enum import unique
 import os
 import sys
-from enum import unique
 from typing import Final
 
 from .version import __version__

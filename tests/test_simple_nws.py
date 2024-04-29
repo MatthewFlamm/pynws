@@ -1,11 +1,11 @@
 from unittest.mock import AsyncMock, patch
 
 import aiohttp
-import pytest
 from freezegun import freeze_time
+import pytest
 
 from pynws import NwsError, SimpleNWS, call_with_retry
-from tests.helpers import data_return_function, setup_app
+from tests.helpers import setup_app
 
 LATLON = (0, 0)
 STATION = "ABC"

@@ -1,7 +1,7 @@
 """Functions to retrieve raw data."""
 
-import logging
 from datetime import datetime
+import logging
 from typing import Any, Dict, Optional
 
 from aiohttp import ClientSession
