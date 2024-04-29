@@ -25,4 +25,4 @@ jobs:
         pip install -r requirements-test.txt
     - name: mypy
       run: |
-        mypy pynws
+        mypy src/pynws
