@@ -62,12 +62,7 @@ def _setup_retry_func(
     interval: Union[float, timedelta],
     stop: Union[float, timedelta],
 ) -> Callable[[Any, Any], Awaitable[Any]]:
-    from tenacity import (  # pylint: disable=import-outside-toplevel
-        retry,
-        retry_if_exception,
-        stop_after_delay,
-        wait_fixed,
-    )
+    from tenacity import retry, retry_if_exception, stop_after_delay, wait_fixed
 
     return retry(
         reraise=True,
