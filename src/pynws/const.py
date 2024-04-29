@@ -7,16 +7,12 @@ import os
 import sys
 from typing import Final
 
-from .version import __version__
-
 if sys.version_info >= (3, 11):
     from enum import StrEnum
 else:
     from .backports.enum import StrEnum
 
 file_dir = os.path.join(os.path.dirname(__file__), "..")
-
-version = __version__
 
 API_URL: Final = "https://api.weather.gov/"
 API_GRIDPOINTS_STATIONS: Final = "gridpoints/{}/{},{}/stations"

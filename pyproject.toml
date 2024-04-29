@@ -1,3 +1,58 @@
+[build-system]
+requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+dynamic = ["version"]
+name = "pynws"
+requires-python = ">=3.8"
+dependencies = [
+    "aiohttp",
+    "metar"
+]
+description = "Python library to retrieve observations and forecasts from NWS/NOAA"
+readme = {file = "README.md", content-type = "text/markdown"}
+keywords = ["nws", "weather"]
+license = {text = "MIT License"}
+classifiers = [
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+]
+authors = [
+  {name = "Matthew Flamm", email = "matthewhflamm0@gmail.com"}
+]
+
+[project.optional-dependencies]
+retry = ["tenacity"]
+
+[project.urls]
+"Repository" = "https://github.com/MatthewFlamm/pynws"
+"Bug Tracker" = "https://github.com/MatthewFlamm/pynws/issues"
+
+[tool.setuptools_scm]
+write_to = "src/pynws/_version.py"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = false
+
+[tool.mypy]
+files = ["src"]
+
+[[tool.mypy.overrides]]
+module = "metar"
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "src"]
+asyncio_mode = "auto"
+log_level = "DEBUG"
+addopts = "--doctest-modules"
+
 [tool.ruff]
 required-version = ">=0.3.7"
 target-version = "py38"
