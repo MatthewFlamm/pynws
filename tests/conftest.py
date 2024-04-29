@@ -3,7 +3,7 @@ from unittest.mock import patch
 import pytest
 
 
-@pytest.fixture
+@pytest.fixture()
 def mock_urls():
     with patch(
         "pynws.urls.stations_observations_url"
@@ -33,4 +33,13 @@ def mock_urls():
         mock_gridpoints_stations_url.return_value = "/gridpoints_stations"
         mock_alerts_active_zone_url.return_value = "/alerts_active_zone"
 
-        yield mock_stations_observations_url, mock_stations_observations_latest_url, mock_points_url, mock_detailed_forecast_url, mock_gridpoints_forecast_url, mock_gridpoints_forecast_hourly_url, mock_gridpoints_stations_url, mock_alerts_active_zone_url
+        yield (
+            mock_stations_observations_url,
+            mock_stations_observations_latest_url,
+            mock_points_url,
+            mock_detailed_forecast_url,
+            mock_gridpoints_forecast_url,
+            mock_gridpoints_forecast_hourly_url,
+            mock_gridpoints_stations_url,
+            mock_alerts_active_zone_url,
+        )
