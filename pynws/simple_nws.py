@@ -59,8 +59,8 @@ def _is_500_error(error: BaseException) -> bool:
 
 def _setup_retry_func(
     func: Callable[[Any, Any], Awaitable[Any]],
-    interval: Union[int, float, timedelta],
-    stop: Union[int, float, timedelta],
+    interval: Union[float, timedelta],
+    stop: Union[float, timedelta],
 ) -> Callable[[Any, Any], Awaitable[Any]]:
     from tenacity import (  # pylint: disable=import-outside-toplevel
         retry,
@@ -79,8 +79,8 @@ def _setup_retry_func(
 
 async def call_with_retry(
     func: Callable[[Any, Any], Awaitable[Any]],
-    interval: Union[int, float, timedelta],
-    stop: Union[int, float, timedelta],
+    interval: Union[float, timedelta],
+    stop: Union[float, timedelta],
     /,
     *args,
     **kwargs,
@@ -91,9 +91,9 @@ async def call_with_retry(
     ----------
     func : Callable
         An awaitable coroutine to retry.
-    interval : int, float, datetime.datetime.timedelta
+    interval : float, datetime.datetime.timedelta
         Time interval for retry.
-    stop : int, float, datetime.datetime.timedelta
+    stop : float, datetime.datetime.timedelta
         Time interval to stop retrying.
     args : Any
         Positional args to pass to func.

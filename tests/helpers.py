@@ -18,6 +18,7 @@ def data_return_function(input):
                     return aiohttp.web.json_response(data=json.load(f))
             if issubclass(input0, Exception):
                 raise input0
+        raise RuntimeError("Unexpected input")
 
     return function
 
