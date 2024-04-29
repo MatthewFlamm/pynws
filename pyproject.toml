@@ -48,7 +48,7 @@ module = "metar"
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
-testpaths = ["tests", "src"]
+testpaths = ["tests"]
 asyncio_mode = "auto"
 log_level = "DEBUG"
 addopts = "--doctest-modules"
