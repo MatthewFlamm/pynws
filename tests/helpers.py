@@ -6,15 +6,19 @@ import aiohttp
 DIR = "tests/fixtures"
 
 
-def data_return_function(file_name):
+def data_return_function(input):
     async def function(request):
-        if isinstance(file_name, str):
-            with open(os.path.join(DIR, file_name)) as f:
+        if isinstance(input, str):
+            with open(os.path.join(DIR, input)) as f:
                 return aiohttp.web.json_response(data=json.load(f))
-        elif isinstance(file_name, list):
-            with open(os.path.join(DIR, file_name.pop(0))) as f:
-                return aiohttp.web.json_response(data=json.load(f))
-        return None
+        elif isinstance(input, list):
+            input0 = input.pop(0)
+            if isinstance(input0, str):
+                with open(os.path.join(DIR, input0)) as f:
+                    return aiohttp.web.json_response(data=json.load(f))
+            if issubclass(input0, Exception):
+                raise input0
+        raise RuntimeError("Unexpected input")
 
     return function
 
