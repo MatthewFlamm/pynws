@@ -51,7 +51,6 @@ ignore_missing_imports = true
 testpaths = ["tests"]
 asyncio_mode = "auto"
 log_level = "DEBUG"
-addopts = "--doctest-modules"
 
 [tool.ruff]
 required-version = ">=0.3.7"
