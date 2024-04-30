@@ -1,3 +1,4 @@
+import sys
 from unittest.mock import AsyncMock, patch
 
 import aiohttp
@@ -368,7 +369,14 @@ async def test_retry_5xx(aiohttp_client, mock_urls):
         mock_update = AsyncMock()
         mock_update.side_effect = [ValueError, None]
 
-        await call_with_retry(mock_update, 0, 5)
+        if sys.version_info >= (3, 10):
+            mock_wrap = mock_update
+        else:
+
+            async def mock_wrap(*args, **kwargs):
+                return await mock_update(*args, **kwargs)
+
+        await call_with_retry(mock_wrap, 0, 5)
 
         assert mock_update.call_count == 2
 
@@ -376,7 +384,14 @@ async def test_retry_5xx(aiohttp_client, mock_urls):
 async def test_retry_with_args():
     mock_update = AsyncMock()
 
-    await call_with_retry(mock_update, 0, 5, "", test=None)
+    if sys.version_info >= (3, 10):
+        mock_wrap = mock_update
+    else:
+
+        async def mock_wrap(*args, **kwargs):
+            return await mock_update(*args, **kwargs)
+
+    await call_with_retry(mock_wrap, 0, 5, "", test=None)
 
     mock_update.assert_called_once_with("", test=None)
 
@@ -384,11 +399,18 @@ async def test_retry_with_args():
 async def test_retry_invalid_args():
     mock_update = AsyncMock()
 
+    if sys.version_info >= (3, 10):
+        mock_wrap = mock_update
+    else:
+
+        async def mock_wrap(*args, **kwargs):
+            return await mock_update(*args, **kwargs)
+
     # positional only args
     with pytest.raises(TypeError):
         # 'interval' and 'stop' will be included in '**kwargs' since positional-only
         # parameters with these names already exist
-        await call_with_retry(mock_update, interval=0, stop=5)
+        await call_with_retry(mock_wrap, interval=0, stop=5)
 
     assert mock_update.call_count == 0
 
@@ -397,7 +419,14 @@ async def test_retries_runtime_error():
     mock_update = AsyncMock()
     mock_update.side_effect = [RuntimeError, None]
 
+    if sys.version_info >= (3, 10):
+        mock_wrap = mock_update
+    else:
+
+        async def mock_wrap(*args, **kwargs):
+            return await mock_update(*args, **kwargs)
+
     with pytest.raises(RuntimeError):
-        await call_with_retry(mock_update, 0, 5)
+        await call_with_retry(mock_wrap, 0, 5)
 
     assert mock_update.call_count == 1
