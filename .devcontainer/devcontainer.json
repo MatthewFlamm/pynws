@@ -1,5 +1,12 @@
 {
     "name": "Python 3",
     "image": "mcr.microsoft.com/vscode/devcontainers/python:3.12-bullseye",
-    "postCreateCommand": "./.devcontainer/postcreatecommand.sh"
+    "postCreateCommand": "./.devcontainer/postcreatecommand.sh",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "charliermarsh.ruff"
+            ]
+        }
+    }
 }
