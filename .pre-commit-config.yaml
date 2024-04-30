@@ -9,6 +9,6 @@ repos:
       - id: ruff
         args:
           - --fix
-        files: '^src/'
+        files: '^(src|tests)/'
       - id: ruff-format
-        files: '^src/'
+        files: '^(src|tests)/'
