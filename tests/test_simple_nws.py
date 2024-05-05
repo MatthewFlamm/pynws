@@ -356,10 +356,13 @@ async def test_nws_alerts_all_zones_second_alert(aiohttp_client, mock_urls):
     assert len(alerts) == 2
 
 
-async def test_retry_5xx(aiohttp_client, mock_urls):
-    with patch("pynws.simple_nws._is_500_error") as err_mock:
+async def test_retry(aiohttp_client, mock_urls):
+    with patch("pynws.simple_nws._nws_retry_func") as err_mock:
         # retry all exceptions
-        err_mock.return_value = True
+        def _return_true(error):
+            return True
+
+        err_mock.return_value = _return_true
 
         app = setup_app()
         client = await aiohttp_client(app)

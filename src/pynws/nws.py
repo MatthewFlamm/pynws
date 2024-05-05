@@ -28,6 +28,10 @@ class NwsError(Exception):
         self.message = message
 
 
+class NwsNoDataError(NwsError):
+    """No data was returned."""
+
+
 class Nws:
     """Class to more easily get data for one location."""
 
