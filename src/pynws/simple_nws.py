@@ -247,16 +247,33 @@ class SimpleNWS(Nws):
         elif raise_no_data:
             raise NwsNoDataError("Observation received with no data.")
 
-    async def update_forecast(self: SimpleNWS) -> None:
+    async def update_forecast(self: SimpleNWS, *, raise_no_data: bool = False) -> None:
         """Update forecast."""
         self._forecast = await self.get_gridpoints_forecast()
+        if not self.forecast and raise_no_data:
+            raise NwsNoDataError("Forecast received with no data.")
 
-    async def update_forecast_hourly(self: SimpleNWS) -> None:
+    async def update_forecast_hourly(
+        self: SimpleNWS, *, raise_no_data: bool = False
+    ) -> None:
         """Update forecast hourly."""
         self._forecast_hourly = await self.get_gridpoints_forecast_hourly()
+        if not self.forecast_hourly and raise_no_data:
+            raise NwsNoDataError("Forecast hourly received with no data.")
 
-    async def update_detailed_forecast(self: SimpleNWS) -> None:
-        """Update forecast."""
+    async def update_detailed_forecast(
+        self: SimpleNWS, *, raise_no_data: bool = False
+    ) -> None:
+        """Update forecast.
+
+        Note:
+        `raise_no_data`currently can only be set to `False`.
+        """
+        if raise_no_data:
+            raise NotImplementedError(
+                "raise_no_data=True not implemented for update_detailed_forecast"
+            )
+
         self._detailed_forecast = await self.get_detailed_forecast()
 
     @staticmethod
@@ -273,22 +290,52 @@ class SimpleNWS(Nws):
         current_alert_ids = self._unique_alert_ids(current_alerts)
         return [alert for alert in alerts if alert[ALERT_ID] not in current_alert_ids]
 
-    async def update_alerts_forecast_zone(self: SimpleNWS) -> List[Dict[str, Any]]:
-        """Update alerts zone."""
+    async def update_alerts_forecast_zone(
+        self: SimpleNWS, *, raise_no_data: bool = False
+    ) -> List[Dict[str, Any]]:
+        """Update alerts zone.
+
+        Note:
+        `raise_no_data`currently can only be set to `False`.
+        """
+        if raise_no_data:
+            raise NotImplementedError(
+                "raise_no_data=True not implemented for update_alerts_forecast_zone"
+            )
         alerts = await self.get_alerts_forecast_zone()
         new_alerts = self._new_alerts(alerts, self._alerts_forecast_zone)
         self._alerts_forecast_zone = alerts
         return new_alerts
 
-    async def update_alerts_county_zone(self: SimpleNWS) -> List[Dict[str, Any]]:
-        """Update alerts zone."""
+    async def update_alerts_county_zone(
+        self: SimpleNWS, *, raise_no_data: bool = False
+    ) -> List[Dict[str, Any]]:
+        """Update alerts zone.
+
+        Note:
+        `raise_no_data`currently can only be set to `False`.
+        """
+        if raise_no_data:
+            raise NotImplementedError(
+                "raise_no_data=True not implemented for update_alerts_county_zone"
+            )
         alerts = await self.get_alerts_county_zone()
         new_alerts = self._new_alerts(alerts, self._alerts_county_zone)
         self._alerts_county_zone = alerts
         return new_alerts
 
-    async def update_alerts_fire_weather_zone(self: SimpleNWS) -> List[Dict[str, Any]]:
-        """Update alerts zone."""
+    async def update_alerts_fire_weather_zone(
+        self: SimpleNWS, *, raise_no_data: bool = False
+    ) -> List[Dict[str, Any]]:
+        """Update alerts zone.
+
+        Note:
+        `raise_no_data`currently can only be set to `False`.
+        """
+        if raise_no_data:
+            raise NotImplementedError(
+                "raise_no_data=True not implemented for update_alerts_fire_weather_zone"
+            )
         alerts = await self.get_alerts_fire_weather_zone()
         new_alerts = self._new_alerts(alerts, self._alerts_fire_weather_zone)
         self._alerts_fire_weather_zone = alerts

@@ -5,7 +5,7 @@ import aiohttp
 from freezegun import freeze_time
 import pytest
 
-from pynws import NwsError, SimpleNWS, call_with_retry
+from pynws import NwsError, NwsNoDataError, SimpleNWS, call_with_retry
 from tests.helpers import setup_app
 
 LATLON = (0, 0)
@@ -288,6 +288,52 @@ async def test_nws_forecast_empty(aiohttp_client, mock_urls):
     forecast = nws.forecast
 
     assert forecast == []
+
+
+@freeze_time("2019-10-13T14:30:00-04:00")
+async def test_nws_forecast_empty_raise(aiohttp_client, mock_urls):
+    app = setup_app(gridpoints_forecast="gridpoints_forecast_empty.json")
+    client = await aiohttp_client(app)
+    nws = SimpleNWS(*LATLON, USERID, client)
+    with pytest.raises(NwsNoDataError):
+        await nws.update_forecast(raise_no_data=True)
+
+
+@freeze_time("2019-10-14T20:30:00-04:00")
+async def test_nws_forecast_hourly_empty(aiohttp_client, mock_urls):
+    app = setup_app(gridpoints_forecast_hourly="gridpoints_forecast_hourly_empty.json")
+    client = await aiohttp_client(app)
+    nws = SimpleNWS(*LATLON, USERID, client)
+    await nws.update_forecast_hourly()
+    forecast_hourly = nws.forecast_hourly
+
+    assert forecast_hourly == []
+
+
+@freeze_time("2019-10-14T20:30:00-04:00")
+async def test_nws_forecast_hourly_empty_raise(aiohttp_client, mock_urls):
+    app = setup_app(gridpoints_forecast_hourly="gridpoints_forecast_hourly_empty.json")
+    client = await aiohttp_client(app)
+    nws = SimpleNWS(*LATLON, USERID, client)
+    with pytest.raises(NwsNoDataError):
+        await nws.update_forecast_hourly(raise_no_data=True)
+
+
+async def test_nws_unimplemented_retry_no_data(aiohttp_client, mock_urls):
+    app = setup_app(gridpoints_forecast="gridpoints_forecast_empty.json")
+    client = await aiohttp_client(app)
+    nws = SimpleNWS(*LATLON, USERID, client)
+    with pytest.raises(NotImplementedError):
+        await nws.update_detailed_forecast(raise_no_data=True)
+
+    with pytest.raises(NotImplementedError):
+        await nws.update_alerts_forecast_zone(raise_no_data=True)
+
+    with pytest.raises(NotImplementedError):
+        await nws.update_alerts_county_zone(raise_no_data=True)
+
+    with pytest.raises(NotImplementedError):
+        await nws.update_alerts_fire_weather_zone(raise_no_data=True)
 
 
 async def test_nws_alerts_forecast_zone(aiohttp_client, mock_urls):
