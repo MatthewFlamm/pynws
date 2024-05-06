@@ -70,7 +70,7 @@ def _setup_retry_func(
     stop: Union[float, timedelta],
     *,
     retry_no_data=False,
-) -> Callable[[Any, Any], Awaitable[Any]]:
+) -> Callable[..., Awaitable[Any]]:
     from tenacity import retry, retry_if_exception, stop_after_delay, wait_fixed
 
     retry_func = _nws_retry_func(retry_no_data=retry_no_data)
