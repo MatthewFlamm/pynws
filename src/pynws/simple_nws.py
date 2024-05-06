@@ -89,7 +89,7 @@ async def call_with_retry(
     stop: Union[float, timedelta],
     /,
     *args,
-    retry_no_data=True,
+    retry_no_data=False,
     **kwargs,
 ) -> Callable[[Any, Any], Awaitable[Any]]:
     """Call an update function with retries.
@@ -110,7 +110,7 @@ async def call_with_retry(
         Keyword args to pass to func.
     """
     retried_func = _setup_retry_func(func, interval, stop, retry_no_data=retry_no_data)
-    return await retried_func(*args, **kwargs)
+    return await retried_func(*args, raise_no_data=retry_no_data, **kwargs)
 
 
 class MetarParam(NamedTuple):

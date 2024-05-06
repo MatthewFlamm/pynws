@@ -174,6 +174,21 @@ async def test_nws_observation_noprop(aiohttp_client, mock_urls):
     assert observation is None
 
 
+async def test_nws_observation_noprop_w_retry(aiohttp_client, mock_urls):
+    app = setup_app(
+        stations_observations=[
+            "stations_observations_noprop.json",
+            "stations_observations.json",
+        ]
+    )
+    client = await aiohttp_client(app)
+    nws = SimpleNWS(*LATLON, USERID, client)
+    await nws.set_station(STATION)
+
+    await call_with_retry(nws.update_observation, 0, 5, retry_no_data=True)
+    assert nws.observation is not None
+
+
 async def test_nws_observation_missing_value(aiohttp_client, mock_urls):
     app = setup_app(stations_observations="stations_observations_missing_value.json")
     client = await aiohttp_client(app)
@@ -395,8 +410,13 @@ async def test_retry_with_args():
             return await mock_update(*args, **kwargs)
 
     await call_with_retry(mock_wrap, 0, 5, "", test=None)
+    # raise_no_data is always included when called with retry
+    mock_update.assert_called_once_with("", raise_no_data=False, test=None)
 
-    mock_update.assert_called_once_with("", test=None)
+    mock_update.reset_mock()
+    await call_with_retry(mock_wrap, 0, 5, "", test=None, retry_no_data=True)
+    # retry_no_data will change raise_no_data
+    mock_update.assert_called_once_with("", raise_no_data=True, test=None)
 
 
 async def test_retry_invalid_args():
