@@ -326,16 +326,28 @@ async def test_nws_unimplemented_retry_no_data(aiohttp_client, mock_urls):
     app = setup_app(gridpoints_forecast="gridpoints_forecast_empty.json")
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(
+        NotImplementedError,
+        match="raise_no_data=True not implemented for update_detailed_forecast",
+    ):
         await nws.update_detailed_forecast(raise_no_data=True)
 
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(
+        NotImplementedError,
+        match="raise_no_data=True not implemented for update_alerts_forecast_zone",
+    ):
         await nws.update_alerts_forecast_zone(raise_no_data=True)
 
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(
+        NotImplementedError,
+        match="raise_no_data=True not implemented for update_alerts_county_zone",
+    ):
         await nws.update_alerts_county_zone(raise_no_data=True)
 
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(
+        NotImplementedError,
+        match="raise_no_data=True not implemented for update_alerts_fire_weather_zone",
+    ):
         await nws.update_alerts_fire_weather_zone(raise_no_data=True)
 
 
