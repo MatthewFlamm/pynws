@@ -52,9 +52,23 @@ WIND_DIRECTIONS: Final = [
 WIND: Final = {name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)}
 
 
-def _nws_retry_func(retry_no_data):
+def _nws_retry_func(retry_no_data: bool):
+    """
+    Return function used for tenacity.retry.
+
+    Retry if:
+        - if error is ClientResponseError and has a 5xx status.
+        - if error is NwsNoDataError, the behavior is determined by retry_no_data
+
+    Parameters
+    ----------
+    retry_no_data : bool
+        Whether to retry when `NwsNoDataError` is raised.
+
+    """
+
     def _retry(error: BaseException) -> bool:
-        """Return True if error is ClientResponseError and has a 5xx status."""
+        """Whether to retry based on execptions."""
         if isinstance(error, ClientResponseError) and error.status >= 500:
             return True
         if retry_no_data and isinstance(error, NwsNoDataError):
