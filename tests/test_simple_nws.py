@@ -318,7 +318,7 @@ async def test_nws_forecast_hourly_empty_raise(aiohttp_client, mock_urls):
     app = setup_app(gridpoints_forecast_hourly="gridpoints_forecast_hourly_empty.json")
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
-    with pytest.raises(NwsNoDataError, match="Hourly forecast received with no data"):
+    with pytest.raises(NwsNoDataError, match="Forecast hourly received with no data"):
         await nws.update_forecast_hourly(raise_no_data=True)
 
 
