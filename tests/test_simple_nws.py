@@ -173,6 +173,9 @@ async def test_nws_observation_noprop(aiohttp_client, mock_urls):
 
     assert observation is None
 
+    with pytest.raises(NwsNoDataError, match="Observation received with no data"):
+        await nws.update_observation(raise_no_data=True)
+
 
 async def test_nws_observation_noprop_w_retry(aiohttp_client, mock_urls):
     app = setup_app(
@@ -295,7 +298,7 @@ async def test_nws_forecast_empty_raise(aiohttp_client, mock_urls):
     app = setup_app(gridpoints_forecast="gridpoints_forecast_empty.json")
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
-    with pytest.raises(NwsNoDataError):
+    with pytest.raises(NwsNoDataError, match="Forecast received with no data"):
         await nws.update_forecast(raise_no_data=True)
 
 
@@ -315,7 +318,7 @@ async def test_nws_forecast_hourly_empty_raise(aiohttp_client, mock_urls):
     app = setup_app(gridpoints_forecast_hourly="gridpoints_forecast_hourly_empty.json")
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
-    with pytest.raises(NwsNoDataError):
+    with pytest.raises(NwsNoDataError, match="Hourly forecast received with no data"):
         await nws.update_forecast_hourly(raise_no_data=True)
 
 
