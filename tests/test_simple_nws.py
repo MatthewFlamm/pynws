@@ -236,20 +236,32 @@ async def test_nws_forecast(aiohttp_client, mock_urls):
     assert forecast[1]["probabilityOfPrecipitation"] == 0
 
 
-@freeze_time("2019-10-14T21:30:00-04:00")
 async def test_nws_forecast_discard_stale(aiohttp_client, mock_urls):
-    app = setup_app()
-    client = await aiohttp_client(app)
-    nws = SimpleNWS(*LATLON, USERID, client, filter_forecast=True)
-    await nws.update_forecast_hourly()
-    forecast = nws.forecast_hourly
-    assert forecast[0]["temperature"] == 77
+    with freeze_time("2019-10-14T21:30:00-04:00"):
+        app = setup_app()
+        client = await aiohttp_client(app)
+        nws = SimpleNWS(*LATLON, USERID, client, filter_forecast=True)
+        await nws.update_forecast_hourly()
+        forecast = nws.forecast_hourly
+        assert forecast[0]["temperature"] == 77
 
-    nws = SimpleNWS(*LATLON, USERID, client, filter_forecast=False)
-    await nws.update_forecast_hourly()
-    forecast = nws.forecast_hourly
+        nws = SimpleNWS(*LATLON, USERID, client, filter_forecast=False)
+        await nws.update_forecast_hourly()
+        forecast = nws.forecast_hourly
 
-    assert forecast[0]["temperature"] == 78
+        assert forecast[0]["temperature"] == 78
+
+    with freeze_time("2019-10-15T21:30:00-04:00"):
+        nws = SimpleNWS(*LATLON, USERID, client, filter_forecast=True)
+        await nws.update_forecast_hourly()
+        forecast = nws.forecast_hourly
+        assert forecast == []
+
+        nws = SimpleNWS(*LATLON, USERID, client, filter_forecast=True)
+        with pytest.raises(
+            NwsNoDataError, match="Forecast hourly received with no data"
+        ):
+            await nws.update_forecast_hourly(raise_no_data=True)
 
 
 @freeze_time("2019-10-14T20:30:00-04:00")
