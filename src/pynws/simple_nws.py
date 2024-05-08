@@ -26,7 +26,7 @@ from metar import Metar
 
 from .const import ALERT_ID, API_WEATHER_CODE, Final
 from .forecast import DetailedForecast
-from .nws import Nws, NwsError
+from .nws import Nws, NwsError, NwsNoDataError
 from .units import convert_unit
 
 WIND_DIRECTIONS: Final = [
@@ -52,23 +52,48 @@ WIND_DIRECTIONS: Final = [
 WIND: Final = {name: idx * 360 / 16 for idx, name in enumerate(WIND_DIRECTIONS)}
 
 
-def _is_500_error(error: BaseException) -> bool:
-    """Return True if error is ClientResponseError and has a 5xx status."""
-    return isinstance(error, ClientResponseError) and error.status >= 500
+def _nws_retry_func(retry_no_data: bool):
+    """
+    Return function used for tenacity.retry.
+
+    Retry if:
+        - if error is ClientResponseError and has a 5xx status.
+        - if error is NwsNoDataError, the behavior is determined by retry_no_data
+
+    Parameters
+    ----------
+    retry_no_data : bool
+        Whether to retry when `NwsNoDataError` is raised.
+
+    """
+
+    def _retry(error: BaseException) -> bool:
+        """Whether to retry based on execptions."""
+        if isinstance(error, ClientResponseError) and error.status >= 500:
+            return True
+        if retry_no_data and isinstance(error, NwsNoDataError):
+            return True
+        return False
+
+    return _retry
 
 
 def _setup_retry_func(
     func: Callable[[Any, Any], Awaitable[Any]],
     interval: Union[float, timedelta],
     stop: Union[float, timedelta],
-) -> Callable[[Any, Any], Awaitable[Any]]:
+    *,
+    retry_no_data=False,
+) -> Callable[..., Awaitable[Any]]:
     from tenacity import retry, retry_if_exception, stop_after_delay, wait_fixed
+
+    retry_func = _nws_retry_func(retry_no_data=retry_no_data)
 
     return retry(
         reraise=True,
         wait=wait_fixed(interval),
         stop=stop_after_delay(stop),
-        retry=retry_if_exception(_is_500_error),
+        retry=retry_if_exception(retry_func),
     )(func)
 
 
@@ -78,6 +103,7 @@ async def call_with_retry(
     stop: Union[float, timedelta],
     /,
     *args,
+    retry_no_data=False,
     **kwargs,
 ) -> Callable[[Any, Any], Awaitable[Any]]:
     """Call an update function with retries.
@@ -90,13 +116,15 @@ async def call_with_retry(
         Time interval for retry.
     stop : float, datetime.datetime.timedelta
         Time interval to stop retrying.
+    retry_no_data : bool
+         Whether to retry when no data is returned.
     args : Any
         Positional args to pass to func.
     kwargs : Any
         Keyword args to pass to func.
     """
-    retried_func = _setup_retry_func(func, interval, stop)
-    return await retried_func(*args, **kwargs)
+    retried_func = _setup_retry_func(func, interval, stop, retry_no_data=retry_no_data)
+    return await retried_func(*args, raise_no_data=retry_no_data, **kwargs)
 
 
 class MetarParam(NamedTuple):
@@ -219,24 +247,47 @@ class SimpleNWS(Nws):
         return metar_obs
 
     async def update_observation(
-        self: SimpleNWS, limit: int = 0, start_time: Optional[datetime] = None
+        self: SimpleNWS,
+        limit: int = 0,
+        start_time: Optional[datetime] = None,
+        *,
+        raise_no_data: bool = False,
     ) -> None:
         """Update observation."""
         obs = await self.get_stations_observations(limit, start_time=start_time)
         if obs:
             self._observation = obs
             self._metar_obs = [self.extract_metar(iobs) for iobs in self._observation]
+        elif raise_no_data:
+            raise NwsNoDataError("Observation received with no data.")
 
-    async def update_forecast(self: SimpleNWS) -> None:
+    async def update_forecast(self: SimpleNWS, *, raise_no_data: bool = False) -> None:
         """Update forecast."""
         self._forecast = await self.get_gridpoints_forecast()
+        if not self.forecast and raise_no_data:
+            raise NwsNoDataError("Forecast received with no data.")
 
-    async def update_forecast_hourly(self: SimpleNWS) -> None:
+    async def update_forecast_hourly(
+        self: SimpleNWS, *, raise_no_data: bool = False
+    ) -> None:
         """Update forecast hourly."""
         self._forecast_hourly = await self.get_gridpoints_forecast_hourly()
+        if not self.forecast_hourly and raise_no_data:
+            raise NwsNoDataError("Forecast hourly received with no data.")
 
-    async def update_detailed_forecast(self: SimpleNWS) -> None:
-        """Update forecast."""
+    async def update_detailed_forecast(
+        self: SimpleNWS, *, raise_no_data: bool = False
+    ) -> None:
+        """Update forecast.
+
+        Note:
+        `raise_no_data`currently can only be set to `False`.
+        """
+        if raise_no_data:
+            raise NotImplementedError(
+                "raise_no_data=True not implemented for update_detailed_forecast"
+            )
+
         self._detailed_forecast = await self.get_detailed_forecast()
 
     @staticmethod
@@ -253,22 +304,52 @@ class SimpleNWS(Nws):
         current_alert_ids = self._unique_alert_ids(current_alerts)
         return [alert for alert in alerts if alert[ALERT_ID] not in current_alert_ids]
 
-    async def update_alerts_forecast_zone(self: SimpleNWS) -> List[Dict[str, Any]]:
-        """Update alerts zone."""
+    async def update_alerts_forecast_zone(
+        self: SimpleNWS, *, raise_no_data: bool = False
+    ) -> List[Dict[str, Any]]:
+        """Update alerts zone.
+
+        Note:
+        `raise_no_data`currently can only be set to `False`.
+        """
+        if raise_no_data:
+            raise NotImplementedError(
+                "raise_no_data=True not implemented for update_alerts_forecast_zone"
+            )
         alerts = await self.get_alerts_forecast_zone()
         new_alerts = self._new_alerts(alerts, self._alerts_forecast_zone)
         self._alerts_forecast_zone = alerts
         return new_alerts
 
-    async def update_alerts_county_zone(self: SimpleNWS) -> List[Dict[str, Any]]:
-        """Update alerts zone."""
+    async def update_alerts_county_zone(
+        self: SimpleNWS, *, raise_no_data: bool = False
+    ) -> List[Dict[str, Any]]:
+        """Update alerts zone.
+
+        Note:
+        `raise_no_data`currently can only be set to `False`.
+        """
+        if raise_no_data:
+            raise NotImplementedError(
+                "raise_no_data=True not implemented for update_alerts_county_zone"
+            )
         alerts = await self.get_alerts_county_zone()
         new_alerts = self._new_alerts(alerts, self._alerts_county_zone)
         self._alerts_county_zone = alerts
         return new_alerts
 
-    async def update_alerts_fire_weather_zone(self: SimpleNWS) -> List[Dict[str, Any]]:
-        """Update alerts zone."""
+    async def update_alerts_fire_weather_zone(
+        self: SimpleNWS, *, raise_no_data: bool = False
+    ) -> List[Dict[str, Any]]:
+        """Update alerts zone.
+
+        Note:
+        `raise_no_data`currently can only be set to `False`.
+        """
+        if raise_no_data:
+            raise NotImplementedError(
+                "raise_no_data=True not implemented for update_alerts_fire_weather_zone"
+            )
         alerts = await self.get_alerts_fire_weather_zone()
         new_alerts = self._new_alerts(alerts, self._alerts_fire_weather_zone)
         self._alerts_fire_weather_zone = alerts

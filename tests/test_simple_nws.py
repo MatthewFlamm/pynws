@@ -5,7 +5,7 @@ import aiohttp
 from freezegun import freeze_time
 import pytest
 
-from pynws import NwsError, SimpleNWS, call_with_retry
+from pynws import NwsError, NwsNoDataError, SimpleNWS, call_with_retry
 from tests.helpers import setup_app
 
 LATLON = (0, 0)
@@ -173,6 +173,24 @@ async def test_nws_observation_noprop(aiohttp_client, mock_urls):
 
     assert observation is None
 
+    with pytest.raises(NwsNoDataError, match="Observation received with no data"):
+        await nws.update_observation(raise_no_data=True)
+
+
+async def test_nws_observation_noprop_w_retry(aiohttp_client, mock_urls):
+    app = setup_app(
+        stations_observations=[
+            "stations_observations_noprop.json",
+            "stations_observations.json",
+        ]
+    )
+    client = await aiohttp_client(app)
+    nws = SimpleNWS(*LATLON, USERID, client)
+    await nws.set_station(STATION)
+
+    await call_with_retry(nws.update_observation, 0, 5, retry_no_data=True)
+    assert nws.observation is not None
+
 
 async def test_nws_observation_missing_value(aiohttp_client, mock_urls):
     app = setup_app(stations_observations="stations_observations_missing_value.json")
@@ -218,20 +236,32 @@ async def test_nws_forecast(aiohttp_client, mock_urls):
     assert forecast[1]["probabilityOfPrecipitation"] == 0
 
 
-@freeze_time("2019-10-14T21:30:00-04:00")
 async def test_nws_forecast_discard_stale(aiohttp_client, mock_urls):
-    app = setup_app()
-    client = await aiohttp_client(app)
-    nws = SimpleNWS(*LATLON, USERID, client, filter_forecast=True)
-    await nws.update_forecast_hourly()
-    forecast = nws.forecast_hourly
-    assert forecast[0]["temperature"] == 77
+    with freeze_time("2019-10-14T21:30:00-04:00"):
+        app = setup_app()
+        client = await aiohttp_client(app)
+        nws = SimpleNWS(*LATLON, USERID, client, filter_forecast=True)
+        await nws.update_forecast_hourly()
+        forecast = nws.forecast_hourly
+        assert forecast[0]["temperature"] == 77
 
-    nws = SimpleNWS(*LATLON, USERID, client, filter_forecast=False)
-    await nws.update_forecast_hourly()
-    forecast = nws.forecast_hourly
+        nws = SimpleNWS(*LATLON, USERID, client, filter_forecast=False)
+        await nws.update_forecast_hourly()
+        forecast = nws.forecast_hourly
 
-    assert forecast[0]["temperature"] == 78
+        assert forecast[0]["temperature"] == 78
+
+    with freeze_time("2019-10-15T21:30:00-04:00"):
+        nws = SimpleNWS(*LATLON, USERID, client, filter_forecast=True)
+        await nws.update_forecast_hourly()
+        forecast = nws.forecast_hourly
+        assert forecast == []
+
+        nws = SimpleNWS(*LATLON, USERID, client, filter_forecast=True)
+        with pytest.raises(
+            NwsNoDataError, match="Forecast hourly received with no data"
+        ):
+            await nws.update_forecast_hourly(raise_no_data=True)
 
 
 @freeze_time("2019-10-14T20:30:00-04:00")
@@ -273,6 +303,64 @@ async def test_nws_forecast_empty(aiohttp_client, mock_urls):
     forecast = nws.forecast
 
     assert forecast == []
+
+
+@freeze_time("2019-10-13T14:30:00-04:00")
+async def test_nws_forecast_empty_raise(aiohttp_client, mock_urls):
+    app = setup_app(gridpoints_forecast="gridpoints_forecast_empty.json")
+    client = await aiohttp_client(app)
+    nws = SimpleNWS(*LATLON, USERID, client)
+    with pytest.raises(NwsNoDataError, match="Forecast received with no data"):
+        await nws.update_forecast(raise_no_data=True)
+
+
+@freeze_time("2019-10-14T20:30:00-04:00")
+async def test_nws_forecast_hourly_empty(aiohttp_client, mock_urls):
+    app = setup_app(gridpoints_forecast_hourly="gridpoints_forecast_hourly_empty.json")
+    client = await aiohttp_client(app)
+    nws = SimpleNWS(*LATLON, USERID, client)
+    await nws.update_forecast_hourly()
+    forecast_hourly = nws.forecast_hourly
+
+    assert forecast_hourly == []
+
+
+@freeze_time("2019-10-14T20:30:00-04:00")
+async def test_nws_forecast_hourly_empty_raise(aiohttp_client, mock_urls):
+    app = setup_app(gridpoints_forecast_hourly="gridpoints_forecast_hourly_empty.json")
+    client = await aiohttp_client(app)
+    nws = SimpleNWS(*LATLON, USERID, client)
+    with pytest.raises(NwsNoDataError, match="Forecast hourly received with no data"):
+        await nws.update_forecast_hourly(raise_no_data=True)
+
+
+async def test_nws_unimplemented_retry_no_data(aiohttp_client, mock_urls):
+    app = setup_app(gridpoints_forecast="gridpoints_forecast_empty.json")
+    client = await aiohttp_client(app)
+    nws = SimpleNWS(*LATLON, USERID, client)
+    with pytest.raises(
+        NotImplementedError,
+        match="raise_no_data=True not implemented for update_detailed_forecast",
+    ):
+        await nws.update_detailed_forecast(raise_no_data=True)
+
+    with pytest.raises(
+        NotImplementedError,
+        match="raise_no_data=True not implemented for update_alerts_forecast_zone",
+    ):
+        await nws.update_alerts_forecast_zone(raise_no_data=True)
+
+    with pytest.raises(
+        NotImplementedError,
+        match="raise_no_data=True not implemented for update_alerts_county_zone",
+    ):
+        await nws.update_alerts_county_zone(raise_no_data=True)
+
+    with pytest.raises(
+        NotImplementedError,
+        match="raise_no_data=True not implemented for update_alerts_fire_weather_zone",
+    ):
+        await nws.update_alerts_fire_weather_zone(raise_no_data=True)
 
 
 async def test_nws_alerts_forecast_zone(aiohttp_client, mock_urls):
@@ -356,10 +444,13 @@ async def test_nws_alerts_all_zones_second_alert(aiohttp_client, mock_urls):
     assert len(alerts) == 2
 
 
-async def test_retry_5xx(aiohttp_client, mock_urls):
-    with patch("pynws.simple_nws._is_500_error") as err_mock:
+async def test_retry(aiohttp_client, mock_urls):
+    with patch("pynws.simple_nws._nws_retry_func") as err_mock:
         # retry all exceptions
-        err_mock.return_value = True
+        def _return_true(error):
+            return True
+
+        err_mock.return_value = _return_true
 
         app = setup_app()
         client = await aiohttp_client(app)
@@ -392,8 +483,13 @@ async def test_retry_with_args():
             return await mock_update(*args, **kwargs)
 
     await call_with_retry(mock_wrap, 0, 5, "", test=None)
+    # raise_no_data is always included when called with retry
+    mock_update.assert_called_once_with("", raise_no_data=False, test=None)
 
-    mock_update.assert_called_once_with("", test=None)
+    mock_update.reset_mock()
+    await call_with_retry(mock_wrap, 0, 5, "", test=None, retry_no_data=True)
+    # retry_no_data will change raise_no_data
+    mock_update.assert_called_once_with("", raise_no_data=True, test=None)
 
 
 async def test_retry_invalid_args():

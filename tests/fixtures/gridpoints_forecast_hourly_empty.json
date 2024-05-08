@@ -1,0 +1,92 @@
+{
+    "@context": [
+        "https://raw.githubusercontent.com/geojson/geojson-ld/master/contexts/geojson-base.jsonld",
+        {
+            "wx": "https://api.weather.gov/ontology#",
+            "geo": "http://www.opengis.net/ont/geosparql#",
+            "unit": "http://codes.wmo.int/common/unit/",
+            "@vocab": "https://api.weather.gov/ontology#"
+        }
+    ],
+    "type": "Feature",
+    "geometry": {
+        "type": "GeometryCollection",
+        "geometries": [
+            {
+                "type": "Point",
+                "coordinates": [
+                    -84.956046999999998,
+                    29.995017300000001
+                ]
+            },
+            {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -84.968174099999999,
+                            30.007206
+                        ],
+                        [
+                            -84.970116500000003,
+                            29.984511300000001
+                        ],
+                        [
+                            -84.943922400000005,
+                            29.982827500000003
+                        ],
+                        [
+                            -84.941974999999999,
+                            30.005522000000003
+                        ],
+                        [
+                            -84.968174099999999,
+                            30.007206
+                        ]
+                    ]
+                ]
+            }
+        ]
+    },
+    "properties": {
+        "updated": "2019-10-14T23:16:24+00:00",
+        "units": "us",
+        "forecastGenerator": "HourlyForecastGenerator",
+        "generatedAt": "2019-10-15T00:12:54+00:00",
+        "updateTime": "2019-10-14T23:16:24+00:00",
+        "validTimes": "2019-10-14T17:00:00+00:00/P7DT20H",
+        "elevation": {
+            "value": 7.9248000000000003,
+            "unitCode": "unit:m"
+        },
+        "periods": [
+            {
+                "number": null,
+                "name": null,
+                "startTime": null,
+                "endTime": null,
+                "isDaytime": null,
+                "temperature": null,
+                "temperatureUnit": null,
+                "temperatureTrend": null,
+                "probabilityOfPrecipitation": {
+                    "unitCode": null,
+                    "value": null
+                },
+                "dewpoint": {
+                    "unitCode": null,
+                    "value": null
+                },
+                "relativeHumidity": {
+                    "unitCode": null,
+                    "value": null
+                },
+                "windSpeed": null,
+                "windDirection": null,
+                "icon": null,
+                "shortForecast": null,
+                "detailedForecast": null
+            }
+        ]
+    }
+}
