@@ -263,16 +263,20 @@ class SimpleNWS(Nws):
 
     async def update_forecast(self: SimpleNWS, *, raise_no_data: bool = False) -> None:
         """Update forecast."""
-        self._forecast = await self.get_gridpoints_forecast()
-        if not self.forecast and raise_no_data:
+        forecast = await self.get_gridpoints_forecast()
+        if self._filter_forecast(forecast):
+            self._forecast = forecast
+        elif raise_no_data:
             raise NwsNoDataError("Forecast received with no data.")
 
     async def update_forecast_hourly(
         self: SimpleNWS, *, raise_no_data: bool = False
     ) -> None:
         """Update forecast hourly."""
-        self._forecast_hourly = await self.get_gridpoints_forecast_hourly()
-        if not self.forecast_hourly and raise_no_data:
+        forecast_hourly = await self.get_gridpoints_forecast_hourly()
+        if self._filter_forecast(forecast_hourly):
+            self._forecast_hourly = forecast_hourly
+        elif raise_no_data:
             raise NwsNoDataError("Forecast hourly received with no data.")
 
     async def update_detailed_forecast(
@@ -442,12 +446,14 @@ class SimpleNWS(Nws):
     @property
     def forecast(self: SimpleNWS) -> Optional[List[Dict[str, Any]]]:
         """Return forecast."""
-        return self._convert_forecast(self._forecast, self.filter_forecast)
+        forecast = self._filter_forecast(self._forecast)
+        return self._convert_forecast(forecast)
 
     @property
     def forecast_hourly(self: SimpleNWS) -> Optional[List[Dict[str, Any]]]:
         """Return forecast hourly."""
-        return self._convert_forecast(self._forecast_hourly, self.filter_forecast)
+        forecast = self._filter_forecast(self._forecast_hourly)
+        return self._convert_forecast(forecast)
 
     @property
     def detailed_forecast(self: SimpleNWS) -> Optional[DetailedForecast]:
@@ -459,25 +465,30 @@ class SimpleNWS(Nws):
         """
         return self._detailed_forecast
 
-    @staticmethod
-    def _convert_forecast(
+    def _filter_forecast(
+        self,
         input_forecast: Optional[List[Dict[str, Any]]],
-        filter_forecast: bool,
     ) -> List[Dict[str, Any]]:
-        """Converts forecast to common dict."""
         if not input_forecast:
             return []
-        forecast = []
+        if not self.filter_forecast:
+            return input_forecast
+        forecast: List[Dict[str, Any]] = []
         now = datetime.now(timezone.utc)
         for forecast_entry in input_forecast:
-            # get weather
-            if filter_forecast:
-                end_time = forecast_entry.get("endTime")
-                if not end_time:
-                    continue
-                if now > datetime.fromisoformat(end_time):
-                    continue
+            end_time = forecast_entry.get("endTime")
+            if not end_time or now > datetime.fromisoformat(end_time):
+                continue
+            forecast.append(forecast_entry)
+        return forecast
 
+    @staticmethod
+    def _convert_forecast(
+        input_forecast: List[Dict[str, Any]],
+    ) -> List[Dict[str, Any]]:
+        """Converts forecast to common dict."""
+        forecast = []
+        for forecast_entry in input_forecast:
             if (value := forecast_entry.get("temperature")) is not None:
                 forecast_entry["temperature"] = int(value)
 

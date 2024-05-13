@@ -192,6 +192,24 @@ async def test_nws_observation_noprop_w_retry(aiohttp_client, mock_urls):
     assert nws.observation is not None
 
 
+async def test_nws_observation_cache(aiohttp_client, mock_urls):
+    app = setup_app(
+        stations_observations=[
+            "stations_observations.json",
+            "stations_observations_noprop.json",
+        ]
+    )
+    client = await aiohttp_client(app)
+    nws = SimpleNWS(*LATLON, USERID, client)
+    await nws.set_station(STATION)
+    await nws.update_observation()
+    observation = nws.observation
+    assert observation
+
+    await nws.update_observation()
+    assert observation
+
+
 async def test_nws_observation_missing_value(aiohttp_client, mock_urls):
     app = setup_app(stations_observations="stations_observations_missing_value.json")
     client = await aiohttp_client(app)
@@ -314,6 +332,24 @@ async def test_nws_forecast_empty_raise(aiohttp_client, mock_urls):
         await nws.update_forecast(raise_no_data=True)
 
 
+@freeze_time("2019-10-13T14:30:00-04:00")
+async def test_nws_forecast_cache(aiohttp_client, mock_urls):
+    app = setup_app(
+        gridpoints_forecast=[
+            "gridpoints_forecast.json",
+            "gridpoints_forecast_empty.json",
+        ]
+    )
+    client = await aiohttp_client(app)
+    nws = SimpleNWS(*LATLON, USERID, client)
+    await nws.update_forecast()
+    forecast = nws.forecast
+    assert forecast
+
+    await nws.update_forecast()
+    assert forecast
+
+
 @freeze_time("2019-10-14T20:30:00-04:00")
 async def test_nws_forecast_hourly_empty(aiohttp_client, mock_urls):
     app = setup_app(gridpoints_forecast_hourly="gridpoints_forecast_hourly_empty.json")
@@ -332,6 +368,23 @@ async def test_nws_forecast_hourly_empty_raise(aiohttp_client, mock_urls):
     nws = SimpleNWS(*LATLON, USERID, client)
     with pytest.raises(NwsNoDataError, match="Forecast hourly received with no data"):
         await nws.update_forecast_hourly(raise_no_data=True)
+
+
+@freeze_time("2019-10-14T20:30:00-04:00")
+async def test_nws_forecast_hourly_cache(aiohttp_client, mock_urls):
+    app = setup_app(
+        gridpoints_forecast_hourly=[
+            "gridpoints_forecast_hourly.json",
+            "gridpoints_forecast_hourly_empty.json",
+        ]
+    )
+    client = await aiohttp_client(app)
+    nws = SimpleNWS(*LATLON, USERID, client)
+    await nws.update_forecast_hourly()
+    assert nws.forecast_hourly
+
+    await nws.update_forecast_hourly()
+    assert nws.forecast_hourly
 
 
 async def test_nws_unimplemented_retry_no_data(aiohttp_client, mock_urls):
