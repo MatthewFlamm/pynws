@@ -263,16 +263,20 @@ class SimpleNWS(Nws):
 
     async def update_forecast(self: SimpleNWS, *, raise_no_data: bool = False) -> None:
         """Update forecast."""
-        self._forecast = await self.get_gridpoints_forecast()
-        if not self.forecast and raise_no_data:
+        forecast = await self.get_gridpoints_forecast()
+        if self._convert_forecast(forecast, self.filter_forecast):
+            self._forecast = forecast
+        elif raise_no_data:
             raise NwsNoDataError("Forecast received with no data.")
 
     async def update_forecast_hourly(
         self: SimpleNWS, *, raise_no_data: bool = False
     ) -> None:
         """Update forecast hourly."""
-        self._forecast_hourly = await self.get_gridpoints_forecast_hourly()
-        if not self.forecast_hourly and raise_no_data:
+        forecast_hourly = await self.get_gridpoints_forecast_hourly()
+        if self._convert_forecast(forecast_hourly, self.filter_forecast):
+            self._forecast_hourly = forecast_hourly
+        elif raise_no_data:
             raise NwsNoDataError("Forecast hourly received with no data.")
 
     async def update_detailed_forecast(
