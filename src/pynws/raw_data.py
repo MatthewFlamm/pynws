@@ -9,6 +9,15 @@ from aiohttp import ClientSession
 from . import urls
 from .const import API_ACCEPT, API_USER
 
+BASE_HEADERS = {
+    "Accept": (
+        f"{API_ACCEPT},text/html,application/xhtml+xml,"
+        "application/xml;q=0.9,*/*;q=0.8"
+    ),
+    "Accept-Language": "en-US,en;q=0.7",
+    "Cache-Control": "max-age=0",
+}
+
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -17,7 +26,10 @@ def get_header(userid: str) -> Dict[str, str]:
 
     NWS recommends including an email in userid.
     """
-    return {"accept": API_ACCEPT, "User-Agent": API_USER.format(userid)}
+    return {
+        **BASE_HEADERS,
+        "User-Agent": API_USER.format(userid),
+    }
 
 
 async def _make_request(

@@ -16,10 +16,10 @@ file_dir = os.path.join(os.path.dirname(__file__), "..")
 
 API_URL: Final = "https://api.weather.gov/"
 API_GRIDPOINTS_STATIONS: Final = "gridpoints/{}/{},{}/stations"
-API_STATIONS_OBSERVATIONS: Final = "stations/{}/observations/"
+API_STATIONS_OBSERVATIONS: Final = "stations/{}/observations"
 API_STATIONS_OBSERVATIONS_LATEST: Final = "stations/{}/observations/latest"
 API_ACCEPT: Final = "application/geo+json"
-API_USER: Final = "pynws {}"
+API_USER: Final = "(pynws, {})"
 API_DETAILED_FORECAST: Final = "gridpoints/{}/{},{}"
 API_GRIDPOINTS_FORECAST: Final = "gridpoints/{}/{},{}/forecast"
 API_GRIDPOINTS_FORECAST_HOURLY: Final = "gridpoints/{}/{},{}/forecast/hourly"
