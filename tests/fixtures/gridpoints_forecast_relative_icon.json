@@ -1,0 +1,119 @@
+{
+    "@context": [
+        "https://raw.githubusercontent.com/geojson/geojson-ld/master/contexts/geojson-base.jsonld",
+        {
+            "wx": "https://api.weather.gov/ontology#",
+            "geo": "http://www.opengis.net/ont/geosparql#",
+            "unit": "http://codes.wmo.int/common/unit/",
+            "@vocab": "https://api.weather.gov/ontology#"
+        }
+    ],
+    "type": "Feature",
+    "geometry": {
+        "type": "GeometryCollection",
+        "geometries": [
+            {
+                "type": "Point",
+                "coordinates": [
+                    -84.956046999999998,
+                    29.995017300000001
+                ]
+            },
+            {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -84.968174099999999,
+                            30.007206
+                        ],
+                        [
+                            -84.970116500000003,
+                            29.984511300000001
+                        ],
+                        [
+                            -84.943922400000005,
+                            29.982827500000003
+                        ],
+                        [
+                            -84.941974999999999,
+                            30.005522000000003
+                        ],
+                        [
+                            -84.968174099999999,
+                            30.007206
+                        ]
+                    ]
+                ]
+            }
+        ]
+    },
+    "properties": {
+        "updated": "2019-10-13T18:16:20+00:00",
+        "units": "us",
+        "forecastGenerator": "BaselineForecastGenerator",
+        "generatedAt": "2019-10-13T18:42:44+00:00",
+        "updateTime": "2019-10-13T18:16:20+00:00",
+        "validTimes": "2019-10-13T12:00:00+00:00/P6DT22H",
+        "elevation": {
+            "value": 7.9248000000000003,
+            "unitCode": "unit:m"
+        },
+        "periods": [
+            {
+                "number": 1,
+                "name": "This Afternoon",
+                "startTime": "2019-10-13T14:00:00-04:00",
+                "endTime": "2019-10-13T18:00:00-04:00",
+                "isDaytime": true,
+                "temperature": 41,
+                "temperatureUnit": "F",
+                "temperatureTrend": null,
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 20
+                },
+                "dewpoint": {
+                    "unitCode": "wmoUnit:degC",
+                    "value": 5
+                },
+                "relativeHumidity": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 63
+                },
+                "windSpeed": "10 mph",
+                "windDirection": "S",
+                "icon": "/icons/land/day/tsra,40/ovc?size=medium",
+                "shortForecast": "Chance Showers And Thunderstorms",
+                "detailedForecast": ""
+            },
+            {
+                "number": 2,
+                "name": "Tonight",
+                "startTime": "2019-10-13T18:00:00-04:00",
+                "endTime": "2019-10-14T06:00:00-04:00",
+                "isDaytime": false,
+                "temperature": 68,
+                "temperatureUnit": "F",
+                "temperatureTrend": null,
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": null
+                },
+                "dewpoint": {
+                    "unitCode": "wmoUnit:degC",
+                    "value": 5
+                },
+                "relativeHumidity": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 63
+                },
+                "windSpeed": "0 to 5 mph",
+                "windDirection": "S",
+                "icon": "/icons/land/night/few?size=medium",
+                "shortForecast": "Mostly Clear",
+                "detailedForecast": "Mostly clear, with a low around 68. South wind 0 to 5 mph."
+            }
+        ]
+    }
+}
