@@ -23,6 +23,7 @@ if TYPE_CHECKING:
 
 from aiohttp import ClientResponseError, ClientSession
 from metar import Metar
+from yarl import URL
 
 from .const import ALERT_ID, API_WEATHER_CODE, Final
 from .forecast import DetailedForecast
@@ -177,9 +178,10 @@ def parse_icon(icon: str) -> Tuple[str, _WeatherCodes]:
     Example return:
     ('day', (('skc', None), ('tsra', 40),))
     """
-    icon_list = icon.split("/")
-    time = icon_list[5]
-    weather = [i.split("?")[0] for i in icon_list[6:]]
+    icon_url = URL(icon)
+    icon_parts = icon_url.parts
+    time = icon_parts[3]
+    weather = icon_parts[4:]
     code = [w.split(",")[0] for w in weather]
     chance = [int(w.split(",")[1]) if len(w.split(",")) == 2 else None for w in weather]
     return time, list(zip(code, chance))

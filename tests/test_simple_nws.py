@@ -40,6 +40,7 @@ async def test_nws_set_station_none(aiohttp_client, mock_urls):
         "stations_observations_strings.json",
         "stations_observations_other_unitcode.json",
         "stations_observations_multiple_unsorted.json",
+        "stations_observations_relative_icon.json",
     ],
 )
 async def test_nws_observation(aiohttp_client, mock_urls, observation_json):
@@ -230,9 +231,15 @@ async def test_nws_observation_missing_value(aiohttp_client, mock_urls):
     assert observation["iconWeather"] is None
 
 
+@pytest.mark.parametrize(
+    "gridpoints_forecast",
+    ["gridpoints_forecast.json", "gridpoints_forecast_relative_icon.json"],
+)
 @freeze_time("2019-10-13T14:30:00-04:00")
-async def test_nws_forecast(aiohttp_client, mock_urls):
-    app = setup_app()
+async def test_nws_forecast(aiohttp_client, mock_urls, gridpoints_forecast):
+    app = setup_app(
+        gridpoints_forecast=gridpoints_forecast,
+    )
     client = await aiohttp_client(app)
     nws = SimpleNWS(*LATLON, USERID, client)
     await nws.update_forecast()

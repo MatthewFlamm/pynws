@@ -8,7 +8,8 @@ name = "pynws"
 requires-python = ">=3.8"
 dependencies = [
     "aiohttp",
-    "metar"
+    "metar",
+    "yarl"
 ]
 description = "Python library to retrieve observations and forecasts from NWS/NOAA"
 readme = {file = "README.md", content-type = "text/markdown"}
