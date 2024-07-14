@@ -72,9 +72,7 @@ def _nws_retry_func(retry_no_data: bool):
         """Whether to retry based on execptions."""
         if isinstance(error, ClientResponseError) and error.status >= 500:
             return True
-        if retry_no_data and isinstance(error, NwsNoDataError):
-            return True
-        return False
+        return bool(retry_no_data) and isinstance(error, NwsNoDataError)
 
     return _retry
 
