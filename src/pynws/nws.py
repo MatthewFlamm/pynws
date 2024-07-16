@@ -136,7 +136,7 @@ class Nws:
         raw_forecast = await raw_gridpoints_forecast(
             self.wfo, self.x, self.y, self.session, self.userid
         )
-        return raw_forecast["properties"]["periods"]
+        return raw_forecast["properties"]
 
     async def get_gridpoints_forecast_hourly(self: Nws) -> List[Dict[str, Any]]:
         """Return hourly forecast from grid."""
@@ -147,7 +147,7 @@ class Nws:
         raw_forecast = await raw_gridpoints_forecast_hourly(
             self.wfo, self.x, self.y, self.session, self.userid
         )
-        return raw_forecast["properties"]["periods"]
+        return raw_forecast["properties"]
 
     async def get_alerts_active_zone(self: Nws, zone: str) -> List[Dict[str, Any]]:
         """Returns alerts dict for zone."""

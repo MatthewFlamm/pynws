@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import asdict, dataclass, fields
 from datetime import datetime, timezone
 from statistics import mean
 from typing import (
@@ -15,6 +16,7 @@ from typing import (
     Optional,
     Set,
     Tuple,
+    TypedDict,
     Union,
 )
 
@@ -25,7 +27,7 @@ from aiohttp import ClientResponseError, ClientSession
 from metar import Metar
 from yarl import URL
 
-from .const import ALERT_ID, API_WEATHER_CODE, Final
+from .const import ALERT_ID, API_WEATHER_CODE, Final, MetadataKeys
 from .forecast import DetailedForecast
 from .nws import Nws, NwsError, NwsNoDataError
 from .units import convert_unit
@@ -211,7 +213,9 @@ class SimpleNWS(Nws):
         self.station: Optional[str] = None
         self.stations: Optional[List[str]] = None
         self._forecast: Optional[List[Dict[str, Any]]] = None
+        self._forecast_metadata: Dict[str, str] = {}
         self._forecast_hourly: Optional[List[Dict[str, Any]]] = None
+        self._forecast_hourly_metadata: Dict[str, str] = {}
         self._detailed_forecast: Optional[DetailedForecast] = None
         self._alerts_forecast_zone: List[Dict[str, Any]] = []
         self._alerts_county_zone: List[Dict[str, Any]] = []
@@ -263,7 +267,10 @@ class SimpleNWS(Nws):
 
     async def update_forecast(self: SimpleNWS, *, raise_no_data: bool = False) -> None:
         """Update forecast."""
-        forecast = await self.get_gridpoints_forecast()
+        forecast_with_metadata = await self.get_gridpoints_forecast()
+        for metadataKey in MetadataKeys:
+            self._forecast_metadata[metadataKey] = forecast_with_metadata[metadataKey]
+        forecast = forecast_with_metadata["periods"]
         if self._filter_forecast(forecast):
             self._forecast = forecast
         elif raise_no_data:
@@ -273,7 +280,10 @@ class SimpleNWS(Nws):
         self: SimpleNWS, *, raise_no_data: bool = False
     ) -> None:
         """Update forecast hourly."""
-        forecast_hourly = await self.get_gridpoints_forecast_hourly()
+        forecast_hourly_with_metadata = await self.get_gridpoints_forecast_hourly()
+        for metadataKey in MetadataKeys:
+            self._forecast_hourly_metadata[metadataKey] = forecast_hourly_with_metadata[metadataKey]
+        forecast_hourly = forecast_hourly_with_metadata["periods"]
         if self._filter_forecast(forecast_hourly):
             self._forecast_hourly = forecast_hourly
         elif raise_no_data:
@@ -450,10 +460,20 @@ class SimpleNWS(Nws):
         return self._convert_forecast(forecast)
 
     @property
+    def forecast_metadata(self: SimpleNWS) -> Dict[str, str]:
+        """Return forecast metadata."""
+        return self._forecast_metadata
+
+    @property
     def forecast_hourly(self: SimpleNWS) -> Optional[List[Dict[str, Any]]]:
         """Return forecast hourly."""
         forecast = self._filter_forecast(self._forecast_hourly)
         return self._convert_forecast(forecast)
+
+    @property
+    def forecast_hourly_metadata(self: SimpleNWS) -> Dict[str, str]:
+        """Return forecast hourly metadata."""
+        return self._forecast_hourly_metadata
 
     @property
     def detailed_forecast(self: SimpleNWS) -> Optional[DetailedForecast]:
