@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, fields
 from datetime import datetime, timezone
 from statistics import mean
 from typing import (
@@ -16,7 +15,6 @@ from typing import (
     Optional,
     Set,
     Tuple,
-    TypedDict,
     Union,
 )
 
@@ -282,7 +280,9 @@ class SimpleNWS(Nws):
         """Update forecast hourly."""
         forecast_hourly_with_metadata = await self.get_gridpoints_forecast_hourly()
         for metadataKey in MetadataKeys:
-            self._forecast_hourly_metadata[metadataKey] = forecast_hourly_with_metadata[metadataKey]
+            self._forecast_hourly_metadata[metadataKey] = forecast_hourly_with_metadata[
+                metadataKey
+            ]
         forecast_hourly = forecast_hourly_with_metadata["periods"]
         if self._filter_forecast(forecast_hourly):
             self._forecast_hourly = forecast_hourly
