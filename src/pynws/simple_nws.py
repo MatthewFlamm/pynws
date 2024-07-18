@@ -266,11 +266,13 @@ class SimpleNWS(Nws):
     async def update_forecast(self: SimpleNWS, *, raise_no_data: bool = False) -> None:
         """Update forecast."""
         forecast_with_metadata = await self.get_gridpoints_forecast()
-        for metadataKey in MetadataKeys:
-            self._forecast_metadata[metadataKey] = forecast_with_metadata[metadataKey]
         forecast = forecast_with_metadata["periods"]
         if self._filter_forecast(forecast):
             self._forecast = forecast
+            for metadataKey in MetadataKeys:
+                self._forecast_metadata[metadataKey] = forecast_with_metadata[
+                    metadataKey
+                ]
         elif raise_no_data:
             raise NwsNoDataError("Forecast received with no data.")
 
@@ -279,13 +281,13 @@ class SimpleNWS(Nws):
     ) -> None:
         """Update forecast hourly."""
         forecast_hourly_with_metadata = await self.get_gridpoints_forecast_hourly()
-        for metadataKey in MetadataKeys:
-            self._forecast_hourly_metadata[metadataKey] = forecast_hourly_with_metadata[
-                metadataKey
-            ]
         forecast_hourly = forecast_hourly_with_metadata["periods"]
         if self._filter_forecast(forecast_hourly):
             self._forecast_hourly = forecast_hourly
+            for metadataKey in MetadataKeys:
+                self._forecast_hourly_metadata[metadataKey] = (
+                    forecast_hourly_with_metadata[metadataKey]
+                )
         elif raise_no_data:
             raise NwsNoDataError("Forecast hourly received with no data.")
 

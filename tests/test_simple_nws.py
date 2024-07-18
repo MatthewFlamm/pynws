@@ -342,6 +342,7 @@ async def test_nws_forecast_empty(aiohttp_client, mock_urls):
     forecast = nws.forecast
 
     assert forecast == []
+    assert nws.forecast_metadata == {}
 
 
 @freeze_time("2019-10-13T14:30:00-04:00")
@@ -369,6 +370,7 @@ async def test_nws_forecast_cache(aiohttp_client, mock_urls):
 
     await nws.update_forecast()
     assert forecast
+    assert nws.forecast_metadata["updateTime"] == "2019-10-13T18:16:20+00:00"
 
 
 @freeze_time("2019-10-14T20:30:00-04:00")
@@ -380,6 +382,7 @@ async def test_nws_forecast_hourly_empty(aiohttp_client, mock_urls):
     forecast_hourly = nws.forecast_hourly
 
     assert forecast_hourly == []
+    assert nws.forecast_hourly_metadata == {}
 
 
 @freeze_time("2019-10-14T20:30:00-04:00")
@@ -406,6 +409,8 @@ async def test_nws_forecast_hourly_cache(aiohttp_client, mock_urls):
 
     await nws.update_forecast_hourly()
     assert nws.forecast_hourly
+
+    assert nws.forecast_hourly_metadata["updateTime"] == "2019-10-14T23:16:24+00:00"
 
 
 async def test_nws_unimplemented_retry_no_data(aiohttp_client, mock_urls):
