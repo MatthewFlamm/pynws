@@ -211,9 +211,9 @@ class SimpleNWS(Nws):
         self.station: Optional[str] = None
         self.stations: Optional[List[str]] = None
         self._forecast: Optional[List[Dict[str, Any]]] = None
-        self._forecast_metadata: Dict[str, str] = {}
+        self._forecast_metadata: Dict[str, str | None] = {}
         self._forecast_hourly: Optional[List[Dict[str, Any]]] = None
-        self._forecast_hourly_metadata: Dict[str, str] = {}
+        self._forecast_hourly_metadata: Dict[str, str | None] = {}
         self._detailed_forecast: Optional[DetailedForecast] = None
         self._alerts_forecast_zone: List[Dict[str, Any]] = []
         self._alerts_county_zone: List[Dict[str, Any]] = []
@@ -270,7 +270,7 @@ class SimpleNWS(Nws):
         if self._filter_forecast(forecast):
             self._forecast = forecast
             self._forecast_metadata = {
-                metadataKey: forecast_with_metadata[metadataKey]
+                metadataKey: forecast_with_metadata.get(metadataKey)
                 for metadataKey in MetadataKeys
             }
         elif raise_no_data:
@@ -285,7 +285,7 @@ class SimpleNWS(Nws):
         if self._filter_forecast(forecast_hourly):
             self._forecast_hourly = forecast_hourly
             self._forecast_hourly_metadata = {
-                metadataKey: forecast_hourly_with_metadata[metadataKey]
+                metadataKey: forecast_hourly_with_metadata.get(metadataKey)
                 for metadataKey in MetadataKeys
             }
         elif raise_no_data:
@@ -462,7 +462,7 @@ class SimpleNWS(Nws):
         return self._convert_forecast(forecast)
 
     @property
-    def forecast_metadata(self: SimpleNWS) -> Dict[str, str]:
+    def forecast_metadata(self: SimpleNWS) -> Dict[str, str | None]:
         """Return forecast metadata."""
         return self._forecast_metadata
 
@@ -473,7 +473,7 @@ class SimpleNWS(Nws):
         return self._convert_forecast(forecast)
 
     @property
-    def forecast_hourly_metadata(self: SimpleNWS) -> Dict[str, str]:
+    def forecast_hourly_metadata(self: SimpleNWS) -> Dict[str, str | None]:
         """Return forecast hourly metadata."""
         return self._forecast_hourly_metadata
 
