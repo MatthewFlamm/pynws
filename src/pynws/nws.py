@@ -127,7 +127,7 @@ class Nws:
         )
         return DetailedForecast(raw_forecast["properties"])
 
-    async def get_gridpoints_forecast(self: Nws) -> List[Dict[str, Any]]:
+    async def get_gridpoints_forecast(self: Nws) -> Dict[str, Any]:
         """Return daily forecast from grid."""
         if self.wfo is None:
             await self.get_points()
@@ -138,7 +138,7 @@ class Nws:
         )
         return raw_forecast["properties"]
 
-    async def get_gridpoints_forecast_hourly(self: Nws) -> List[Dict[str, Any]]:
+    async def get_gridpoints_forecast_hourly(self: Nws) -> Dict[str, Any]:
         """Return hourly forecast from grid."""
         if self.wfo is None:
             await self.get_points()
