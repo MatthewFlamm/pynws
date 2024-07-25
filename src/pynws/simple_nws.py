@@ -456,7 +456,7 @@ class SimpleNWS(Nws):
         return data
 
     @property
-    def forecast(self: SimpleNWS) -> Optional[List[Dict[str, Any]]]:
+    def forecast(self: SimpleNWS) -> List[Dict[str, Any]]:
         """Return forecast."""
         forecast = self._filter_forecast(self._forecast)
         return self._convert_forecast(forecast)
@@ -467,7 +467,7 @@ class SimpleNWS(Nws):
         return self._forecast_metadata
 
     @property
-    def forecast_hourly(self: SimpleNWS) -> Optional[List[Dict[str, Any]]]:
+    def forecast_hourly(self: SimpleNWS) -> List[Dict[str, Any]]:
         """Return forecast hourly."""
         forecast = self._filter_forecast(self._forecast_hourly)
         return self._convert_forecast(forecast)
@@ -488,7 +488,7 @@ class SimpleNWS(Nws):
         return self._detailed_forecast
 
     def _filter_forecast(
-        self,
+        self: SimpleNWS,
         input_forecast: Optional[List[Dict[str, Any]]],
     ) -> List[Dict[str, Any]]:
         if not input_forecast:
