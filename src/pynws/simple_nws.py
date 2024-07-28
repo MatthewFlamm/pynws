@@ -203,7 +203,7 @@ class SimpleNWS(Nws):
         api_key: str,
         session: ClientSession,
         filter_forecast: bool = True,
-        forecast_units: str = "us"
+        forecast_units: str = "us",
     ):
         """Set up simplified NWS class."""
         super().__init__(session, api_key, (lat, lon))

@@ -92,7 +92,12 @@ async def raw_points(
 
 
 async def raw_detailed_forecast(
-    wfo: str, x: int, y: int, websession: ClientSession, userid: str, units: str,
+    wfo: str,
+    x: int,
+    y: int,
+    websession: ClientSession,
+    userid: str,
+    units: str,
 ) -> Dict[str, Any]:
     """Return griddata response."""
     url = urls.detailed_forecast_url(wfo, x, y)
@@ -101,21 +106,31 @@ async def raw_detailed_forecast(
 
 
 async def raw_gridpoints_forecast(
-    wfo: str, x: int, y: int, websession: ClientSession, userid: str, units: str,
+    wfo: str,
+    x: int,
+    y: int,
+    websession: ClientSession,
+    userid: str,
+    units: str,
 ) -> Dict[str, Any]:
     """Return griddata response."""
     url = urls.gridpoints_forecast_url(wfo, x, y)
     header = get_header(userid)
-    return await _make_request(websession, url, header, {"units": units })
+    return await _make_request(websession, url, header, {"units": units})
 
 
 async def raw_gridpoints_forecast_hourly(
-    wfo: str, x: int, y: int, websession: ClientSession, userid: str, units: str,
+    wfo: str,
+    x: int,
+    y: int,
+    websession: ClientSession,
+    userid: str,
+    units: str,
 ) -> Dict[str, Any]:
     """Return griddata response."""
     url = urls.gridpoints_forecast_hourly_url(wfo, x, y)
     header = get_header(userid)
-    return await _make_request(websession, url, header, {"units": units })
+    return await _make_request(websession, url, header, {"units": units})
 
 
 async def raw_alerts_active_zone(
