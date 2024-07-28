@@ -203,11 +203,13 @@ class SimpleNWS(Nws):
         api_key: str,
         session: ClientSession,
         filter_forecast: bool = True,
+        forecast_units: str = "us"
     ):
         """Set up simplified NWS class."""
         super().__init__(session, api_key, (lat, lon))
 
         self.filter_forecast = filter_forecast
+        self.forecast_units = forecast_units
         self._observation: Optional[List[Dict[str, Any]]] = None
         self._metar_obs: Optional[List[Optional[Metar.Metar]]] = None
         self.station: Optional[str] = None
