@@ -30,8 +30,8 @@ def get_params(
     limit: amount of observations to return.
     units: units used in response ("us", "si").
     """
-    params = {}
-    if limit > 0:
+    params: Dict[str, Any] = {}
+    if limit and limit > 0:
         params["limit"] = limit
     if start:
         if not isinstance(start, datetime):
