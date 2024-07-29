@@ -63,7 +63,7 @@ class Nws:
         self.county_zone: Optional[str] = None
         self.fire_weather_zone: Optional[str] = None
 
-        if forecast_units in ["us", "si"]:
+        if forecast_units in ("us", "si"):
             self.forecast_units = forecast_units
         else:
             self.forecast_units = "us"
