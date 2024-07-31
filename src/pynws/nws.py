@@ -3,12 +3,12 @@
 from __future__ import annotations
 
 from datetime import datetime
-from enum import auto, StrEnum
 from typing import Any, Dict, List, Optional, Tuple, cast
 
 from aiohttp import ClientSession
 
 from .forecast import DetailedForecast
+from .forecast_units import NwsForecastUnits
 from .raw_data import (
     raw_alerts_active_zone,
     raw_detailed_forecast,
@@ -31,13 +31,6 @@ class NwsError(Exception):
 
 class NwsNoDataError(NwsError):
     """No data was returned."""
-
-
-class NwsForecastUnits(StrEnum):
-    """Values accepted as forecast_units."""
-
-    US = auto()
-    SI = auto()
 
 
 class Nws:
@@ -77,7 +70,8 @@ class Nws:
             self.forecast_units = forecast_units
         else:
             raise ValueError(
-                f"{forecast_units} can only be {', '.join([i.value for i in NwsForecastUnits])}"
+                f"{forecast_units} can only be "
+                + ", ".join([i.value for i in NwsForecastUnits])
             )
 
     async def get_points_stations(self: Nws) -> List[str]:

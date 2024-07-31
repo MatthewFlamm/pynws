@@ -27,7 +27,8 @@ from yarl import URL
 
 from .const import ALERT_ID, API_WEATHER_CODE, Final
 from .forecast import DetailedForecast
-from .nws import Nws, NwsError, NwsNoDataError, NwsForecastUnits
+from .forecast_units import NwsForecastUnits
+from .nws import Nws, NwsError, NwsNoDataError
 from .units import convert_unit
 
 WIND_DIRECTIONS: Final = [

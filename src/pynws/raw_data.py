@@ -8,8 +8,7 @@ from aiohttp import ClientSession
 
 from . import urls
 from .const import API_ACCEPT, API_USER
-
-from .nws import NwsForecastUnits
+from .forecast_units import NwsForecastUnits
 
 _LOGGER = logging.getLogger(__name__)
 
