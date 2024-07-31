@@ -1,4 +1,9 @@
-from enum import StrEnum, auto
+import sys
+
+if sys.version_info >= (3, 11):
+    from enum import StrEnum, auto
+else:
+    from .backports.enum import StrEnum, auto
 
 
 class NwsForecastUnits(StrEnum):
