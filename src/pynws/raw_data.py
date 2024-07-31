@@ -9,6 +9,8 @@ from aiohttp import ClientSession
 from . import urls
 from .const import API_ACCEPT, API_USER
 
+from .nws import NwsForecastUnits
+
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -111,13 +113,11 @@ async def raw_detailed_forecast(
     y: int,
     websession: ClientSession,
     userid: str,
-    forecast_units: str,
 ) -> Dict[str, Any]:
     """Return griddata response."""
     url = urls.detailed_forecast_url(wfo, x, y)
     header = get_header(userid)
-    params = get_params(units=forecast_units)
-    return await _make_request(websession, url, header, params)
+    return await _make_request(websession, url, header)
 
 
 async def raw_gridpoints_forecast(
@@ -126,7 +126,7 @@ async def raw_gridpoints_forecast(
     y: int,
     websession: ClientSession,
     userid: str,
-    forecast_units: str,
+    forecast_units: NwsForecastUnits,
 ) -> Dict[str, Any]:
     """Return griddata response."""
     url = urls.gridpoints_forecast_url(wfo, x, y)
@@ -141,7 +141,7 @@ async def raw_gridpoints_forecast_hourly(
     y: int,
     websession: ClientSession,
     userid: str,
-    forecast_units: str,
+    forecast_units: NwsForecastUnits,
 ) -> Dict[str, Any]:
     """Return griddata response."""
     url = urls.gridpoints_forecast_hourly_url(wfo, x, y)

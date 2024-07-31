@@ -27,7 +27,7 @@ from yarl import URL
 
 from .const import ALERT_ID, API_WEATHER_CODE, Final
 from .forecast import DetailedForecast
-from .nws import Nws, NwsError, NwsNoDataError
+from .nws import Nws, NwsError, NwsNoDataError, NwsForecastUnits
 from .units import convert_unit
 
 WIND_DIRECTIONS: Final = [
@@ -203,13 +203,12 @@ class SimpleNWS(Nws):
         api_key: str,
         session: ClientSession,
         filter_forecast: bool = True,
-        forecast_units: str = "us",
+        forecast_units: NwsForecastUnits = NwsForecastUnits.US,
     ):
         """Set up simplified NWS class."""
-        super().__init__(session, api_key, (lat, lon))
+        super().__init__(session, api_key, (lat, lon), forecast_units=forecast_units)
 
         self.filter_forecast = filter_forecast
-        self.forecast_units = forecast_units
         self._observation: Optional[List[Dict[str, Any]]] = None
         self._metar_obs: Optional[List[Optional[Metar.Metar]]] = None
         self.station: Optional[str] = None
