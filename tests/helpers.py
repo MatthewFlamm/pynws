@@ -24,7 +24,7 @@ def data_return_function(input):
             elif issubclass(input0, Exception):
                 raise input0
         else:
-            raise RuntimeError("Unexpected input")
+            raise TypeError("Unexpected input")
         with open(os.path.join(DIR, f"{input_name}.json")) as f:
             return aiohttp.web.json_response(data=json.load(f))
 
