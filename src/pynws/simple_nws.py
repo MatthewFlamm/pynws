@@ -25,7 +25,7 @@ from aiohttp import ClientResponseError, ClientSession
 from metar import Metar
 from yarl import URL
 
-from .const import ALERT_ID, API_WEATHER_CODE, Final
+from .const import ALERT_ID, API_WEATHER_CODE, Final, MetadataKeys
 from .forecast import DetailedForecast
 from .forecast_units import NwsForecastUnits
 from .nws import Nws, NwsError, NwsNoDataError
@@ -73,9 +73,7 @@ def _nws_retry_func(retry_no_data: bool):
         """Whether to retry based on execptions."""
         if isinstance(error, ClientResponseError) and error.status >= 500:
             return True
-        if retry_no_data and isinstance(error, NwsNoDataError):
-            return True
-        return False
+        return bool(retry_no_data) and isinstance(error, NwsNoDataError)
 
     return _retry
 
@@ -215,7 +213,9 @@ class SimpleNWS(Nws):
         self.station: Optional[str] = None
         self.stations: Optional[List[str]] = None
         self._forecast: Optional[List[Dict[str, Any]]] = None
+        self._forecast_metadata: Dict[str, str | None] = {}
         self._forecast_hourly: Optional[List[Dict[str, Any]]] = None
+        self._forecast_hourly_metadata: Dict[str, str | None] = {}
         self._detailed_forecast: Optional[DetailedForecast] = None
         self._alerts_forecast_zone: List[Dict[str, Any]] = []
         self._alerts_county_zone: List[Dict[str, Any]] = []
@@ -267,9 +267,14 @@ class SimpleNWS(Nws):
 
     async def update_forecast(self: SimpleNWS, *, raise_no_data: bool = False) -> None:
         """Update forecast."""
-        forecast = await self.get_gridpoints_forecast()
+        forecast_with_metadata = await self.get_gridpoints_forecast()
+        forecast = forecast_with_metadata["periods"]
         if self._filter_forecast(forecast):
             self._forecast = forecast
+            self._forecast_metadata = {
+                metadataKey: forecast_with_metadata.get(metadataKey)
+                for metadataKey in MetadataKeys
+            }
         elif raise_no_data:
             raise NwsNoDataError("Forecast received with no data.")
 
@@ -277,9 +282,14 @@ class SimpleNWS(Nws):
         self: SimpleNWS, *, raise_no_data: bool = False
     ) -> None:
         """Update forecast hourly."""
-        forecast_hourly = await self.get_gridpoints_forecast_hourly()
+        forecast_hourly_with_metadata = await self.get_gridpoints_forecast_hourly()
+        forecast_hourly = forecast_hourly_with_metadata["periods"]
         if self._filter_forecast(forecast_hourly):
             self._forecast_hourly = forecast_hourly
+            self._forecast_hourly_metadata = {
+                metadataKey: forecast_hourly_with_metadata.get(metadataKey)
+                for metadataKey in MetadataKeys
+            }
         elif raise_no_data:
             raise NwsNoDataError("Forecast hourly received with no data.")
 
@@ -448,16 +458,26 @@ class SimpleNWS(Nws):
         return data
 
     @property
-    def forecast(self: SimpleNWS) -> Optional[List[Dict[str, Any]]]:
+    def forecast(self: SimpleNWS) -> List[Dict[str, Any]]:
         """Return forecast."""
         forecast = self._filter_forecast(self._forecast)
         return self._convert_forecast(forecast)
 
     @property
-    def forecast_hourly(self: SimpleNWS) -> Optional[List[Dict[str, Any]]]:
+    def forecast_metadata(self: SimpleNWS) -> Dict[str, str | None]:
+        """Return forecast metadata."""
+        return self._forecast_metadata
+
+    @property
+    def forecast_hourly(self: SimpleNWS) -> List[Dict[str, Any]]:
         """Return forecast hourly."""
         forecast = self._filter_forecast(self._forecast_hourly)
         return self._convert_forecast(forecast)
+
+    @property
+    def forecast_hourly_metadata(self: SimpleNWS) -> Dict[str, str | None]:
+        """Return forecast hourly metadata."""
+        return self._forecast_hourly_metadata
 
     @property
     def detailed_forecast(self: SimpleNWS) -> Optional[DetailedForecast]:
@@ -470,7 +490,7 @@ class SimpleNWS(Nws):
         return self._detailed_forecast
 
     def _filter_forecast(
-        self,
+        self: SimpleNWS,
         input_forecast: Optional[List[Dict[str, Any]]],
     ) -> List[Dict[str, Any]]:
         if not input_forecast:

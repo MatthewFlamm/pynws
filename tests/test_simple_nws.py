@@ -260,6 +260,13 @@ async def test_nws_forecast(aiohttp_client, mock_urls, gridpoints_forecast):
     # tests null value in quatitative value
     assert forecast[1]["probabilityOfPrecipitation"] == 0
 
+    # test metadata
+    metadata = nws.forecast_metadata
+
+    assert metadata["updateTime"] == "2019-10-13T18:16:20+00:00"
+    assert metadata["generatedAt"] == "2019-10-13T18:42:44+00:00"
+    assert metadata["validTimes"] == "2019-10-13T12:00:00+00:00/P6DT22H"
+
 
 async def test_nws_forecast_discard_stale(aiohttp_client, mock_urls):
     with freeze_time("2019-10-14T21:30:00-04:00"):
@@ -302,6 +309,13 @@ async def test_nws_forecast_hourly(aiohttp_client, mock_urls):
     assert forecast[0]["dewpoint"] == 41
     assert forecast[0]["relativeHumidity"] == 63
 
+    # test metadata
+    metadata = nws.forecast_hourly_metadata
+
+    assert metadata["updateTime"] == "2019-10-14T23:16:24+00:00"
+    assert metadata["generatedAt"] == "2019-10-15T00:12:54+00:00"
+    assert metadata["validTimes"] == "2019-10-14T17:00:00+00:00/P7DT20H"
+
 
 @freeze_time("2019-10-13T14:30:00-04:00")
 async def test_nws_forecast_strings(aiohttp_client, mock_urls):
@@ -328,6 +342,7 @@ async def test_nws_forecast_empty(aiohttp_client, mock_urls):
     forecast = nws.forecast
 
     assert forecast == []
+    assert nws.forecast_metadata == {}
 
 
 @freeze_time("2019-10-13T14:30:00-04:00")
@@ -355,6 +370,7 @@ async def test_nws_forecast_cache(aiohttp_client, mock_urls):
 
     await nws.update_forecast()
     assert forecast
+    assert nws.forecast_metadata["updateTime"] == "2019-10-13T18:16:20+00:00"
 
 
 @freeze_time("2019-10-14T20:30:00-04:00")
@@ -366,6 +382,7 @@ async def test_nws_forecast_hourly_empty(aiohttp_client, mock_urls):
     forecast_hourly = nws.forecast_hourly
 
     assert forecast_hourly == []
+    assert nws.forecast_hourly_metadata == {}
 
 
 @freeze_time("2019-10-14T20:30:00-04:00")
@@ -392,6 +409,8 @@ async def test_nws_forecast_hourly_cache(aiohttp_client, mock_urls):
 
     await nws.update_forecast_hourly()
     assert nws.forecast_hourly
+
+    assert nws.forecast_hourly_metadata["updateTime"] == "2019-10-14T23:16:24+00:00"
 
 
 async def test_nws_unimplemented_retry_no_data(aiohttp_client, mock_urls):

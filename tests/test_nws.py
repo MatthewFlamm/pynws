@@ -130,8 +130,11 @@ async def test_nws_gridpoints_forecast(aiohttp_client, mock_urls):
     client = await aiohttp_client(app)
     nws = Nws(client, USERID, LATLON)
     assert nws
-    forecast = await nws.get_gridpoints_forecast()
+    forecast_with_metadata = await nws.get_gridpoints_forecast()
     assert nws.wfo
+    assert forecast_with_metadata
+    assert isinstance(forecast_with_metadata, dict)
+    forecast = forecast_with_metadata["periods"]
     assert forecast
     assert isinstance(forecast, list)
 
@@ -148,8 +151,11 @@ async def test_nws_gridpoints_forecast_hourly(aiohttp_client, mock_urls):
     client = await aiohttp_client(app)
     nws = Nws(client, USERID, LATLON)
     assert nws
-    forecast = await nws.get_gridpoints_forecast_hourly()
+    forecast_with_metadata = await nws.get_gridpoints_forecast_hourly()
     assert nws.wfo
+    assert forecast_with_metadata
+    assert isinstance(forecast_with_metadata, dict)
+    forecast = forecast_with_metadata["periods"]
     assert forecast
     assert isinstance(forecast, list)
 

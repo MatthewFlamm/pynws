@@ -131,3 +131,6 @@ class Detail(StrEnum):
     LOW_VISIBILITY_OCCURRENCE_RISK_INDEX = "lowVisibilityOccurrenceRiskIndex"
     STABILITY = "stability"
     RED_FLAG_THREAT_INDEX = "redFlagThreatIndex"
+
+
+MetadataKeys = ["updateTime", "generatedAt", "validTimes"]
