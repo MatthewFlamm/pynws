@@ -66,7 +66,7 @@ class Nws:
 
         if forecast_units is None:
             self.forecast_units = NwsForecastUnits.US
-        elif forecast_units in NwsForecastUnits:
+        elif forecast_units in (i.value for i in NwsForecastUnits):
             self.forecast_units = forecast_units
         else:
             raise ValueError(
