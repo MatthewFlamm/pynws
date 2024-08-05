@@ -14,6 +14,16 @@ USERID = "test_user"
 ZONE = "test_zone"
 
 
+async def test_nws_forecast_parameters(aiohttp_client, mock_urls):
+    app = setup_app()
+    client = await aiohttp_client(app)
+    with pytest.raises(ValueError, match=".* can only be .*") as exc_info:
+        nws = SimpleNWS(*LATLON, USERID, client, forecast_units="usi")
+    assert exc_info.type is ValueError
+    nws = SimpleNWS(*LATLON, USERID, client, forecast_units="us")
+    assert nws
+
+
 async def test_nws_set_station(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
