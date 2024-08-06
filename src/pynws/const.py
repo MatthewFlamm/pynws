@@ -134,3 +134,10 @@ class Detail(StrEnum):
 
 
 MetadataKeys = ["updateTime", "generatedAt", "validTimes"]
+
+
+class ForecastUnits(StrEnum):
+    """Values accepted as forecast_units."""
+
+    US = "us"
+    SI = "si"

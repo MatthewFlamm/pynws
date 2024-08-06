@@ -7,8 +7,8 @@ from typing import Any, Dict, List, Optional, Tuple, cast
 
 from aiohttp import ClientSession
 
+from .const import ForecastUnits
 from .forecast import DetailedForecast
-from .forecast_units import NwsForecastUnits
 from .raw_data import (
     raw_alerts_active_zone,
     raw_detailed_forecast,
@@ -42,7 +42,7 @@ class Nws:
         userid: str,
         latlon: Optional[Tuple[float, float]] = None,
         station: Optional[str] = None,
-        forecast_units: Optional[NwsForecastUnits] = None,
+        forecast_units: Optional[ForecastUnits] = None,
     ):
         if not session:
             raise NwsError(f"{session!r} is required")
@@ -65,13 +65,13 @@ class Nws:
         self.fire_weather_zone: Optional[str] = None
 
         if forecast_units is None:
-            self.forecast_units = NwsForecastUnits.US
-        elif forecast_units in (i.value for i in NwsForecastUnits):
+            self.forecast_units = ForecastUnits.US
+        elif forecast_units in (i.value for i in ForecastUnits):
             self.forecast_units = forecast_units
         else:
             raise ValueError(
                 f"{forecast_units} can only be "
-                + ", ".join([i.value for i in NwsForecastUnits])
+                + ", ".join([i.value for i in ForecastUnits])
             )
 
     async def get_points_stations(self: Nws) -> List[str]:

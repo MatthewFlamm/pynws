@@ -7,8 +7,7 @@ from typing import Any, Dict, Optional
 from aiohttp import ClientSession
 
 from . import urls
-from .const import API_ACCEPT, API_USER
-from .forecast_units import NwsForecastUnits
+from .const import API_ACCEPT, API_USER, ForecastUnits
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -125,7 +124,7 @@ async def raw_gridpoints_forecast(
     y: int,
     websession: ClientSession,
     userid: str,
-    forecast_units: NwsForecastUnits,
+    forecast_units: ForecastUnits = ForecastUnits.US,
 ) -> Dict[str, Any]:
     """Return griddata response."""
     url = urls.gridpoints_forecast_url(wfo, x, y)
@@ -140,7 +139,7 @@ async def raw_gridpoints_forecast_hourly(
     y: int,
     websession: ClientSession,
     userid: str,
-    forecast_units: NwsForecastUnits,
+    forecast_units: ForecastUnits = ForecastUnits.US,
 ) -> Dict[str, Any]:
     """Return griddata response."""
     url = urls.gridpoints_forecast_hourly_url(wfo, x, y)
