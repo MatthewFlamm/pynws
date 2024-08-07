@@ -106,6 +106,28 @@ async def test_nws_detailed_forecast(aiohttp_client, mock_urls):
         assert Detail.TEMPERATURE in details
 
 
+async def test_nws_gridpoints_forecast_si(aiohttp_client, mock_urls):
+    app = setup_app()
+    client = await aiohttp_client(app)
+    nws = Nws(client, USERID, LATLON, forecast_units="si")
+    assert nws
+    forecast_with_metadata = await nws.get_gridpoints_forecast()
+    assert nws.wfo
+    assert forecast_with_metadata
+    assert isinstance(forecast_with_metadata, dict)
+    forecast = forecast_with_metadata["periods"]
+    assert forecast
+    assert isinstance(forecast, list)
+
+    values = forecast[0]
+    assert isinstance(values, dict)
+    assert values["startTime"] == "2019-10-13T14:00:00-04:00"
+    assert values["temperature"] == 5
+    assert values["temperatureUnit"] == "C"
+    assert values["windSpeed"] == "16 km/h"
+    assert values["dewpoint"]["value"] == 5
+
+
 async def test_nws_gridpoints_forecast(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
@@ -146,6 +168,27 @@ async def test_nws_gridpoints_forecast_hourly(aiohttp_client, mock_urls):
     assert values["temperature"] == 78
     assert values["temperatureUnit"] == "F"
     assert values["windSpeed"] == "0 mph"
+
+
+async def test_nws_gridpoints_forecast_hourly_si(aiohttp_client, mock_urls):
+    app = setup_app()
+    client = await aiohttp_client(app)
+    nws = Nws(client, USERID, LATLON, forecast_units="si")
+    assert nws
+    forecast_with_metadata = await nws.get_gridpoints_forecast_hourly()
+    assert nws.wfo
+    assert forecast_with_metadata
+    assert isinstance(forecast_with_metadata, dict)
+    forecast = forecast_with_metadata["periods"]
+    assert forecast
+    assert isinstance(forecast, list)
+
+    values = forecast[0]
+    assert isinstance(values, dict)
+    assert values["startTime"] == "2019-10-14T20:00:00-04:00"
+    assert values["temperature"] == 25.5
+    assert values["temperatureUnit"] == "C"
+    assert values["windSpeed"] == "0 km/h"
 
 
 async def test_nws_alerts_active_zone(aiohttp_client, mock_urls):
