@@ -12,6 +12,7 @@ WFO = "ABC"
 X = 0
 Y = 0
 ZONE = "test"
+UNIT = "us"
 
 
 async def test_gridpoints_stations(aiohttp_client, mock_urls):
@@ -61,13 +62,13 @@ async def test_detailed_forecast(aiohttp_client, mock_urls):
 async def test_gridpoints_forecast(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
-    await raw_data.raw_gridpoints_forecast(WFO, X, Y, client, USERID)
+    await raw_data.raw_gridpoints_forecast(WFO, X, Y, client, USERID, UNIT)
 
 
 async def test_gridpoints_forecast_hourly(aiohttp_client, mock_urls):
     app = setup_app()
     client = await aiohttp_client(app)
-    await raw_data.raw_gridpoints_forecast_hourly(WFO, X, Y, client, USERID)
+    await raw_data.raw_gridpoints_forecast_hourly(WFO, X, Y, client, USERID, UNIT)
 
 
 async def test_alerts_active_zone(aiohttp_client, mock_urls):

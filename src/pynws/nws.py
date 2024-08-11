@@ -7,6 +7,7 @@ from typing import Any, Dict, List, Optional, Tuple, cast
 
 from aiohttp import ClientSession
 
+from .const import ForecastUnits
 from .forecast import DetailedForecast
 from .raw_data import (
     raw_alerts_active_zone,
@@ -41,6 +42,7 @@ class Nws:
         userid: str,
         latlon: Optional[Tuple[float, float]] = None,
         station: Optional[str] = None,
+        forecast_units: Optional[ForecastUnits] = None,
     ):
         if not session:
             raise NwsError(f"{session!r} is required")
@@ -61,6 +63,16 @@ class Nws:
         self.forecast_zone: Optional[str] = None
         self.county_zone: Optional[str] = None
         self.fire_weather_zone: Optional[str] = None
+
+        if forecast_units is None:
+            self.forecast_units = ForecastUnits.US
+        elif forecast_units in (i.value for i in ForecastUnits):
+            self.forecast_units = forecast_units
+        else:
+            raise ValueError(
+                f"{forecast_units} can only be "
+                + ", ".join([i.value for i in ForecastUnits])
+            )
 
     async def get_points_stations(self: Nws) -> List[str]:
         """Returns station list"""
@@ -134,7 +146,7 @@ class Nws:
         if self.wfo is None or self.x is None or self.y is None:
             raise NwsError("Error retrieving points")
         raw_forecast = await raw_gridpoints_forecast(
-            self.wfo, self.x, self.y, self.session, self.userid
+            self.wfo, self.x, self.y, self.session, self.userid, self.forecast_units
         )
         return raw_forecast["properties"]
 
@@ -145,7 +157,7 @@ class Nws:
         if self.wfo is None or self.x is None or self.y is None:
             raise NwsError("Error retrieving points")
         raw_forecast = await raw_gridpoints_forecast_hourly(
-            self.wfo, self.x, self.y, self.session, self.userid
+            self.wfo, self.x, self.y, self.session, self.userid, self.forecast_units
         )
         return raw_forecast["properties"]
 

@@ -9,29 +9,37 @@ DIR = "tests/fixtures"
 def data_return_function(input):
     async def function(request):
         if isinstance(input, str):
-            with open(os.path.join(DIR, input)) as f:
-                return aiohttp.web.json_response(data=json.load(f))
+            if "units" in request.query:
+                input_name = "_".join((input, request.query["units"]))
+            else:
+                input_name = input
         elif isinstance(input, list):
             input0 = input.pop(0)
+            if "units" in request.query:
+                input_name = "_".join((input0, request.query["units"]))
+            else:
+                input_name = input0
             if isinstance(input0, str):
-                with open(os.path.join(DIR, input0)) as f:
-                    return aiohttp.web.json_response(data=json.load(f))
-            if issubclass(input0, Exception):
+                pass
+            elif issubclass(input0, Exception):
                 raise input0
-        raise RuntimeError("Unexpected input")
+        else:
+            raise TypeError("Unexpected input")
+        with open(os.path.join(DIR, f"{input_name}.json")) as f:
+            return aiohttp.web.json_response(data=json.load(f))
 
     return function
 
 
 def setup_app(
-    gridpoints_stations="gridpoints_stations.json",
-    points="points.json",
-    stations_observations="stations_observations.json",
-    stations_observations_latest="stations_observations_latest.json",
-    detailed_forecast="detailed_forecast.json",
-    gridpoints_forecast="gridpoints_forecast.json",
-    gridpoints_forecast_hourly="gridpoints_forecast_hourly.json",
-    alerts_active_zone="alerts_active_zone.json",
+    gridpoints_stations="gridpoints_stations",
+    points="points",
+    stations_observations="stations_observations",
+    stations_observations_latest="stations_observations_latest",
+    detailed_forecast="detailed_forecast",
+    gridpoints_forecast="gridpoints_forecast",
+    gridpoints_forecast_hourly="gridpoints_forecast_hourly",
+    alerts_active_zone="alerts_active_zone",
 ):
     app = aiohttp.web.Application()
     app.router.add_get(

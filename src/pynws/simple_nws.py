@@ -25,7 +25,7 @@ from aiohttp import ClientResponseError, ClientSession
 from metar import Metar
 from yarl import URL
 
-from .const import ALERT_ID, API_WEATHER_CODE, Final, MetadataKeys
+from .const import ALERT_ID, API_WEATHER_CODE, Final, ForecastUnits, MetadataKeys
 from .forecast import DetailedForecast
 from .nws import Nws, NwsError, NwsNoDataError
 from .units import convert_unit
@@ -201,9 +201,10 @@ class SimpleNWS(Nws):
         api_key: str,
         session: ClientSession,
         filter_forecast: bool = True,
+        forecast_units: ForecastUnits = ForecastUnits.US,
     ):
         """Set up simplified NWS class."""
-        super().__init__(session, api_key, (lat, lon))
+        super().__init__(session, api_key, (lat, lon), forecast_units=forecast_units)
 
         self.filter_forecast = filter_forecast
         self._observation: Optional[List[Dict[str, Any]]] = None
