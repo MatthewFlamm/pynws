@@ -3,7 +3,7 @@ from unittest.mock import patch
 import pytest
 
 
-@pytest.fixture()
+@pytest.fixture
 def mock_urls():
     with patch(
         "pynws.urls.stations_observations_url"
