@@ -108,7 +108,7 @@ class Nws:
         )
         return cast(Dict[str, Any], res.get("properties"))
 
-    async def get_points(self: Nws) -> None:
+    async def get_points(self: Nws) -> Dict[str, Any]:
         """Saves griddata from latlon."""
         if self.latlon is None:
             raise NwsError("Latitude and longitude are required")
