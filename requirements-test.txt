@@ -4,7 +4,7 @@ metar==1.11.0
 pytest==8.3.4
 pytest-asyncio==0.25.1
 pytest-cov==6.0.0
-pytest-aiohttp==1.0.5
+pytest-aiohttp==1.1.0
 mypy==1.14.1
 tenacity==9.0.0
 yarl==1.18.3
