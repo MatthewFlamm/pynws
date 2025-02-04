@@ -108,7 +108,7 @@ class Nws:
         )
         return cast(Dict[str, Any], res.get("properties"))
 
-    async def get_points(self: Nws) -> None:
+    async def get_points(self: Nws) -> Dict[str, Any]:
         """Saves griddata from latlon."""
         if self.latlon is None:
             raise NwsError("Latitude and longitude are required")
@@ -122,7 +122,7 @@ class Nws:
             self.forecast_zone = properties.get("forecastZone").split("/")[-1]
             self.county_zone = properties.get("county").split("/")[-1]
             self.fire_weather_zone = properties.get("fireWeatherZone").split("/")[-1]
-        return properties
+        return cast(Dict[str, Any], properties)
 
     async def get_detailed_forecast(self: Nws) -> DetailedForecast:
         """Return all forecast data from grid.
