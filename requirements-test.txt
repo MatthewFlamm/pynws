@@ -1,4 +1,4 @@
-aiohttp==3.11.18
+aiohttp==3.12.9
 freezegun==1.5.2
 metar==1.11.0
 pytest==8.3.5
