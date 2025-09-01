@@ -3,7 +3,7 @@ freezegun==1.5.2
 metar==1.11.0
 pytest==8.3.5
 pytest-asyncio==1.1.0
-pytest-cov==6.1.1
+pytest-cov==6.2.1
 pytest-aiohttp==1.1.0
 mypy==1.16.0
 tenacity==9.1.2
